@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config>
+        <!--                            👇👇👇👇👇👇👇👇👇 -->
+        <domain includeSubdomains="true">3.145.45.188</domain>
+        <trust-anchors>
+            <certificates src="user"/>
+        </trust-anchors>
+    </domain-config>
+</network-security-config>
