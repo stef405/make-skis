@@ -11,4 +11,6 @@
     <string name="preview">Image</string>
     <string name="chattImage">chattImage</string>
     <string name="videoView">videoView</string>
+
+    <string name="history">History</string>
 </resources>
