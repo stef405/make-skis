@@ -4,7 +4,7 @@
     <string name="send">Send</string>
     <string name="username">zhukevin</string>
     <string name="message">Some short sample text.</string>
-
+    <string name="history">History</string>
     <string name="album">Album</string>
     <string name="camera">Camera</string>
     <string name="video">Video</string>
