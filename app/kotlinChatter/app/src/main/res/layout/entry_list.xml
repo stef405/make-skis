@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingStart="6dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="6dp"
+    android:paddingBottom="14dp">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Puzzle 1"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/entryImage"
+        app:layout_constraintTop_toTopOf="@+id/entryImage"
+        tools:layout_editor_absoluteX="178dp" />
+
+    <ImageButton
+        android:id="@+id/deleteEntry"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="16dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="@+id/entryImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/entryImage"
+        app:layout_constraintVertical_bias="0.393"
+        app:src="@drawable/icon_garbage" />
+
+    <ImageButton
+        android:id="@+id/entryImage"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:src="@drawable/puzzleImage" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
