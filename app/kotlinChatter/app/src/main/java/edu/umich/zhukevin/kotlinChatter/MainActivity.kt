@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         view = ActivityMainBinding.inflate(layoutInflater)
-        view.root.setBackgroundColor(Color.parseColor("#E0E0E0"))
+        view.root.setBackgroundColor(Color.parseColor("#FFFFFF"))
         setContentView(view.root)
 
         chattListAdapter = ChattListAdapter(this, chatts)
