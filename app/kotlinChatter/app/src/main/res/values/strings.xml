@@ -5,10 +5,13 @@
     <string name="username">zhukevin</string>
     <string name="message">Some short sample text.</string>
     <string name="history">History</string>
+    <string name="puzzle_piece_history">Puzzle Piece History</string>
     <string name="album">Album</string>
     <string name="camera">Camera</string>
     <string name="video">Video</string>
     <string name="preview">Image</string>
     <string name="chattImage">chattImage</string>
     <string name="videoView">videoView</string>
+    <string name="defaultHistory">No current puzzle entries</string>
+    <string name="defaultPieceHistory">No current puzzle piece entries</string>
 </resources>

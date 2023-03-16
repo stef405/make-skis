@@ -6,34 +6,54 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/history"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:text="@string/history"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.119"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/backArrowButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            app:layout_constraintEnd_toStartOf="@+id/puzzle_piece_history"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/_icon_back_arrow" />
+
+        <TextView
+            android:id="@+id/puzzle_piece_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:text="@string/puzzle_piece_history"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingHorizontal="10sp"
+        android:paddingVertical="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@drawable/empty_puzzle" />
+        tools:srcCompat="@drawable/empty_puzzle_piece" />
 
     <TextView
         android:id="@+id/defaultHistoryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/defaultHistory"
+        android:text="@string/defaultPieceHistory"
         android:textSize="18sp"
         android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -55,11 +75,7 @@
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/refreshContainer"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        android:layout_height="wrap_content">
 
         <ListView
             android:id="@+id/chattListView"
