@@ -12,6 +12,8 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.widget.Button
+import android.widget.EditText
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.databinding.ObservableArrayList
@@ -22,6 +24,7 @@ import edu.umich.zhukevin.kotlinChatter.ChattStore.getChatts
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
     private lateinit var view: ActivityMainBinding
     private lateinit var chattListAdapter: ChattListAdapter
     private val viewState: MainViewState by viewModels()
@@ -85,10 +88,31 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+
         // Popup Window
 //        show_btn.setOnClickListener {
 //
 //        }
+
+        view.dimButton.setOnClickListener{
+            setContentView(R.layout.dim_dialog)
+            var width = findViewById(R.id.width) as EditText
+            var height = findViewById(R.id.height) as EditText
+            var num_pieces = findViewById(R.id.num_pieces) as EditText
+            var next_btn = findViewById(R.id.next) as Button
+
+            next_btn.setOnClickListener {
+                val width = width
+                val height = height
+                val num_pieces = num_pieces
+
+            }
+        }
+    }
+
+    fun showHistory() {
+
+
     }
 
     fun startPost(view: View?) = startActivity(Intent(this, PostActivity::class.java))
@@ -138,6 +162,8 @@ class MainActivity : AppCompatActivity() {
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
             values)
     }
+
+
 }
 
 class MainViewState: ViewModel() {
