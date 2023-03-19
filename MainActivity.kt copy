@@ -1,0 +1,80 @@
+package edu.umich.zxiris.kotlinChatter
+
+import android.content.DialogInterface
+import android.content.Intent
+import android.graphics.Color
+import android.os.Bundle
+import android.view.View
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import edu.umich.zxiris.kotlinChatter.ChattStore.chatts
+import edu.umich.zxiris.kotlinChatter.ChattStore.getChatts
+import edu.umich.zxiris.kotlinChatter.databinding.ActivityMainBinding
+
+class MainActivity: AppCompatActivity() {
+    private lateinit var view: ActivityMainBinding
+    private lateinit var chattListAdapter: ChattListAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        view = ActivityMainBinding.inflate(layoutInflater)
+        view.root.setBackgroundColor(Color.parseColor("#E0E0E0"))
+        setContentView(view.root)
+
+        chattListAdapter = ChattListAdapter(this, chatts)
+        view.chattListView.setAdapter(chattListAdapter)
+
+        // setup refreshContainer here later
+        view.refreshContainer.setOnRefreshListener {
+            refreshTimeline()
+        }
+
+        refreshTimeline()
+    }
+
+    private fun refreshTimeline() {
+        getChatts(applicationContext) {
+            runOnUiThread {
+                // inform the list adapter that data set has changed
+                // so that it can redraw the screen.
+                chattListAdapter.notifyDataSetChanged()
+            }
+            // stop the refreshing animation upon completion:
+            view.refreshContainer.isRefreshing = false
+        }
+    }
+
+    fun startPost(view: View?) = startActivity(Intent(this, PostActivity::class.java))
+
+    // this is the code for the fail message
+    // it needs to be connected to the camera button for the event to be triggered
+    private fun failMessage(event:Event) {
+        var builder = AlertDialog.Builder(activity)
+        // note to person compiling everything together:
+        //  i hardcoded this but you should put these strings into the string.xml ( i already did that )
+        // to do that, just put your cursor on the text you want to extract, alt enter (options enter on mac)
+        // and click "extract string resource" for both the "setTitle" and "setMessage"
+        // this is what it should look like:
+        builder.setTitle(getString(R.string.fail_message_title))
+        builder.setMessage(getString(R.string.fail_message))
+        //this is the hardcoded code (all the strings are in string.xml):
+        // builder.setTitle("Error")
+        // builder.setMessage("Puzzle image could not be processed. Please retake image with bright lighting and no blurriness")
+
+        // make sure you also extract the string resources here too
+        // for "retake" and "exit"
+        builder.setPositiveButton(getString(R.string.retake), DialogInterface.OnClickListener { dialog, id ->
+            // this should remove the dialog and take us back to the main screen and call "onResume" function
+            // allows them to retake
+            dialog.cancel()
+        })
+        builder.setNegativeButton(getString(R.string.exit), DialogInterface.OnClickListener { dialog, id ->
+            // replace "vieweModel.delete(event) with exit to home screen feature
+            viewModel.delete(event)
+            dialog.cancel()
+        })
+        var alert = builder.create()
+        alert.show()
+
+    }
+}
