@@ -3,14 +3,13 @@ package edu.umich.zhukevin.kotlinChatter
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
-class Chatt(var username: String? = null,
-            var message: String? = null,
-            var timestamp: String? = null,
-            imageUrl: String? = null,
-            videoUrl: String? = null) {
+class Chatt(
+    imageUrl: String? = null,
+    var name: String? = null
+    ) {
     var imageUrl: String? by ChattPropDelegate(imageUrl)
-    var videoUrl: String? by ChattPropDelegate(videoUrl)
 }
+
 
 class ChattPropDelegate private constructor ():
     ReadWriteProperty<Any?, String?> {

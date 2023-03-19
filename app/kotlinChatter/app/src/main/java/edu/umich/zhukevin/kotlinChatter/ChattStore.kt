@@ -64,27 +64,24 @@ object ChattStore {
 
     fun getChatts() {
         val request = Request.Builder()
-            .url(serverUrl+"getimages/")
+            .url(serverUrl+"savedpuzzles/")
             .build()
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                Log.e("getChatts", "Failed GET request")
+                Log.e("savedpuzzles", "Failed GET request")
             }
 
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful) {
-                    val chattsReceived = try { JSONObject(response.body?.string() ?: "").getJSONArray("chatts") } catch (e: JSONException) { JSONArray() }
+                    val chattsReceived = try { JSONObject(response.body?.string() ?: "").getJSONArray("puzzle_images") } catch (e: JSONException) { JSONArray() }
 
                     chatts.clear()
                     for (i in 0 until chattsReceived.length()) {
                         val chattEntry = chattsReceived[i] as JSONArray
                         if (chattEntry.length() == nFields) {
-                            chatts.add(Chatt(username = chattEntry[0].toString(),
-                                message = chattEntry[1].toString(),
-                                timestamp = chattEntry[2].toString(),
-                                imageUrl = chattEntry[3].toString(),
-                                videoUrl = chattEntry[4].toString(),
+                            chatts.add(Chatt(imageUrl = chattEntry[0].toString(),
+                                name = "Puzzle 1"
                             ))
                         } else {
                             Log.e("getChatts", "Received unexpected number of fields " + chattEntry.length().toString() + " instead of " + nFields.toString())
