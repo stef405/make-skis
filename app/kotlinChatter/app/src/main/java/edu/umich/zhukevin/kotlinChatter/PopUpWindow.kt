@@ -45,7 +45,6 @@ class PopUpWindow : AppCompatActivity() {
         view.popupWindowButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
-
     }
 
     private fun setWindowFlag(activity: Activity, on: Boolean) {

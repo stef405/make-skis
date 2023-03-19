@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
         }
         view.cameraButton.setOnClickListener {
             viewState.imageUri = mediaStoreAlloc(mediaType="image/jpeg")
-//
+
             val intent = Intent(this, PopUpWindow::class.java)
             intent.putExtra("popuptitle", "Error")
             intent.putExtra("popuptext", "Sorry, that email address is already used!")
@@ -84,16 +84,9 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
 
             takePicture.launch(viewState.imageUri)
-
-
         }
 
-
-        // Popup Window
-//        show_btn.setOnClickListener {
-//
-//        }
-
+        /*
         view.dimButton.setOnClickListener{
             setContentView(R.layout.dim_dialog)
             var width = findViewById(R.id.width) as EditText
@@ -108,6 +101,7 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
+        */
     }
 
     fun showHistory() {
