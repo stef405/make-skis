@@ -17,7 +17,7 @@ object ChattStore {
     val chatts = ObservableArrayList<Chatt>()
     private val nFields = Chatt::class.declaredMemberProperties.size
 
-    private const val serverUrl = "https://3.145.45.188/"
+    private const val serverUrl = "https://3.16.218.169/"
 
     private val client = OkHttpClient()
 
