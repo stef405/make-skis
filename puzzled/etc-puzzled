@@ -16,6 +16,10 @@ server {
     include proxy_params;
     proxy_pass http://unix:/run/gunicorn.sock;
   }
+    client_max_body_size 10M;
+    location ^~ /media {
+        alias /home/ubuntu/441/chatterd/media;
+    }
 }
 
 server {
