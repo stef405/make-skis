@@ -220,3 +220,4 @@ class PostViewState: ViewModel() {
     var videoUri: Uri? = null
     var videoIcon = android.R.drawable.presence_video_online
 }
+

@@ -34,5 +34,20 @@ def postchatt(request):
 
     return JsonResponse({})
 
+@csrf_exempt
+def deletepuzzle(request):
+    # not sure if this should be DELETE
+    if request.method != 'DELETE':
+        return HttpResponse(status=404)
+
+    json_data = json.loads(request.body)
+    puzzle_id = json_data['puzzle_id']
+
+    cursor = connection.cursor()
+    cursor.execute('DELETE FROM puzzles WHERE puzzle_id = '
+                   '(%d);', puzzle_id)
+
+    return JsonResponse({})
+
 
 # Create your views here.
