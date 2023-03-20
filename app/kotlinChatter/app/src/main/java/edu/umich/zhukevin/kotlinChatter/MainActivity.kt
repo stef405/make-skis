@@ -19,16 +19,21 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import edu.umich.zhukevin.kotlinChatter.PieceStore.getPieces
 import edu.umich.zhukevin.kotlinChatter.PieceStore.pieces
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityMainBinding
+import edu.umich.zhukevin.kotlinChatter.databinding.ActivityPuzzlePieceBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var view: ActivityMainBinding
     private lateinit var pieceListAdapter: PieceListAdapter
     private val viewState: MainViewState by viewModels()
+
+    private lateinit var other_view: ActivityPuzzlePieceBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +74,7 @@ class MainActivity : AppCompatActivity() {
         var takePicture = registerForActivityResult(ActivityResultContracts.TakePicture())
         { success ->
             if (success) {
-                // doCrop(cropIntent)
+                startActivity(Intent(this, PuzzlePieceActivity::class.java))
             } else {
                 Log.d("TakePicture", "failed")
             }
@@ -77,12 +82,12 @@ class MainActivity : AppCompatActivity() {
         view.cameraButton.setOnClickListener {
             viewState.imageUri = mediaStoreAlloc(mediaType="image/jpeg")
 
-            val intent = Intent(this, PopUpWindow::class.java)
-            intent.putExtra("popuptitle", "Error")
-            intent.putExtra("popuptext", "Sorry, that email address is already used!")
-            intent.putExtra("popupbtn", "OK")
-            intent.putExtra("darkstatusbar", false)
-            startActivity(intent)
+//            val intent = Intent(this, PopUpWindow::class.java)
+//            intent.putExtra("popuptitle", "Error")
+//            intent.putExtra("popuptext", "Puzzle image could not be processed. Please retake image with bright lighting and no blurriness.")
+//            intent.putExtra("popupbtn", "OK")
+//            intent.putExtra("darkstatusbar", false)
+//            startActivity(intent)
 
             takePicture.launch(viewState.imageUri)
         }
