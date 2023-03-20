@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">kotlinChatter</string>
+    <string name="app_name">PuzzlePal</string>
     <string name="post">Post</string>
     <string name="send">Send</string>
     <string name="username">zhukevin</string>
