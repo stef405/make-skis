@@ -201,17 +201,17 @@
 //        return super.onOptionsItemSelected(item)
 //    }
 //
-//    private fun submitChatt() {
-//        val chatt = Chatt(username = view.usernameTextView.text.toString(),
-//            message = view.messageTextView.text.toString())
-//
-//        postChatt(applicationContext, chatt, viewState.imageUri, viewState.videoUri) { msg ->
-//            runOnUiThread {
-//                toast(msg)
-//            }
-//            finish()
-//        }
-//    }
+////    private fun submitChatt() {
+////        val chatt = Chatt(username = view.usernameTextView.text.toString(),
+////            message = view.messageTextView.text.toString())
+////
+////        postChatt(applicationContext, chatt, viewState.imageUri, viewState.videoUri) { msg ->
+////            runOnUiThread {
+////                toast(msg)
+////            }
+////            finish()
+////        }
+////    }
 //}
 //
 //class PostViewState: ViewModel() {

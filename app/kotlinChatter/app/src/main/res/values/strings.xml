@@ -16,8 +16,6 @@
     <string name="defaultPieceHistory">No current puzzle piece entries</string>
     <string name="title_activity_puzzle_piece">PuzzlePieceActivity</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
