@@ -2,6 +2,7 @@ package edu.umich.zhukevin.kotlinChatter
 
 import android.Manifest
 import android.content.ContentValues
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -12,21 +13,21 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
 import androidx.lifecycle.ViewModel
-import edu.umich.zhukevin.kotlinChatter.ChattStore.chatts
-import edu.umich.zhukevin.kotlinChatter.ChattStore.getChatts
+import edu.umich.zhukevin.kotlinChatter.PieceStore.getPieces
+import edu.umich.zhukevin.kotlinChatter.PieceStore.pieces
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var view: ActivityMainBinding
-    private lateinit var chattListAdapter: ChattListAdapter
+    private lateinit var pieceListAdapter: PieceListAdapter
     private val viewState: MainViewState by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,16 +36,16 @@ class MainActivity : AppCompatActivity() {
         view.root.setBackgroundColor(Color.parseColor("#FFFFFF"))
         setContentView(view.root)
 
-        chattListAdapter = ChattListAdapter(this, chatts)
-        view.chattListView.setAdapter(chattListAdapter)
+        pieceListAdapter = PieceListAdapter(this, pieces)
+        view.puzzleListView.setAdapter(pieceListAdapter)
 
         // setup refreshContainer here later
         view.refreshContainer.setOnRefreshListener {
-            getChatts()
+            getPieces()
         }
 
         refreshTimeline()
-        chatts.addOnListChangedCallback(propertyObserver)
+        pieces.addOnListChangedCallback(propertyObserver)
 
         // register camera contract
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { results ->
@@ -109,11 +110,11 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun startPost(view: View?) = startActivity(Intent(this, PostActivity::class.java))
+//    fun startPost(view: View?) = startActivity(Intent(this, PostActivity::class.java))
 
     // refresh content
     private fun refreshTimeline() {
-        getChatts()
+        getPieces()
 
         // stop the refreshing animation upon completion:
         view.refreshContainer.isRefreshing = false
@@ -129,7 +130,7 @@ class MainActivity : AppCompatActivity() {
         ) {
             println("onItemRangeInserted: $positionStart, $itemCount")
             runOnUiThread {
-                chattListAdapter.notifyDataSetChanged()
+                pieceListAdapter.notifyDataSetChanged()
             }
         }
         override fun onItemRangeMoved(sender: ObservableArrayList<Int>?, fromPosition: Int, toPosition: Int,
@@ -140,7 +141,7 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
 
-        chatts.removeOnListChangedCallback(propertyObserver)
+//        chatts.removeOnListChangedCallback(propertyObserver)
     }
 
     // store camera image
@@ -155,6 +156,28 @@ class MainActivity : AppCompatActivity() {
             else
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
             values)
+    }
+
+    fun retakeAlertMessage(view: View){
+        val builder = AlertDialog.Builder(this)
+        with(builder)
+        {
+            setTitle(getString(R.string.fail_title))
+            setMessage(getString(R.string.error_message))
+            setPositiveButton(getString(R.string.retake_photo), DialogInterface.OnClickListener(positiveButtonClick))
+            setNegativeButton(getString(R.string.exit_alert_dialog), negativeButtonClick)
+            show()
+        }
+    }
+
+    val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+        Toast.makeText(applicationContext,
+            android.R.string.yes, Toast.LENGTH_SHORT).show()
+    }
+
+    val negativeButtonClick = { dialog: DialogInterface, which: Int ->
+        Toast.makeText(applicationContext,
+            android.R.string.no, Toast.LENGTH_SHORT).show()
     }
 
 
