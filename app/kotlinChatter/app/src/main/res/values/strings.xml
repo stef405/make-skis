@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">kotlinChatter</string>
+    <string name="app_name">PuzzlePal</string>
     <string name="post">Post</string>
     <string name="send">Send</string>
     <string name="username">zhukevin</string>
@@ -14,4 +14,15 @@
     <string name="videoView">videoView</string>
     <string name="defaultHistory">No current puzzle entries</string>
     <string name="defaultPieceHistory">No current puzzle piece entries</string>
+    <string name="title_activity_puzzle_piece">PuzzlePieceActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="fail_title">Error</string>
+    <string name="error_message">Puzzle image could not be processed. Please retake image with bright lighting and no blurriness</string>
+    <string name="retake_photo">Retake</string>
+    <string name="exit_alert_dialog">Exit</string>
 </resources>

@@ -31,19 +31,27 @@
         android:theme="@style/Theme.KotlinChatter"
         tools:targetApi="31">
         <activity
+            android:name=".PieceListAdapter"
+            android:exported="false" />
+        <activity
+            android:name=".PuzzlePieceActivity"
+            android:exported="false"
+            android:label="@string/title_activity_puzzle_piece"
+            android:theme="@style/Theme.KotlinChatter.NoActionBar" />
+        <activity
             android:name=".PopUpWindow"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity
-            android:name=".VideoPlayActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+<!--        <activity-->
+<!--            android:name=".VideoPlayActivity"-->
+<!--            android:exported="false">-->
+<!--            <meta-data-->
+<!--                android:name="android.app.lib_name"-->
+<!--                android:value="" />-->
+<!--        </activity>-->
         <activity
             android:name=".PostActivity"
             android:label="@string/post"
