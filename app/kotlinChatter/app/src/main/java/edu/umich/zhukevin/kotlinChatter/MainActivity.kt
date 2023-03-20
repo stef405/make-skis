@@ -26,6 +26,7 @@ import edu.umich.zhukevin.kotlinChatter.PieceStore.getPieces
 import edu.umich.zhukevin.kotlinChatter.PieceStore.pieces
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityMainBinding
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityPuzzlePieceBinding
+import edu.umich.zhukevin.kotlinChatter.databinding.DimBinding
 
 class MainActivity : AppCompatActivity() {
 
@@ -74,7 +75,7 @@ class MainActivity : AppCompatActivity() {
         var takePicture = registerForActivityResult(ActivityResultContracts.TakePicture())
         { success ->
             if (success) {
-                startActivity(Intent(this, PuzzlePieceActivity::class.java))
+                startActivity(Intent(this, Dimensions::class.java))
             } else {
                 Log.d("TakePicture", "failed")
             }
