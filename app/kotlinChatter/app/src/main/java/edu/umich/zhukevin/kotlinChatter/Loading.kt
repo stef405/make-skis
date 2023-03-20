@@ -1,8 +1,10 @@
 package edu.umich.zhukevin.kotlinChatter
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.delay
@@ -22,11 +24,11 @@ class Loading : AppCompatActivity() {
         setContentView(view.root)
 
         view.loading.visibility = View.VISIBLE
+        Handler().postDelayed({
+            startActivity(Intent(this, PuzzlePieceActivity::class.java))
+        }, 5000)
 
-
-        Thread.sleep(15000)
-
-        startActivity(Intent(this, PuzzlePieceActivity::class.java))
+//        view.progressBar.visibility = View.VISIBLE
 
 
 

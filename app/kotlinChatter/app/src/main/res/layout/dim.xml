@@ -35,7 +35,7 @@
         android:layout_height="19dp"
         android:layout_marginBottom="25dp"
         android:text="Height"
-        android:textSize="20sp"
+        android:textSize="15sp"
         app:layout_constraintBottom_toTopOf="@+id/height"
         app:layout_constraintStart_toStartOf="@+id/height"
         app:layout_constraintTop_toTopOf="parent"
@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:text="Width"
-        android:textSize="20sp"
+        android:textSize="15sp"
         app:layout_constraintBottom_toTopOf="@+id/width"
         app:layout_constraintStart_toStartOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/height" />
@@ -69,7 +69,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:text="Puzzle Piece Count"
-        android:textSize="20sp"
+        android:textSize="15sp"
         app:layout_constraintStart_toStartOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/width" />
 
