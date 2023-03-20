@@ -25,12 +25,15 @@ import androidx.lifecycle.ViewModel
 import edu.umich.zhukevin.kotlinChatter.PieceStore.getPieces
 import edu.umich.zhukevin.kotlinChatter.PieceStore.pieces
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityMainBinding
+import edu.umich.zhukevin.kotlinChatter.databinding.ActivityPuzzlePieceBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var view: ActivityMainBinding
     private lateinit var pieceListAdapter: PieceListAdapter
     private val viewState: MainViewState by viewModels()
+
+    private lateinit var other_view: ActivityPuzzlePieceBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,7 +74,7 @@ class MainActivity : AppCompatActivity() {
         var takePicture = registerForActivityResult(ActivityResultContracts.TakePicture())
         { success ->
             if (success) {
-                startActivity(Intent(this, MainActivity::class.java))
+                startActivity(Intent(this, PuzzlePieceActivity::class.java))
             } else {
                 Log.d("TakePicture", "failed")
             }

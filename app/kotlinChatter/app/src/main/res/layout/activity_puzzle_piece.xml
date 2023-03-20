@@ -48,7 +48,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@drawable/empty_puzzle_piece" />
+        android:src="@drawable/empty_puzzle_piece" />
 
     <TextView
         android:id="@+id/defaultHistoryText"
