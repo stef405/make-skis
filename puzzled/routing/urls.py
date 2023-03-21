@@ -25,4 +25,6 @@ urlpatterns = [
     path('postimages/', views.postimages, name='postimages'),
     path('deletepuzzle/', views.deletepuzzle, name='deletepuzzle'),
     path('postpuzzle/', views.postpuzzle, name='postpuzzle'),
+    path('deletepiece/', views.deletepiece, name='deletepiece'),
+    path('postpuzzle/', views.postpiece, name='postpiece'),
 ]
