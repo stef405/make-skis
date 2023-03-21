@@ -1,5 +1,5 @@
 CREATE TABLE Puzzles (
-    puzzle_id INTEGER PRIMARY KEY AUTO INCREMENT,
+    puzzle_id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL,
     puzzle_img TEXT NOT NULL,
     piece_ct INTEGER,
@@ -8,7 +8,7 @@ CREATE TABLE Puzzles (
 );
 
 CREATE TABLE Pieces (
-    piece_id INTEGER PRIMARY KEY AUTO INCREMENT,
+    piece_id SERIAL PRIMARY KEY,
     piece_image TEXT NOT NULL,
     solution_image TEXT NOT NULL,
     puzzle_id INTEGER NOT NULL,
