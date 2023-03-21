@@ -9,8 +9,8 @@ CREATE TABLE Puzzles (
 
 CREATE TABLE Pieces (
     piece_id SERIAL PRIMARY KEY,
-    piece_image TEXT NOT NULL,
-    solution_image TEXT NOT NULL,
+    piece_img TEXT NOT NULL,
+    solution_img TEXT NOT NULL,
     puzzle_id INTEGER NOT NULL,
     difficulty INTEGER,
     FOREIGN KEY(puzzle_id) REFERENCES Puzzles(puzzle_id)

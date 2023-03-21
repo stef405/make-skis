@@ -156,7 +156,7 @@ def postpiece(request):
         
     cursor = connection.cursor()
     cursor.execute('INSERT INTO puzzles (user_id, puzzle_id, piece_image_url, difficulty) VALUES '
-                   '(%d, %d, %s, %s);', (user_id, puzzle_id, piece_image_url, difficulty))
+                   '(%d, %d, %s, %d);', (user_id, puzzle_id, piece_image_url, difficulty))
 
     return HttpResponse(status=201)
 
