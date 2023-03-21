@@ -15,6 +15,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="height"
+        android:textColorHint="#808080"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,7 +25,8 @@
         android:layout_height="145dp"
         android:layout_marginTop="30dp"
         android:text="Please Provide Dimensions and Puzzle Piece Count"
-        android:textSize="34sp"
+        android:textSize="34dp"
+        android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -36,6 +38,7 @@
         android:layout_marginBottom="25dp"
         android:text="Height"
         android:textSize="15sp"
+        android:textColor="#000000"
         app:layout_constraintBottom_toTopOf="@+id/height"
         app:layout_constraintStart_toStartOf="@+id/height"
         app:layout_constraintTop_toTopOf="parent"
@@ -47,6 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:text="Width"
+        android:textColor="#000000"
         android:textSize="15sp"
         app:layout_constraintBottom_toTopOf="@+id/width"
         app:layout_constraintStart_toStartOf="@+id/textView5"
@@ -60,6 +64,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="width"
+        android:textColorHint="#808080"
         app:layout_constraintStart_toStartOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
@@ -70,6 +75,7 @@
         android:layout_marginTop="25dp"
         android:text="Puzzle Piece Count"
         android:textSize="15sp"
+        android:textColor="#000000"
         app:layout_constraintStart_toStartOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/width" />
 
@@ -81,6 +87,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="puzzle piece count"
+        android:textColorHint="#808080"
         app:layout_constraintStart_toStartOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/te" />
 
