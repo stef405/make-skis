@@ -30,17 +30,41 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KotlinChatter"
         tools:targetApi="31">
+        <activity android:name=".Difficulty"
+            android:exported="false"
+            android:label="Difficulty" />
+        <activity android:name=".Loading"
+            android:exported="false"
+            android:label="Loading" />
         <activity
-            android:name=".VideoPlayActivity"
+            android:name=".PieceListAdapter"
+            android:exported="false" />
+        <activity android:name=".Dimensions"
+            android:exported="false"
+            android:label="Dimensions"/>
+        <activity
+            android:name=".PuzzlePieceActivity"
+            android:exported="false"
+            android:label="@string/title_activity_puzzle_piece"
+            android:theme="@style/Theme.KotlinChatter.NoActionBar" />
+        <activity
+            android:name=".PopUpWindow"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity
+<!--        <activity-->
+<!--            android:name=".VideoPlayActivity"-->
+<!--            android:exported="false">-->
+<!--            <meta-data-->
+<!--                android:name="android.app.lib_name"-->
+<!--                android:value="" />-->
+<!--        </activity>-->
+<!--        <activity
             android:name=".PostActivity"
             android:label="@string/post"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity" />-->
         <activity
             android:name=".MainActivity"
             android:exported="true">

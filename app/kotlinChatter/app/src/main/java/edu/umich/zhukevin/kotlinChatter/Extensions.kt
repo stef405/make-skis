@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import java.io.File
+import edu.umich.zhukevin.kotlinChatter.databinding.DimBinding
 
 fun Context.toast(message: String, short: Boolean = true) {
     Toast.makeText(this, message, if (short) Toast.LENGTH_SHORT else Toast.LENGTH_LONG).show()
