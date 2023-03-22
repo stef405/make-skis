@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 
-class Puzzles(models.Model):
+class Puzzle(models.Model):
     puzzle_id = models.IntegerField
     user_id = models.IntegerField
     puzzle_img = models.URLField
@@ -10,7 +10,7 @@ class Puzzles(models.Model):
     width = models.IntegerField
     height = models.IntegerField
 
-class Pieces(models.Model):
+class Piece(models.Model):
     piece_id = models.IntegerField
     piece_img = models.CharField(max_length=50)
     solution_img = models.URLField

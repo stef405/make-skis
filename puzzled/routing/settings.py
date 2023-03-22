@@ -77,8 +77,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'puzzledb',
-        'USER': 'chatter',
-        'PASSWORD': 'chattchatt',
+        'USER': 'puzzler',
+        'PASSWORD': 'puzzle',
         'HOST': 'localhost',
         'PORT': '',
     }
