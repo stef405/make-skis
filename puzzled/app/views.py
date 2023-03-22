@@ -117,7 +117,7 @@ def postpuzzle(request):
     piece_ct = request.POST.get('piece_ct')
     width = request.POST.get('width')
     height = request.POST.get('height')
-    
+    return user_id
     """
     if request.FILES.get("puzzle_img"):
         content = request.FILES['puzzle_img']
