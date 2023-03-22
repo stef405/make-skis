@@ -27,4 +27,5 @@ urlpatterns = [
     path('postpuzzle/', views.postpuzzle, name='postpuzzle'),
     path('deletepiece/', views.deletepiece, name='deletepiece'),
     path('postpuzzle/', views.postpiece, name='postpiece'),
+    path('getpuzzles/', views.getpuzzles, name='getpuzzles'),
 ]

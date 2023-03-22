@@ -107,6 +107,18 @@ def deletepuzzle(request):
 
     return HttpResponse(status=204)
 
+def getpuzzles(request):
+    if request.method != 'GET':
+        return HttpResponse(status=404)
+
+    cursor = connection.cursor()
+    cursor.execute('SELECT * FROM puzzles;')
+    rows = cursor.fetchall()
+
+    response = {}
+    response['puzzles'] = rows
+    return JsonResponse(response)
+
 @csrf_exempt
 def postpuzzle(request):
     if request.method != 'POST':
