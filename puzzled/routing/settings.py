@@ -75,12 +75,12 @@ WSGI_APPLICATION = 'routing.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'puzzledb',
-	'USER': 'chatter',
-	'PASSWORD': 'chattchatt',
-	'HOST': 'localhost',
-	'PORT': '',
+        'USER': 'chatter',
+        'PASSWORD': 'chattchatt',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
