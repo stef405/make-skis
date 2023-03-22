@@ -110,11 +110,9 @@ def deletepuzzle(request):
 @csrf_exempt
 def postpuzzle(request):
     if request.method != 'POST':
-        return 10
-
+        return HttpResponse(status=400)
     # loading multipart/form-data
     user_id = request.POST.get("user_id")
-    return user_id
     piece_ct = request.POST.get('piece_ct')
     width = request.POST.get('width')
     height = request.POST.get('height')
@@ -130,7 +128,7 @@ def postpuzzle(request):
     """    
     cursor = connection.cursor()
     cursor.execute('INSERT INTO puzzles (user_id, piece_ct, width, height) VALUES '
-                   '(%d, %d, %d, %d);', (user_id, piece_ct, width, height))
+                   '(%s, %s, %s, %s);', (user_id, piece_ct, width, height))
 
     return HttpResponse(status=201)
 
