@@ -110,7 +110,7 @@ def deletepuzzle(request):
 @csrf_exempt
 def postpuzzle(request):
     if request.method != 'POST':
-        return HttpResponse(status=400)
+        return 10
 
     json_data = json.loads(request.body)
     # loading multipart/form-data
