@@ -116,6 +116,7 @@ def postpuzzle(request):
     # loading multipart/form-data
     user_id = json_data['user_id']
     piece_ct = json_data['piece_ct']
+    return piece_ct
     width = json_data['width']
     height = json_data['height']
     """
