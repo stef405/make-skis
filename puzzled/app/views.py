@@ -112,12 +112,13 @@ def postpuzzle(request):
     if request.method != 'POST':
         return HttpResponse(status=400)
 
+    json_data = json.loads(request.body)
     # loading multipart/form-data
-    user_id = request.POST.get("user_id")
+    user_id = json_data['user_id']
+    return user_id
     piece_ct = request.POST.get('piece_ct')
     width = request.POST.get('width')
     height = request.POST.get('height')
-    return user_id
     """
     if request.FILES.get("puzzle_img"):
         content = request.FILES['puzzle_img']
