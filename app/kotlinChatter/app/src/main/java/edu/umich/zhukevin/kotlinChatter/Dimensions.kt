@@ -40,9 +40,9 @@ class Dimensions : AppCompatActivity() {
         view.root.setBackgroundColor(Color.parseColor("#FFFFFF"))
         setContentView(view.root)
 
-        height = findViewById(R.id.height)
-        width = findViewById(R.id.width)
-        num_count = findViewById(R.id.num_count)
+        height = view.height
+        width = view.width
+        num_count = view.numCount
 
         var takePicture = registerForActivityResult(ActivityResultContracts.TakePicture())
         { success ->
