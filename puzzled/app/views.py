@@ -118,7 +118,7 @@ def postpuzzle(request):
     width = request.POST.get('width')
     height = request.POST.get('height')
     
-
+    """
     if request.FILES.get("puzzle_img"):
         content = request.FILES['puzzle_img']
         filename = user_id+str(time.time())+".jpeg"
@@ -127,10 +127,10 @@ def postpuzzle(request):
         puzzle_image_url = fs.url(filename)
     else:
         return HttpResponse(status=400)
-        
+    """    
     cursor = connection.cursor()
-    cursor.execute('INSERT INTO puzzles (user_id, puzzle_image_url, piece_ct, width, height) VALUES '
-                   '(%d, %s, %d, %d, %d);', (user_id, puzzle_image_url, piece_ct, width, height))
+    cursor.execute('INSERT INTO puzzles (user_id, piece_ct, width, height) VALUES '
+                   '(%d, %s, %d, %d, %d);', (user_id, piece_ct, width, height))
 
     return HttpResponse(status=201)
 
