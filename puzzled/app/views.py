@@ -86,6 +86,7 @@ def postchatt(request):
 
     return JsonResponse({})
 
+@csrf_exempt
 def deletepuzzle(request):
     # not sure if this should be DELETE
     if request.method != 'DELETE':
