@@ -25,4 +25,6 @@
     <string name="error_message">Puzzle image could not be processed. Please retake image with bright lighting and no blurriness</string>
     <string name="retake_photo">Retake</string>
     <string name="exit_alert_dialog">Exit</string>
+
+    <string name="photo_description">Would you like to upload your puzzle entry from storage?</string>
 </resources>

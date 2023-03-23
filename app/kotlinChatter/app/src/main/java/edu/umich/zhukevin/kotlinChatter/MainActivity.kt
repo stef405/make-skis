@@ -1,32 +1,31 @@
 package edu.umich.zhukevin.kotlinChatter
 
 import android.Manifest
+import android.app.ProgressDialog.show
 import android.content.ContentValues
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import edu.umich.zhukevin.kotlinChatter.PieceStore.getPieces
 import edu.umich.zhukevin.kotlinChatter.PieceStore.pieces
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityMainBinding
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityPuzzlePieceBinding
-import edu.umich.zhukevin.kotlinChatter.databinding.DimBinding
 
 class MainActivity : AppCompatActivity() {
 
@@ -53,6 +52,30 @@ class MainActivity : AppCompatActivity() {
         refreshTimeline()
         pieces.addOnListChangedCallback(propertyObserver)
 
+        val forPickedResult =
+            registerForActivityResult(ActivityResultContracts.GetContent(), fun(uri: Uri?) {
+                uri?.let {
+                    if (it.toString().contains("video")) {
+
+                    } else {
+                        val inStream = contentResolver.openInputStream(it) ?: return
+                        viewState.imageUri = mediaStoreAlloc("image/jpeg")
+                        viewState.imageUri?.let {
+                            val outStream = contentResolver.openOutputStream(it) ?: return
+                            val buffer = ByteArray(8192)
+                            var read: Int
+                            while (inStream.read(buffer).also{ read = it } != -1) {
+                                outStream.write(buffer, 0, read)
+                            }
+                            outStream.flush()
+                            outStream.close()
+                            inStream.close()
+                        }
+                    }
+                    startActivity(Intent(this, Dimensions::class.java))
+                } ?: run { Log.d("Pick media", "failed") }
+            })
+
         // register camera contract
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { results ->
             results.forEach {
@@ -71,44 +94,19 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        //
+        // camera chosen
         var takePicture = registerForActivityResult(ActivityResultContracts.TakePicture())
         { success ->
             if (success) {
                 startActivity(Intent(this, Dimensions::class.java))
             } else {
-                Log.d("TakePicture", "failed")
+                Log.d("Take picture", "failed")
             }
         }
-        view.cameraButton.setOnClickListener {
+        view.plusButton.setOnClickListener {
             viewState.imageUri = mediaStoreAlloc(mediaType="image/jpeg")
-
-//            val intent = Intent(this, PopUpWindow::class.java)
-//            intent.putExtra("popuptitle", "Error")
-//            intent.putExtra("popuptext", "Puzzle image could not be processed. Please retake image with bright lighting and no blurriness.")
-//            intent.putExtra("popupbtn", "OK")
-//            intent.putExtra("darkstatusbar", false)
-//            startActivity(intent)
-
-            takePicture.launch(viewState.imageUri)
+            plusButton(takePicture, forPickedResult)
         }
-
-        /*
-        view.dimButton.setOnClickListener{
-            setContentView(R.layout.dim_dialog)
-            var width = findViewById(R.id.width) as EditText
-            var height = findViewById(R.id.height) as EditText
-            var num_pieces = findViewById(R.id.num_pieces) as EditText
-            var next_btn = findViewById(R.id.next) as Button
-
-            next_btn.setOnClickListener {
-                val width = width
-                val height = height
-                val num_pieces = num_pieces
-
-            }
-        }
-        */
     }
 
     fun showHistory() {
@@ -164,6 +162,20 @@ class MainActivity : AppCompatActivity() {
             values)
     }
 
+    // plus button
+    private fun plusButton(takePicture: ActivityResultLauncher<Uri>, forPickedResult: ActivityResultLauncher<String>) {
+        // setup the alert builder
+        val builder = AlertDialog.Builder(this)
+        with(builder)
+        {
+            setTitle("Upload from Storage")
+            setMessage("Would you like to upload your puzzle entry from storage?")
+            setPositiveButton("STORAGE") { _, _ -> forPickedResult.launch("*/*") }
+            setNegativeButton("TAKE PHOTO") { _, _ -> takePicture.launch(viewState.imageUri) }
+            show()
+        }
+    }
+
     fun retakeAlertMessage(view: View){
         val builder = AlertDialog.Builder(this)
         with(builder)
@@ -185,8 +197,6 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(applicationContext,
             android.R.string.no, Toast.LENGTH_SHORT).show()
     }
-
-
 }
 
 class MainViewState: ViewModel() {
