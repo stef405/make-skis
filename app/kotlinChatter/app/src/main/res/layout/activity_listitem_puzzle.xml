@@ -7,7 +7,8 @@
     android:paddingStart="6dp"
     android:paddingTop="8dp"
     android:paddingEnd="6dp"
-    android:paddingBottom="14dp">
+    android:paddingBottom="14dp"
+    tools:context=".PuzzleListAdapter">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -19,7 +20,7 @@
         >
 
         <ImageButton
-            android:id="@+id/entryImage"
+            android:id="@+id/puzzleImage"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginStart="16dp"
@@ -35,34 +36,34 @@
             android:layout_weight="1"
             android:minHeight="1dp"/>
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Puzzle 1"
-        android:textSize="24sp"
-        android:layout_gravity="center"
-        app:layout_constraintBottom_toBottomOf="@+id/entryImage"
-        app:layout_constraintTop_toTopOf="@+id/entryImage"
-        tools:layout_editor_absoluteX="178dp" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Puzzle 1"
+            android:textSize="24sp"
+            android:layout_gravity="center"
+            app:layout_constraintBottom_toBottomOf="@+id/entryImage"
+            app:layout_constraintTop_toTopOf="@+id/entryImage"
+            tools:layout_editor_absoluteX="178dp" />
         <android.widget.Space
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:minHeight="1dp"/>
 
-    <ImageButton
-        android:id="@+id/deleteEntry"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="16dp"
-        android:layout_gravity="center"
-        android:background="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="@+id/entryImage"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/entryImage"
-        app:layout_constraintVertical_bias="0.393"
-        android:src="@drawable/icon_garbage" />
+        <ImageButton
+            android:id="@+id/deleteEntry"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="16dp"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            app:layout_constraintBottom_toBottomOf="@+id/entryImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/entryImage"
+            app:layout_constraintVertical_bias="0.393"
+            android:src="@drawable/icon_garbage" />
 
 
     </LinearLayout>

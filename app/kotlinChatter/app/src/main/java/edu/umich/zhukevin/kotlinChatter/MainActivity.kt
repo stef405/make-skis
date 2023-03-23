@@ -22,8 +22,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
 import androidx.lifecycle.ViewModel
-import edu.umich.zhukevin.kotlinChatter.PieceStore.getPieces
-import edu.umich.zhukevin.kotlinChatter.PieceStore.pieces
+import edu.umich.zhukevin.kotlinChatter.PuzzleStore.getPieces
+import edu.umich.zhukevin.kotlinChatter.PuzzleStore.pieces
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityMainBinding
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityPuzzlePieceBinding
 
