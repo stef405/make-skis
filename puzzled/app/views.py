@@ -99,12 +99,12 @@ def deletepuzzle(request):
     cursor = connection.cursor()
     # if puzzle_id doesn't exist for user_id return 404
     cursor.execute('SELECT * FROM puzzles WHERE (user_id = '
-                   '(%d) AND puzzle_id = (%d);', (user_id, puzzle_id))
+                   '(%s) AND puzzle_id = (%s);', (user_id, puzzle_id))
     if (cursor.fetchone() == None):
         return HttpResponse(status=404)
     
     cursor.execute('DELETE FROM puzzles WHERE (puzzle_id = '
-                   '(%d) AND user_id = (%d);', (puzzle_id, user_id))
+                   '(%s) AND user_id = (%s);', (puzzle_id, user_id))
 
     return HttpResponse(status=204)
 
