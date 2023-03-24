@@ -110,13 +110,23 @@ def deletepuzzle(request):
 def getpuzzles(request):
     if request.method != 'GET':
         return HttpResponse(status=404)
+    
+    user_id = request.GET.get('user_id')
 
     cursor = connection.cursor()
-    cursor.execute('SELECT * FROM puzzles;')
+    cursor.execute('SELECT * FROM puzzles WHERE (user_id = '
+                   '%s);', (user_id))
     rows = cursor.fetchall()
 
     response = {}
-    response['puzzles'] = rows
+    for row in rows:
+        puzzle = {}
+        puzzle['puzzle_id'] = row.get(0)
+        puzzle['puzzle_img'] = row.get(2)
+        puzzle['piece_ct'] = row.get(3)
+        puzzle['width'] = row.get(4)
+        puzzle['height'] = row.get(5)
+        response['puzzles'].append(puzzle)
     return JsonResponse(response)
 
 def getpieces(request):
