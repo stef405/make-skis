@@ -28,4 +28,5 @@ urlpatterns = [
     path('deletepiece/', views.deletepiece, name='deletepiece'),
     path('postpuzzle/', views.postpiece, name='postpiece'),
     path('getpuzzles/', views.getpuzzles, name='getpuzzles'),
+    path('getpieces/', views.getpieces, name='getpieces'),
 ]

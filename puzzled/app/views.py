@@ -120,6 +120,18 @@ def getpuzzles(request):
     response['puzzles'] = rows
     return JsonResponse(response)
 
+def getpieces(request):
+    if request.method != 'GET':
+        return HttpResponse(status=404)
+
+    cursor = connection.cursor()
+    cursor.execute('SELECT * FROM pieces;')
+    rows = cursor.fetchall()
+
+    response = {}
+    response['pieces'] = rows
+    return JsonResponse(response)
+
 @csrf_exempt
 def postpuzzle(request):
     if request.method != 'POST':
