@@ -103,11 +103,11 @@ def deletepuzzle(request):
 
     return HttpResponse(status=204)
 
-def getpuzzles(request):
+def getpuzzles(request, user_id):
     if request.method != 'GET':
         return HttpResponse(status=404)
     
-    user_id = int(request.GET['user_id'])
+    # user_id = int(request.GET['user_id'])
     
     cursor = connection.cursor()
     cursor.execute("""SELECT * FROM puzzles WHERE (user_id =
