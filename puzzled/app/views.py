@@ -111,11 +111,11 @@ def getpuzzles(request):
     if request.method != 'GET':
         return HttpResponse(status=404)
     
-    user_id = request.GET.get('user_id')
+    user_id = request.get('user_id')
 
     cursor = connection.cursor()
     cursor.execute('SELECT * FROM puzzles WHERE (user_id = '
-                   '(%d));', (user_id))
+                   '(%s));', (user_id))
     rows = cursor.fetchall()
 
     response = {}
