@@ -74,16 +74,16 @@ WSGI_APPLICATION = 'routing.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-<<<<<<< HEAD
-  'default': {
-      'ENGINE': 'django.db.backends.postgresql',
-      'NAME': 'puzzledb',
-      'USER': 'chatter',
-      'PASSWORD': 'chattchatt',
-      'HOST': 'localhost',
-      'PORT': '',
-  }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'puzzledb',
+        'USER': 'puzzler',
+        'PASSWORD': 'puzzle',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -119,7 +119,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'static'   # added line
 
 # Default primary key field type
