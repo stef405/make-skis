@@ -92,8 +92,8 @@ def deletepuzzle(request):
     if request.method != 'DELETE':
         return HttpResponse(status=404)
 
-    user_id = request.POST.get('user_id')
-    puzzle_id = request.POST.get('puzzle_id')
+    user_id = request.DELETE.get('user_id')
+    puzzle_id = request.DELETE.get('puzzle_id')
 
     cursor = connection.cursor()
     # if puzzle_id doesn't exist for user_id return 404
@@ -103,7 +103,7 @@ def deletepuzzle(request):
         return HttpResponse(status=404)
     
     cursor.execute('DELETE FROM puzzles WHERE (puzzle_id = '
-                   '(%s) AND user_id = (%s);', (puzzle_id, user_id))
+                   '(%s) AND user_id = (%s));', (puzzle_id, user_id))
 
     return HttpResponse(status=204)
 
@@ -187,9 +187,9 @@ def deletepiece(request):
     if request.method != 'DELETE':
         return HttpResponse(status=404)
 
-    user_id = request.POST.get('user_id')
-    puzzle_id = request.POST.get('puzzle_id')
-    piece_id = request.POST.get('piece_id')
+    user_id = request.DELETE.get('user_id')
+    puzzle_id = request.DELETE.get('puzzle_id')
+    piece_id = request.DELETE.get('piece_id')
 
     cursor = connection.cursor()
     # if puzzle_id doesn't exist for user_id return 404
