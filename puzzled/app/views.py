@@ -115,14 +115,16 @@ def getpuzzles(request):
                    %s);""", (user_id, ))
     rows = cursor.fetchall()
 
+
     response = {}
     for row in rows:
+        row = list(row)
         puzzle = {}
-        puzzle['puzzle_id'] = row.get(0)
-        puzzle['puzzle_img'] = row.get(2)
-        puzzle['piece_ct'] = row.get(3)
-        puzzle['width'] = row.get(4)
-        puzzle['height'] = row.get(5)
+        puzzle['puzzle_id'] = row[0]
+        puzzle['puzzle_img'] = row[2]
+        puzzle['piece_ct'] = row[3]
+        puzzle['width'] = row[4]
+        puzzle['height'] = row[5]
         response['puzzles'].append(puzzle)
     return JsonResponse(response)
 
