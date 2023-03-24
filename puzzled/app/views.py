@@ -104,15 +104,13 @@ def deletepuzzle(request, user_id, puzzle_id):
 
     return HttpResponse(status=204)
 
-def getpuzzles(request):
+def getpuzzles(request, user_id):
     if request.method != 'GET':
         return HttpResponse(status=404)
     
-    user_id = request.GET.get('user_id')
-
     cursor = connection.cursor()
     cursor.execute('SELECT * FROM puzzles WHERE (user_id = '
-                   '(%s));', (user_id))
+                   '(%d));', (user_id))
     rows = cursor.fetchall()
 
     response = {}
