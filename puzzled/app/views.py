@@ -112,7 +112,7 @@ def getpuzzles(request):
     
     cursor = connection.cursor()
     cursor.execute('SELECT * FROM puzzles WHERE (user_id = '
-                   '(%d));', (user_id))
+                   '(%s));', (user_id))
     rows = cursor.fetchall()
 
     response = {}
