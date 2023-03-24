@@ -87,13 +87,10 @@ def postchatt(request):
     return JsonResponse({})
 
 @csrf_exempt
-def deletepuzzle(request):
+def deletepuzzle(request, user_id, puzzle_id):
     # not sure if this should be DELETE
     if request.method != 'DELETE':
         return HttpResponse(status=404)
-
-    user_id = request.get('user_id')
-    puzzle_id = request.get('puzzle_id')
 
     cursor = connection.cursor()
     # if puzzle_id doesn't exist for user_id return 404
