@@ -92,8 +92,8 @@ def deletepuzzle(request):
     if request.method != 'DELETE':
         return HttpResponse(status=404)
 
-    user_id = request.DELETE.get('user_id')
-    puzzle_id = request.DELETE.get('puzzle_id')
+    user_id = request.get('user_id')
+    puzzle_id = request.get('puzzle_id')
 
     cursor = connection.cursor()
     # if puzzle_id doesn't exist for user_id return 404
