@@ -93,8 +93,8 @@ def deletepuzzle(request):
         return HttpResponse(status=404)
 
     json_data = json.loads(request.body)
-    user_id = json_data['user_id']
-    puzzle_id = json_data['puzzle_id']
+    user_id = request.POST.get('user_id')
+    puzzle_id = request.POST.get('puzzle_id')
 
     cursor = connection.cursor()
     # if puzzle_id doesn't exist for user_id return 404
