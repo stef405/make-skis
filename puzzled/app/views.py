@@ -92,7 +92,6 @@ def deletepuzzle(request):
     if request.method != 'DELETE':
         return HttpResponse(status=404)
 
-    json_data = json.loads(request.body)
     user_id = request.POST.get('user_id')
     puzzle_id = request.POST.get('puzzle_id')
 
@@ -179,7 +178,7 @@ def postpiece(request):
         
     cursor = connection.cursor()
     cursor.execute('INSERT INTO puzzles (user_id, puzzle_id, piece_image_url, difficulty) VALUES '
-                   '(%d, %d, %s, %d);', (user_id, puzzle_id, piece_image_url, difficulty))
+                   '(%s, %s, %s, %s);', (user_id, puzzle_id, piece_image_url, difficulty))
 
     return HttpResponse(status=201)
 
@@ -188,10 +187,9 @@ def deletepiece(request):
     if request.method != 'DELETE':
         return HttpResponse(status=404)
 
-    json_data = json.loads(request.body)
-    user_id = json_data['user_id']
-    puzzle_id = json_data['puzzle_id']
-    piece_id = json_data['piece_id']
+    user_id = request.POST.get('user_id')
+    puzzle_id = request.POST.get('puzzle_id')
+    piece_id = request.POST.get('piece_id')
 
     cursor = connection.cursor()
     # if puzzle_id doesn't exist for user_id return 404
