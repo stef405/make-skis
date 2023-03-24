@@ -98,7 +98,7 @@ def deletepuzzle(request):
     cursor = connection.cursor()
     # if puzzle_id doesn't exist for user_id return 404
     cursor.execute('SELECT * FROM puzzles WHERE (user_id = '
-                   '(%s) AND puzzle_id = (%s);', (user_id, puzzle_id))
+                   '(%s) AND puzzle_id = (%s));', (user_id, puzzle_id))
     if (cursor.fetchone() == None):
         return HttpResponse(status=404)
     
@@ -115,7 +115,7 @@ def getpuzzles(request):
 
     cursor = connection.cursor()
     cursor.execute('SELECT * FROM puzzles WHERE (user_id = '
-                   '(%s));', (user_id))
+                   '(%d));', (user_id))
     rows = cursor.fetchall()
 
     response = {}
