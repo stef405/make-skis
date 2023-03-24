@@ -86,70 +86,123 @@ def postchatt(request):
 
     return JsonResponse({})
 
+@csrf_exempt
 def deletepuzzle(request):
     # not sure if this should be DELETE
     if request.method != 'DELETE':
         return HttpResponse(status=404)
 
     json_data = json.loads(request.body)
-    user_id = json_data['user_id']
-    puzzle_id = json_data['puzzle_id']
+    user_id = request.POST.get('user_id')
+    puzzle_id = request.POST.get('puzzle_id')
 
     cursor = connection.cursor()
     # if puzzle_id doesn't exist for user_id return 404
     cursor.execute('SELECT * FROM puzzles WHERE (user_id = '
-                   '(%d) AND puzzle_id = (%d);', (user_id, puzzle_id))
+                   '(%s) AND puzzle_id = (%s);', (user_id, puzzle_id))
     if (cursor.fetchone() == None):
         return HttpResponse(status=404)
     
     cursor.execute('DELETE FROM puzzles WHERE (puzzle_id = '
-                   '(%d) AND user_id = (%d);', (puzzle_id, user_id))
-
-    return JsonResponse({})
-
-def deletepuzzle(request):
-    # not sure if this should be DELETE
-    if request.method != 'DELETE':
-        return HttpResponse(status=404)
-
-    json_data = json.loads(request.body)
-    user_id = json_data['user_id']
-    puzzle_id = json_data['puzzle_id']
-
-    cursor = connection.cursor()
-    # if puzzle_id doesn't exist for user_id return 404
-    cursor.execute('SELECT * FROM puzzles WHERE (user_id = '
-                   '(%d) AND puzzle_id = (%d);', (user_id, puzzle_id))
-    if (cursor.fetchone() == None):
-        return HttpResponse(status=404)
-    
-    cursor.execute('DELETE FROM puzzles WHERE (puzzle_id = '
-                   '(%d) AND user_id = (%d);', (puzzle_id, user_id))
+                   '(%s) AND user_id = (%s);', (puzzle_id, user_id))
 
     return HttpResponse(status=204)
+
+def getpuzzles(request):
+    if request.method != 'GET':
+        return HttpResponse(status=404)
+
+    cursor = connection.cursor()
+    cursor.execute('SELECT * FROM puzzles;')
+    rows = cursor.fetchall()
+
+    response = {}
+    response['puzzles'] = rows
+    return JsonResponse(response)
+
+def getpieces(request):
+    if request.method != 'GET':
+        return HttpResponse(status=404)
+
+    cursor = connection.cursor()
+    cursor.execute('SELECT * FROM pieces;')
+    rows = cursor.fetchall()
+
+    response = {}
+    response['pieces'] = rows
+    return JsonResponse(response)
 
 @csrf_exempt
 def postpuzzle(request):
     if request.method != 'POST':
         return HttpResponse(status=400)
-
     # loading multipart/form-data
     user_id = request.POST.get("user_id")
-    puzzle_name = request.POST.get("puzzle_name")
-
-    if request.FILES.get("puzzle_image"):
-        content = request.FILES['puzzle_image']
+    piece_ct = request.POST.get('piece_ct')
+    width = request.POST.get('width')
+    height = request.POST.get('height')
+    
+    if request.FILES.get("puzzle_img"):
+        content = request.FILES['puzzle_img']
         filename = user_id+str(time.time())+".jpeg"
         fs = FileSystemStorage()
         filename = fs.save(filename, content)
-        puzzle_imageurl = fs.url(filename)
+        puzzle_image_url = fs.url(filename)
+    else:
+        return HttpResponse(status=400)
+    
+    cursor = connection.cursor()
+    cursor.execute('INSERT INTO puzzles (user_id, puzzle_img, piece_ct, width, height) VALUES '
+                   '(%s, %s, %s, %s, %s);', (user_id, puzzle_image_url, piece_ct, width, height))
+
+    return HttpResponse(status=201)
+
+@csrf_exempt
+def postpiece(request):
+    if request.method != 'POST':
+        return HttpResponse(status=400)
+
+    # loading multipart/form-data
+    user_id = request.POST.get("user_id")
+    puzzle_id = request.POST.get("puzzle_id")
+    difficulty = request.POST.get('difficulty')
+    
+
+    if request.FILES.get("piece_img"):
+        content = request.FILES['piece_img']
+        filename = puzzle_id+str(time.time())+".jpeg"
+        fs = FileSystemStorage()
+        filename = fs.save(filename, content)
+        piece_image_url = fs.url(filename)
     else:
         return HttpResponse(status=400)
         
     cursor = connection.cursor()
-    cursor.execute('INSERT INTO puzzles (user_id, puzzle_name, puzzle_imageurl) VALUES '
-                   '(%d, %s, %s);', (user_id, puzzle_name, puzzle_imageurl))
+    cursor.execute('INSERT INTO puzzles (user_id, puzzle_id, piece_image_url, difficulty) VALUES '
+                   '(%d, %d, %s, %d);', (user_id, puzzle_id, piece_image_url, difficulty))
 
     return HttpResponse(status=201)
+
+def deletepiece(request):
+    # not sure if this should be DELETE
+    if request.method != 'DELETE':
+        return HttpResponse(status=404)
+
+    json_data = json.loads(request.body)
+    user_id = json_data['user_id']
+    puzzle_id = json_data['puzzle_id']
+    piece_id = json_data['piece_id']
+
+    cursor = connection.cursor()
+    # if puzzle_id doesn't exist for user_id return 404
+    cursor.execute('SELECT * FROM puzzles WHERE (user_id = '
+                   '(%s) AND puzzle_id = (%s) AND piece_id = (%s));', (user_id, puzzle_id, piece_id))
+    if (cursor.fetchone() == None):
+        return HttpResponse(status=404)
+    
+    cursor.execute('DELETE FROM puzzles WHERE (puzzle_id = '
+                   '(%s) AND puzzle_id = (%s) AND piece_id = (%s));', (user_id, puzzle_id, piece_id))
+
+    return HttpResponse(status=204)
 
 # Create your views here.
