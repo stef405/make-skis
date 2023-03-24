@@ -116,7 +116,7 @@ def getpuzzles(request):
     rows = cursor.fetchall()
 
 
-    response = {}
+    response = {'puzzles': []}
     for row in rows:
         row = list(row)
         puzzle = {}
