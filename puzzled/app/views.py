@@ -111,8 +111,8 @@ def getpuzzles(request):
     user_id = int(request.GET['user_id'])
     
     cursor = connection.cursor()
-    cursor.execute('SELECT * FROM puzzles WHERE (user_id = '
-                   '(%d));', (user_id))
+    cursor.execute("""SELECT * FROM puzzles WHERE (user_id =
+                   %s);""", (user_id, ))
     rows = cursor.fetchall()
 
     response = {}
