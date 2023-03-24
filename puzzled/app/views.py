@@ -141,7 +141,7 @@ def postpuzzle(request):
     
     cursor = connection.cursor()
     cursor.execute('INSERT INTO puzzles (user_id, puzzle_img, piece_ct, width, height) VALUES '
-                   '(%d, %s, %d, %d, %d);', (int(user_id), puzzle_image_url, int(piece_ct), int(width), int(height)))
+                   '(%s, %s, %s, %s, %s);', (user_id, puzzle_image_url, piece_ct, width, height))
 
     return HttpResponse(status=201)
 
