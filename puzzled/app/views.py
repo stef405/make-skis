@@ -87,42 +87,42 @@ def postchatt(request):
     return JsonResponse({})
 
 @csrf_exempt
-def deletepuzzle(request, user_id, puzzle_id):
+def deletepuzzle(request, puzzle_id):
     # not sure if this should be DELETE
     if request.method != 'DELETE':
         return HttpResponse(status=404)
 
     cursor = connection.cursor()
     # if puzzle_id doesn't exist for user_id return 404
-    cursor.execute('SELECT * FROM puzzles WHERE (user_id = '
-                   '(%s) AND puzzle_id = (%s));', (user_id, puzzle_id))
+    cursor.execute('SELECT * FROM puzzles WHERE puzzle_id = %s;', (puzzle_id,))
     if (cursor.fetchone() == None):
         return HttpResponse(status=404)
     
-    cursor.execute('DELETE FROM puzzles WHERE (puzzle_id = '
-                   '(%s) AND user_id = (%s));', (puzzle_id, user_id))
+    cursor.execute('DELETE FROM puzzles WHERE puzzle_id = %s;', (puzzle_id,))
 
     return HttpResponse(status=204)
 
-def getpuzzles(request):
+def getpuzzles(request, user_id):
     if request.method != 'GET':
         return HttpResponse(status=404)
     
-    user_id = request.GET['user_id']
+    # user_id = int(request.GET['user_id'])
     
     cursor = connection.cursor()
     cursor.execute('SELECT * FROM puzzles WHERE (user_id = '
                    '?);', user_id)
     rows = cursor.fetchall()
 
-    response = {}
+
+    response = {'puzzles': []}
     for row in rows:
+        row = list(row)
         puzzle = {}
-        puzzle['puzzle_id'] = row.get(0)
-        puzzle['puzzle_img'] = row.get(2)
-        puzzle['piece_ct'] = row.get(3)
-        puzzle['width'] = row.get(4)
-        puzzle['height'] = row.get(5)
+        puzzle['puzzle_id'] = row[0]
+        puzzle['puzzle_img'] = row[2]
+        puzzle['piece_ct'] = row[3]
+        puzzle['width'] = row[4]
+        puzzle['height'] = row[5]
         response['puzzles'].append(puzzle)
     return JsonResponse(response)
 
