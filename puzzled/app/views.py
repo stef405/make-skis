@@ -112,7 +112,7 @@ def getpuzzles(request):
     
     cursor = connection.cursor()
     cursor.execute('SELECT * FROM puzzles WHERE (user_id = '
-                   '(%s));', (user_id))
+                   '?);', user_id)
     rows = cursor.fetchall()
 
     response = {}
@@ -130,12 +130,22 @@ def getpieces(request):
     if request.method != 'GET':
         return HttpResponse(status=404)
 
+    user_id = request.GET['user_id']
+    puzzle_id = request.GET['puzzle_id']
+    
     cursor = connection.cursor()
-    cursor.execute('SELECT * FROM pieces;')
+    cursor.execute('SELECT * FROM pieces WHERE (user_id = '
+                   '? AND puzzle_id = ?);', (user_id, puzzle_id))
     rows = cursor.fetchall()
 
     response = {}
-    response['pieces'] = rows
+    for row in rows:
+        piece = {}
+        piece['piece_id'] = row.get(0)
+        piece['piece_img'] = row.get(1)
+        piece['solution_img'] = row.get(2)
+        piece['difficulty'] = row.get(4)
+        response['pieces'].append(piece)
     return JsonResponse(response)
 
 @csrf_exempt
