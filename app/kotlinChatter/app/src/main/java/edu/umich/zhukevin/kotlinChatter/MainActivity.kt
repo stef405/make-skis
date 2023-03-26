@@ -1,7 +1,6 @@
 package edu.umich.zhukevin.kotlinChatter
 
 import android.Manifest
-import android.app.ProgressDialog.show
 import android.content.ContentValues
 import android.content.DialogInterface
 import android.content.Intent
@@ -23,17 +22,34 @@ import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
 import androidx.lifecycle.ViewModel
 import edu.umich.zhukevin.kotlinChatter.PuzzleStore.getPieces
+import edu.umich.zhukevin.kotlinChatter.PuzzleStore.getPuzzles
 import edu.umich.zhukevin.kotlinChatter.PuzzleStore.pieces
+import edu.umich.zhukevin.kotlinChatter.PuzzleStore.puzzles
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityMainBinding
-import edu.umich.zhukevin.kotlinChatter.databinding.ActivityPuzzlePieceBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var view: ActivityMainBinding
-    private lateinit var pieceListAdapter: PieceListAdapter
+    private lateinit var puzzleListAdapter: PuzzleListAdapter
     private val viewState: MainViewState by viewModels()
 
-    private lateinit var other_view: ActivityPuzzlePieceBinding
+    private val propertyObserver = object: ObservableList.OnListChangedCallback<ObservableArrayList<Int>>() {
+        override fun onChanged(sender: ObservableArrayList<Int>?) { }
+        override fun onItemRangeChanged(sender: ObservableArrayList<Int>?, positionStart: Int, itemCount: Int) { }
+        override fun onItemRangeInserted(
+            sender: ObservableArrayList<Int>?,
+            positionStart: Int,
+            itemCount: Int
+        ) {
+            println("onItemRangeInserted: $positionStart, $itemCount")
+            runOnUiThread {
+                puzzleListAdapter.notifyDataSetChanged()
+            }
+        }
+        override fun onItemRangeMoved(sender: ObservableArrayList<Int>?, fromPosition: Int, toPosition: Int,
+                                      itemCount: Int) { }
+        override fun onItemRangeRemoved(sender: ObservableArrayList<Int>?, positionStart: Int, itemCount: Int) { }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,16 +57,15 @@ class MainActivity : AppCompatActivity() {
         view.root.setBackgroundColor(Color.parseColor("#FFFFFF"))
         setContentView(view.root)
 
-        pieceListAdapter = PieceListAdapter(this, pieces)
-        view.puzzleListView.setAdapter(pieceListAdapter)
+        puzzleListAdapter = PuzzleListAdapter(this, puzzles)
+        view.puzzleListView.setAdapter(puzzleListAdapter)
 
         // setup refreshContainer here later
         view.refreshContainer.setOnRefreshListener {
-            getPieces()
+            refreshTimeline()
         }
-
-        refreshTimeline()
-        pieces.addOnListChangedCallback(propertyObserver)
+        puzzles.addOnListChangedCallback(propertyObserver)
+        getPuzzles()
 
         val forPickedResult =
             registerForActivityResult(ActivityResultContracts.GetContent(), fun(uri: Uri?) {
@@ -118,34 +133,15 @@ class MainActivity : AppCompatActivity() {
 
     // refresh content
     private fun refreshTimeline() {
-        getPieces()
-
+        getPuzzles()
         // stop the refreshing animation upon completion:
         view.refreshContainer.isRefreshing = false
     }
 
-    private val propertyObserver = object: ObservableList.OnListChangedCallback<ObservableArrayList<Int>>() {
-        override fun onChanged(sender: ObservableArrayList<Int>?) { }
-        override fun onItemRangeChanged(sender: ObservableArrayList<Int>?, positionStart: Int, itemCount: Int) { }
-        override fun onItemRangeInserted(
-            sender: ObservableArrayList<Int>?,
-            positionStart: Int,
-            itemCount: Int
-        ) {
-            println("onItemRangeInserted: $positionStart, $itemCount")
-            runOnUiThread {
-                pieceListAdapter.notifyDataSetChanged()
-            }
-        }
-        override fun onItemRangeMoved(sender: ObservableArrayList<Int>?, fromPosition: Int, toPosition: Int,
-                                      itemCount: Int) { }
-        override fun onItemRangeRemoved(sender: ObservableArrayList<Int>?, positionStart: Int, itemCount: Int) { }
-    }
-
     override fun onDestroy() {
         super.onDestroy()
-
-//        chatts.removeOnListChangedCallback(propertyObserver)
+        //Possibly change but for now keep like this
+        puzzles.removeOnListChangedCallback(propertyObserver)
     }
 
     // store camera image

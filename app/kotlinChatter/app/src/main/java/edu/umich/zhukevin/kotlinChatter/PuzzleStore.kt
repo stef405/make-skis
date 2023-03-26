@@ -22,7 +22,7 @@ object PuzzleStore {
     val pieces = ObservableArrayList<Piece>()
     val puzzles = ObservableArrayList<Puzzle>()
     private val nFields = Piece::class.declaredMemberProperties.size
-    private const val serverUrl = "https://64179f201b0effb9b4937772.mockapi.io/Piece/1/" //Replace with actual BE
+    private const val serverUrl = "https://3.16.218.169/"
     private val client = OkHttpClient()
 
     fun postPiece(context: Context, piece: Piece, imageUri: Uri?, completion: (String) -> Unit) {
@@ -36,7 +36,7 @@ object PuzzleStore {
         }
 
         val request = Request.Builder()
-            .url(serverUrl +"postpiece/") //Replace with actual route
+            .url(serverUrl +"postpiece/") //https://3.16.218.169/postpiece/puzzlePieceImage.jpeg
             .post(mpFD.build())
             .build()
 
@@ -67,7 +67,7 @@ object PuzzleStore {
         }
 
         val request = Request.Builder()
-            .url(serverUrl +"postpiece/") //Replace with actual route
+            .url(serverUrl +"postpuzzle/") //https://3.16.218.169/postpuzzle/puzzlePieceImage.jpeg
             .post(mpFD.build())
             .build()
 
@@ -89,7 +89,7 @@ object PuzzleStore {
 
     fun getPieces() {
         val request = Request.Builder()
-            .url(serverUrl + "savedpieces/")
+            .url(serverUrl + "savedpieces/") //https://3.16.218.169/postpiece/puzzlePieceImage.jpeg
             .build()
 
         client.newCall(request).enqueue(object : Callback {
