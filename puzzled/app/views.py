@@ -133,7 +133,7 @@ def getpieces(request, puzzle_id):
     cursor.execute("""SELECT * FROM pieces WHERE puzzle_id = %s;""", (puzzle_id, ))
     rows = cursor.fetchall()
 
-    response = {'puzzles': []}
+    response = {'pieces': []}
     for row in rows:
         piece = {}
         piece['piece_id'] = row.get(0)
