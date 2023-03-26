@@ -58,21 +58,25 @@ object PuzzleStore {
 
     fun postPuzzle(context: Context, puzzle: Puzzle, imageUri: Uri?, completion: (String) -> Unit) {
 
+//        var user_id_int: Int = puzzle.user_id.toInt()
+
+        Log.d("imageUri", imageUri.toString())
+
         val mpFD = MultipartBody.Builder().setType(MultipartBody.FORM)
             .addFormDataPart("user_id", puzzle.user_id ?: "")
-            .addFormDataPart("piece_count", puzzle.piece_ct ?: "")
+            .addFormDataPart("piece_ct", puzzle.piece_ct ?: "")
             .addFormDataPart("height", puzzle.height ?: "")
             .addFormDataPart("width", puzzle.width ?: "")
 
         imageUri?.run {
             toFile(context)?.let {
-                mpFD.addFormDataPart("image", "puzzlePieceImage",
+                mpFD.addFormDataPart("puzzle_img", "puzzlePieceImage",
                     it.asRequestBody("image/jpeg".toMediaType()))
             } ?: context.toast("Unsupported image format")
         }
 
         val request = Request.Builder()
-            .url(serverUrl +"postpuzzle/") //https://3.16.218.169/postpuzzle/1/
+            .url(serverUrl +"postpuzzle/" + puzzle.user_id ) //https://3.16.218.169/postpuzzle/1/
             .post(mpFD.build())
             .build()
 
@@ -80,6 +84,7 @@ object PuzzleStore {
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
+                Log.d("error posting", e.localizedMessage)
                 completion(e.localizedMessage ?: "Posting failed")
             }
 

@@ -60,7 +60,7 @@ class Dimensions : AppCompatActivity() {
             var int_count: String = num_count.text.toString()
             var string_image: String = image.toString()
             submitPuzzle("1", int_count, int_height, int_width, string_image)
-            takePicture.launch(viewState.imageUri)
+//            takePicture.launch(viewState.imageUri)
         }
 
     }
