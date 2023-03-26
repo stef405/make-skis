@@ -57,7 +57,12 @@ object PuzzleStore {
     }
 
     fun postPuzzle(context: Context, puzzle: Puzzle, imageUri: Uri?, completion: (String) -> Unit) {
+
         val mpFD = MultipartBody.Builder().setType(MultipartBody.FORM)
+            .addFormDataPart("user_id", puzzle.user_id ?: "")
+            .addFormDataPart("piece_count", puzzle.piece_ct ?: "")
+            .addFormDataPart("height", puzzle.height ?: "")
+            .addFormDataPart("width", puzzle.width ?: "")
 
         imageUri?.run {
             toFile(context)?.let {
@@ -67,7 +72,7 @@ object PuzzleStore {
         }
 
         val request = Request.Builder()
-            .url(serverUrl +"postpuzzle/") //https://3.16.218.169/postpuzzle/puzzlePieceImage.jpeg
+            .url(serverUrl +"postpuzzle/") //https://3.16.218.169/postpuzzle/1/
             .post(mpFD.build())
             .build()
 

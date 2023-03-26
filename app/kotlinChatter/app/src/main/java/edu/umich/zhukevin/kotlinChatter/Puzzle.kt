@@ -4,10 +4,10 @@ import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
 class Puzzle(
-    var user_id: Int? = null,
-    var piece_ct: Int? = null,
-    var height: Int? = null,
-    var width: Int? = null,
+    var user_id: String? = null,
+    var piece_ct: String? = null,
+    var height: String? = null,
+    var width: String? = null,
     imageUrl: String? = null
 ) {
     var imageUrl: String? by PuzzlePropDelegate(imageUrl) //Probably have to change to some other function

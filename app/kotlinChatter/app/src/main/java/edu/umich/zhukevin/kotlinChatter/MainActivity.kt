@@ -21,9 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
 import androidx.lifecycle.ViewModel
-import edu.umich.zhukevin.kotlinChatter.PuzzleStore.getPieces
 import edu.umich.zhukevin.kotlinChatter.PuzzleStore.getPuzzles
-import edu.umich.zhukevin.kotlinChatter.PuzzleStore.pieces
 import edu.umich.zhukevin.kotlinChatter.PuzzleStore.puzzles
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityMainBinding
 
@@ -32,6 +30,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var view: ActivityMainBinding
     private lateinit var puzzleListAdapter: PuzzleListAdapter
     private val viewState: MainViewState by viewModels()
+    class MainViewState: ViewModel() {
+        var imageUri: Uri? = null
+    }
 
     private val propertyObserver = object: ObservableList.OnListChangedCallback<ObservableArrayList<Int>>() {
         override fun onChanged(sender: ObservableArrayList<Int>?) { }
@@ -70,22 +71,18 @@ class MainActivity : AppCompatActivity() {
         val forPickedResult =
             registerForActivityResult(ActivityResultContracts.GetContent(), fun(uri: Uri?) {
                 uri?.let {
-                    if (it.toString().contains("video")) {
-
-                    } else {
-                        val inStream = contentResolver.openInputStream(it) ?: return
-                        viewState.imageUri = mediaStoreAlloc("image/jpeg")
-                        viewState.imageUri?.let {
-                            val outStream = contentResolver.openOutputStream(it) ?: return
-                            val buffer = ByteArray(8192)
-                            var read: Int
-                            while (inStream.read(buffer).also{ read = it } != -1) {
-                                outStream.write(buffer, 0, read)
-                            }
-                            outStream.flush()
-                            outStream.close()
-                            inStream.close()
+                    val inStream = contentResolver.openInputStream(it) ?: return
+                    viewState.imageUri = mediaStoreAlloc("image/jpeg")
+                    viewState.imageUri?.let {
+                        val outStream = contentResolver.openOutputStream(it) ?: return
+                        val buffer = ByteArray(8192)
+                        var read: Int
+                        while (inStream.read(buffer).also{ read = it } != -1) {
+                            outStream.write(buffer, 0, read)
                         }
+                        outStream.flush()
+                        outStream.close()
+                        inStream.close()
                     }
                     startActivity(Intent(this, Dimensions::class.java))
                 } ?: run { Log.d("Pick media", "failed") }
@@ -113,6 +110,7 @@ class MainActivity : AppCompatActivity() {
         var takePicture = registerForActivityResult(ActivityResultContracts.TakePicture())
         { success ->
             if (success) {
+                viewState.imageUri = mediaStoreAlloc("image/jpeg")
                 startActivity(Intent(this, Dimensions::class.java))
             } else {
                 Log.d("Take picture", "failed")
@@ -193,9 +191,4 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(applicationContext,
             android.R.string.no, Toast.LENGTH_SHORT).show()
     }
-}
-
-class MainViewState: ViewModel() {
-    var enableSend = true
-    var imageUri: Uri? = null
 }

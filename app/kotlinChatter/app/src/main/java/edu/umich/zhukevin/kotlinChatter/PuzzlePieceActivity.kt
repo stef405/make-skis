@@ -18,7 +18,7 @@ import edu.umich.zhukevin.kotlinChatter.databinding.ActivityPuzzlePieceBinding
 class PuzzlePieceActivity : AppCompatActivity() {
 
     private lateinit var view: ActivityPuzzlePieceBinding
-    private val viewState: MainViewState by viewModels()
+    private val viewState: PostViewState by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
