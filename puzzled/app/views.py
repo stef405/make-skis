@@ -87,18 +87,18 @@ def postchatt(request):
     return JsonResponse({})
 
 @csrf_exempt
-def deletepuzzle(request, user_id, puzzle_id):
+def deletepuzzle(request, puzzle_id):
     # not sure if this should be DELETE
     if request.method != 'DELETE':
         return HttpResponse(status=404)
 
     cursor = connection.cursor()
     # if puzzle_id doesn't exist for user_id return 404
-    cursor.execute('SELECT * FROM puzzles WHERE (user_id = %s AND puzzle_id = %s);', (user_id, puzzle_id,))
+    cursor.execute('SELECT * FROM puzzles WHERE puzzle_id = %s;', (puzzle_id, ))
     if (cursor.fetchone() == None):
         return HttpResponse(status=404)
     
-    cursor.execute('DELETE FROM puzzles WHERE (user_id = %s AND puzzle_id = %s);', (user_id, puzzle_id,))
+    cursor.execute('DELETE FROM puzzles WHERE puzzle_id = %s;', (puzzle_id, ))
 
     return HttpResponse(status=204)
 
@@ -109,8 +109,7 @@ def getpuzzles(request, user_id):
     # user_id = int(request.GET['user_id'])
     
     cursor = connection.cursor()
-    cursor.execute("""SELECT * FROM puzzles WHERE (user_id = 
-                   %s);""", (user_id, ))
+    cursor.execute("""SELECT * FROM puzzles WHERE (user_id = %s);""", (user_id, ))
     rows = cursor.fetchall()
 
 
@@ -126,19 +125,15 @@ def getpuzzles(request, user_id):
         response['puzzles'].append(puzzle)
     return JsonResponse(response)
 
-def getpieces(request):
+def getpieces(request, puzzle_id):
     if request.method != 'GET':
         return HttpResponse(status=404)
-
-    user_id = request.GET['user_id']
-    puzzle_id = request.GET['puzzle_id']
     
     cursor = connection.cursor()
-    cursor.execute("""SELECT * FROM pieces WHERE (user_id = 
-                   %s AND puzzle_id = %s);""", (user_id, puzzle_id, ))
+    cursor.execute("""SELECT * FROM pieces WHERE puzzle_id = %s;""", (puzzle_id, ))
     rows = cursor.fetchall()
 
-    response = {}
+    response = {'puzzles': []}
     for row in rows:
         piece = {}
         piece['piece_id'] = row.get(0)
@@ -199,24 +194,18 @@ def postpiece(request):
 
     return HttpResponse(status=201)
 
-def deletepiece(request):
+def deletepiece(request, piece_id):
     # not sure if this should be DELETE
     if request.method != 'DELETE':
         return HttpResponse(status=404)
 
-    user_id = request.DELETE.get('user_id')
-    puzzle_id = request.DELETE.get('puzzle_id')
-    piece_id = request.DELETE.get('piece_id')
-
     cursor = connection.cursor()
     # if puzzle_id doesn't exist for user_id return 404
-    cursor.execute('SELECT * FROM puzzles WHERE (user_id = '
-                   '(%s) AND puzzle_id = (%s) AND piece_id = (%s));', (user_id, puzzle_id, piece_id))
+    cursor.execute('SELECT * FROM puzzles WHERE piece_id = %s;', (piece_id, ))
     if (cursor.fetchone() == None):
         return HttpResponse(status=404)
     
-    cursor.execute('DELETE FROM puzzles WHERE (puzzle_id = '
-                   '(%s) AND puzzle_id = (%s) AND piece_id = (%s));', (user_id, puzzle_id, piece_id))
+    cursor.execute('DELETE FROM puzzles WHERE piece_id = %s;', (piece_id, ))
 
     return HttpResponse(status=204)
 

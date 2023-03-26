@@ -23,10 +23,10 @@ urlpatterns = [
     path('postchatt/', views.postchatt, name='postchatt'),
     path('getimages/', views.getimages, name='getimages'),
     path('postimages/', views.postimages, name='postimages'),
-    path('deletepuzzle/<int:user_id>/<int:puzzle_id>/', views.deletepuzzle, name='deletepuzzle'),
+    path('deletepuzzle/<int:puzzle_id>/', views.deletepuzzle, name='deletepuzzle'),
     path('postpuzzle/', views.postpuzzle, name='postpuzzle'),
-    path('deletepiece/', views.deletepiece, name='deletepiece'),
+    path('deletepiece/<int:piece_id>/', views.deletepiece, name='deletepiece'),
     path('postpuzzle/', views.postpiece, name='postpiece'),
     path('getpuzzles/<int:user_id>/', views.getpuzzles, name='getpuzzles'),
-    path('getpieces/', views.getpieces, name='getpieces'),
+    path('getpieces/<int:puzzle_id>/', views.getpieces, name='getpieces'),
 ]
