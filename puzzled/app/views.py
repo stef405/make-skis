@@ -203,11 +203,11 @@ def deletepiece(request, piece_id):
 
     cursor = connection.cursor()
     # if puzzle_id doesn't exist for user_id return 404
-    cursor.execute('SELECT * FROM puzzles WHERE piece_id = %s;', (piece_id, ))
+    cursor.execute('SELECT * FROM pieces WHERE piece_id = %s;', (piece_id, ))
     if (cursor.fetchone() == None):
         return HttpResponse(status=404)
     
-    cursor.execute('DELETE FROM puzzles WHERE piece_id = %s;', (piece_id, ))
+    cursor.execute('DELETE FROM pieces WHERE piece_id = %s;', (piece_id, ))
 
     return HttpResponse(status=204)
 
