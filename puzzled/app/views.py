@@ -174,7 +174,6 @@ def postpiece(request):
         return HttpResponse(status=400)
 
     # loading multipart/form-data
-    user_id = request.POST.get("user_id")
     puzzle_id = request.POST.get("puzzle_id")
     difficulty = request.POST.get('difficulty')
     
@@ -189,8 +188,10 @@ def postpiece(request):
         return HttpResponse(status=400)
         
     cursor = connection.cursor()
-    cursor.execute('INSERT INTO puzzles (user_id, puzzle_id, piece_image_url, difficulty) VALUES '
-                   '(%s, %s, %s, %s);', (user_id, puzzle_id, piece_image_url, difficulty))
+    # TODO: Replace the insert for solution_img with the actual solution once we have a
+    # way of generating it
+    cursor.execute('INSERT INTO pieces (puzzle_id, piece_image, difficulty, solution_img) VALUES '
+                   '(%s, %s, %s, %s);', (puzzle_id, piece_image_url, difficulty, piece_image_url))
 
     return HttpResponse(status=201)
 
