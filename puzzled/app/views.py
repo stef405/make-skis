@@ -196,6 +196,7 @@ def postpiece(request):
 
     return HttpResponse(status=201)
 
+@csrf_exempt
 def deletepiece(request, piece_id):
     # not sure if this should be DELETE
     if request.method != 'DELETE':
