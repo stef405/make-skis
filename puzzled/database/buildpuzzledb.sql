@@ -15,3 +15,5 @@ CREATE TABLE Pieces (
     difficulty INTEGER,
     FOREIGN KEY(puzzle_id) REFERENCES Puzzles(puzzle_id)
 );
+
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO puzzler;

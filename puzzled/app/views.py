@@ -135,11 +135,12 @@ def getpieces(request, puzzle_id):
 
     response = {'pieces': []}
     for row in rows:
+        row = list(row)
         piece = {}
-        piece['piece_id'] = row.get(0)
-        piece['piece_img'] = row.get(1)
-        piece['solution_img'] = row.get(2)
-        piece['difficulty'] = row.get(4)
+        piece['piece_id'] = row[0]
+        piece['piece_img'] = row[1]
+        piece['solution_img'] = row[2]
+        piece['difficulty'] = row[3]
         response['pieces'].append(piece)
     return JsonResponse(response)
 
