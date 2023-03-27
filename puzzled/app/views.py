@@ -190,7 +190,7 @@ def postpiece(request):
     cursor = connection.cursor()
     # TODO: Replace the insert for solution_img with the actual solution once we have a
     # way of generating it
-    cursor.execute('INSERT INTO pieces (puzzle_id, piece_image, difficulty, solution_img) VALUES '
+    cursor.execute('INSERT INTO pieces (puzzle_id, piece_img, difficulty, solution_img) VALUES '
                    '(%s, %s, %s, %s);', (puzzle_id, piece_image_url, difficulty, piece_image_url))
 
     return HttpResponse(status=201)
