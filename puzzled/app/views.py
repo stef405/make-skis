@@ -135,11 +135,12 @@ def getpieces(request, puzzle_id):
 
     response = {'pieces': []}
     for row in rows:
+        row = list(row)
         piece = {}
-        piece['piece_id'] = row.get(0)
-        piece['piece_img'] = row.get(1)
-        piece['solution_img'] = row.get(2)
-        piece['difficulty'] = row.get(4)
+        piece['piece_id'] = row[0]
+        piece['piece_img'] = row[1]
+        piece['solution_img'] = row[2]
+        piece['difficulty'] = row[3]
         response['pieces'].append(piece)
     return JsonResponse(response)
 
@@ -174,7 +175,6 @@ def postpiece(request):
         return HttpResponse(status=400)
 
     # loading multipart/form-data
-    user_id = request.POST.get("user_id")
     puzzle_id = request.POST.get("puzzle_id")
     difficulty = request.POST.get('difficulty')
     
@@ -189,11 +189,14 @@ def postpiece(request):
         return HttpResponse(status=400)
         
     cursor = connection.cursor()
-    cursor.execute('INSERT INTO puzzles (user_id, puzzle_id, piece_image_url, difficulty) VALUES '
-                   '(%s, %s, %s, %s);', (user_id, puzzle_id, piece_image_url, difficulty))
+    # TODO: Replace the insert for solution_img with the actual solution once we have a
+    # way of generating it
+    cursor.execute('INSERT INTO pieces (puzzle_id, piece_img, difficulty, solution_img) VALUES '
+                   '(%s, %s, %s, %s);', (puzzle_id, piece_image_url, difficulty, piece_image_url))
 
     return HttpResponse(status=201)
 
+@csrf_exempt
 def deletepiece(request, piece_id):
     # not sure if this should be DELETE
     if request.method != 'DELETE':
@@ -201,11 +204,11 @@ def deletepiece(request, piece_id):
 
     cursor = connection.cursor()
     # if puzzle_id doesn't exist for user_id return 404
-    cursor.execute('SELECT * FROM puzzles WHERE piece_id = %s;', (piece_id, ))
+    cursor.execute('SELECT * FROM pieces WHERE piece_id = %s;', (piece_id, ))
     if (cursor.fetchone() == None):
         return HttpResponse(status=404)
     
-    cursor.execute('DELETE FROM puzzles WHERE piece_id = %s;', (piece_id, ))
+    cursor.execute('DELETE FROM pieces WHERE piece_id = %s;', (piece_id, ))
 
     return HttpResponse(status=204)
 

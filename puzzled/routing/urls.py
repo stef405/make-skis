@@ -26,7 +26,7 @@ urlpatterns = [
     path('deletepuzzle/<int:puzzle_id>/', views.deletepuzzle, name='deletepuzzle'),
     path('postpuzzle/', views.postpuzzle, name='postpuzzle'),
     path('deletepiece/<int:piece_id>/', views.deletepiece, name='deletepiece'),
-    path('postpuzzle/', views.postpiece, name='postpiece'),
+    path('postpiece/', views.postpiece, name='postpiece'),
     path('getpuzzles/<int:user_id>/', views.getpuzzles, name='getpuzzles'),
     path('getpieces/<int:puzzle_id>/', views.getpieces, name='getpieces'),
 ]
