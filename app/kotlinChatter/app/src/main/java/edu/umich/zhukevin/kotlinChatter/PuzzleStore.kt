@@ -1,34 +1,30 @@
 package edu.umich.zhukevin.kotlinChatter
 
 import android.content.Context
-import android.graphics.BitmapFactory
+import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import androidx.databinding.ObservableArrayList
-import edu.umich.zhukevin.kotlinChatter.PuzzleStore.pieces
-import edu.umich.zhukevin.kotlinChatter.PuzzleStore.puzzles
+import kotlinx.coroutines.coroutineScope
 import okhttp3.Call
 import okhttp3.Callback
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.Response
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import java.io.File
 import java.io.IOException
-import java.nio.file.Paths
 import kotlin.reflect.full.declaredMemberProperties
 
 object PuzzleStore {
     val pieces = ObservableArrayList<Piece>()
     val puzzles = ObservableArrayList<Puzzle>()
     private val nFields = Piece::class.declaredMemberProperties.size
+    private val nPuzzleFields = Puzzle::class.declaredMemberProperties.size
     private const val serverUrl = "https://3.16.218.169/"
     private val client = OkHttpClient()
 
@@ -134,25 +130,38 @@ object PuzzleStore {
 
     fun getPuzzles() {
         val request = Request.Builder()
-            .url(serverUrl + "savedpuzzles/")
+            .url(serverUrl + "getpuzzles/" + "10")
             .build()
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                Log.e("savedpuzzles", "Failed GET request")
+                Log.d("getpuzzles", "Failed GET request")
             }
 
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful) {
-                    val puzzlesReceived = try { JSONObject(response.body?.string() ?: "").getJSONArray("puzzle_pieces_images") } catch (e: JSONException) { JSONArray() }
+                    val puzzlesReceived = try { JSONObject(response.body?.string() ?: "").getJSONArray("puzzles") } catch (e: JSONException) { JSONArray() }
+
 
                     puzzles.clear()
                     for (i in 0 until puzzlesReceived.length()) {
-                        val puzzle = puzzlesReceived[i] as JSONArray
-                        if (puzzle.length() == nFields) {
-                            puzzles.add(Puzzle(imageUrl = puzzle[0].toString()))
+                        val puzzle = puzzlesReceived[i] as JSONObject
+                        val puzzleID: String = puzzle.getString("puzzle_id")
+                        val puzzleIMG: String = puzzle.getString("puzzle_img")
+                        val puzzlePieceCount: String = puzzle.getString("piece_ct")
+                        val puzzleWidth: String = puzzle.getString("width")
+                        val puzzleHeight: String = puzzle.getString("height")
+                        if (puzzle.length() == nPuzzleFields - 1) {
+                            puzzles.add(Puzzle(
+                                user_id = "10",
+                                puzzle_id = puzzleID,
+                                piece_ct = puzzlePieceCount,
+                                height =  puzzleHeight,
+                                width =  puzzleWidth,
+                                imageUrl = puzzleIMG
+                            ))
                         } else {
-                            Log.e("getPieces", "Received unexpected number of fields " + puzzle.length().toString() + " instead of " + PuzzleStore.nFields.toString())
+                            Log.d("getpuzzles", "Received unexpected number of fields " + puzzle.length().toString() + " instead of " + PuzzleStore.nFields.toString())
                         }
                     }
                 }

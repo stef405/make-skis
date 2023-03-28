@@ -5,6 +5,7 @@ import kotlin.reflect.KProperty
 
 class Puzzle(
     var user_id: String? = null,
+    var puzzle_id: String? = null,
     var piece_ct: String? = null,
     var height: String? = null,
     var width: String? = null,

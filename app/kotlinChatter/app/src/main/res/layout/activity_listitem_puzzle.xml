@@ -16,54 +16,61 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="10dp"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        android:gravity="center_horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
             android:id="@+id/puzzleImage"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
             android:layout_gravity="center"
+            android:layout_marginStart="16dp"
+            android:contentDescription="PuzzleImg"
+            android:src="@drawable/puzzle_image"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/puzzle_image" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <android.widget.Space
             android:layout_width="match_parent"
+            android:layout_gravity="center"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:minHeight="1dp"/>
+            android:minHeight="1dp" />
 
         <TextView
             android:id="@+id/puzzleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="Puzzle 1"
             android:textSize="24sp"
-            android:layout_gravity="center"
             app:layout_constraintBottom_toBottomOf="@+id/entryImage"
             app:layout_constraintTop_toTopOf="@+id/entryImage"
             tools:layout_editor_absoluteX="178dp" />
+
         <android.widget.Space
+            android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:minHeight="1dp"/>
+            android:minHeight="1dp" />
 
         <ImageButton
             android:id="@+id/deleteEntry"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="16dp"
+            android:layout_width="53dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginEnd="16dp"
             android:background="@android:color/transparent"
+            android:contentDescription="PuzzleImgDelete"
+            android:padding="10dp"
+            android:src="@drawable/icon_garbage"
             app:layout_constraintBottom_toBottomOf="@+id/entryImage"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/entryImage"
-            app:layout_constraintVertical_bias="0.393"
-            android:src="@drawable/icon_garbage" />
+            app:layout_constraintVertical_bias="0.393" />
 
 
     </LinearLayout>

@@ -16,9 +16,9 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="10dp"
+        android:background="@drawable/border_shadow"
         app:layout_constraintTop_toTopOf="parent"
         >
-
 
         <ImageButton
             android:id="@+id/pieceImage"

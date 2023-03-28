@@ -20,12 +20,6 @@ import edu.umich.zhukevin.kotlinChatter.databinding.ActivityMainBinding
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityPuzzlePieceBinding
 import edu.umich.zhukevin.kotlinChatter.databinding.DimBinding
 
-class PuzzleDim(
-    height: Int? = null,
-    width: Int? = null,
-    num_count: Int? = null
-                )
-
 class Dimensions : AppCompatActivity() {
 
     private lateinit var view: DimBinding
@@ -63,7 +57,7 @@ class Dimensions : AppCompatActivity() {
             var int_width: String = width.text.toString()
             var int_count: String = num_count.text.toString()
 //            var string_image: String = viewState.imageUri.toString()
-            submitPuzzle("1", int_count, int_height, int_width, viewState.imageUri)
+            submitPuzzle("1", int_count, int_height, int_width)
 //            takePicture.launch(viewState.imageUri)
             startActivity(Intent(this, Difficulty::class.java))
         }
@@ -87,8 +81,7 @@ class Dimensions : AppCompatActivity() {
     private fun submitPuzzle(user_id_puzzle: String? = null,
                             piece_count_puzzle: String? = null,
                             height_puzzle: String? = null,
-                            width_puzzle: String? = null,
-                            imageUrl_puzzle: Uri? = null) {
+                            width_puzzle: String? = null) {
 
         val puzzle = Puzzle(user_id = user_id_puzzle, piece_ct = piece_count_puzzle,
             height = height_puzzle, width = width_puzzle)

@@ -13,7 +13,6 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -32,18 +31,25 @@ class MainActivity : AppCompatActivity() {
     private val viewState: MainViewState by viewModels()
     class MainViewState: ViewModel() {
         var imageUri: Uri? = null
+        var filledList: Boolean = false
     }
 
     private val propertyObserver = object: ObservableList.OnListChangedCallback<ObservableArrayList<Int>>() {
-        override fun onChanged(sender: ObservableArrayList<Int>?) { }
+        override fun onChanged(sender: ObservableArrayList<Int>?) {
+        }
         override fun onItemRangeChanged(sender: ObservableArrayList<Int>?, positionStart: Int, itemCount: Int) { }
         override fun onItemRangeInserted(
             sender: ObservableArrayList<Int>?,
             positionStart: Int,
             itemCount: Int
         ) {
+            viewState.filledList = itemCount > 0
             println("onItemRangeInserted: $positionStart, $itemCount")
             runOnUiThread {
+                if(viewState.filledList){
+                    view.emptyPuzzlePiece.visibility = View.GONE
+                    view.defaultHistoryText.visibility = View.GONE
+                }
                 puzzleListAdapter.notifyDataSetChanged()
             }
         }
@@ -59,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(view.root)
 
         puzzleListAdapter = PuzzleListAdapter(this, puzzles)
-        view.puzzleListView.setAdapter(puzzleListAdapter)
+        view.puzzleListView.adapter = puzzleListAdapter
 
         // setup refreshContainer here later
         view.refreshContainer.setOnRefreshListener {
@@ -112,8 +118,6 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this, Dimensions::class.java)
                 intent.putExtra("PUZZLE_URI", viewState.imageUri)
                 this.startActivity(intent)
-
-//                startActivity(Intent(this, Dimensions::class.java))
             } else {
                 Log.d("TakePicture", "failed")
             }
@@ -137,6 +141,10 @@ class MainActivity : AppCompatActivity() {
 
     // refresh content
     private fun refreshTimeline() {
+        if(viewState.filledList){
+            view.emptyPuzzlePiece.visibility = View.GONE
+            view.defaultHistoryText.visibility = View.GONE
+        }
         getPuzzles()
         // stop the refreshing animation upon completion:
         view.refreshContainer.isRefreshing = false

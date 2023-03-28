@@ -1,16 +1,20 @@
 package edu.umich.zhukevin.kotlinChatter
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.lifecycle.ViewModel
 import coil.load
+import androidx.activity.viewModels
+import edu.umich.zhukevin.kotlinChatter.PuzzleStore.puzzles
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityListitemPuzzleBinding
 
-class PuzzleListAdapter(context: Context, pieces: List<Puzzle>) :
-    ArrayAdapter<Puzzle>(context, 0, pieces) {
+class PuzzleListAdapter(context: Context, puzzle: List<Puzzle>) :
+    ArrayAdapter<Puzzle>(context, 0, puzzle) {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val listItemView = (convertView?.tag /* reuse binding */ ?: run {
             val rowView = LayoutInflater.from(context).inflate(R.layout.activity_listitem_puzzle, parent, false)
