@@ -107,27 +107,33 @@ class MainActivity : AppCompatActivity() {
         }
 
         // camera chosen
-        var takePicture = registerForActivityResult(ActivityResultContracts.TakePicture())
-        { success ->
+        val takeImageResult = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
             if (success) {
-                viewState.imageUri = mediaStoreAlloc("image/jpeg")
-                startActivity(Intent(this, Dimensions::class.java))
+                val intent = Intent(this, Dimensions::class.java)
+                intent.putExtra("PUZZLE_URI", viewState.imageUri)
+                this.startActivity(intent)
+
+//                startActivity(Intent(this, Dimensions::class.java))
             } else {
-                Log.d("Take picture", "failed")
+                Log.d("TakePicture", "failed")
             }
         }
+
         view.plusButton.setOnClickListener {
-            viewState.imageUri = mediaStoreAlloc(mediaType="image/jpeg")
-            plusButton(takePicture, forPickedResult)
+            val builder = AlertDialog.Builder(this)
+            with(builder)
+            {
+                setTitle("Upload from Storage")
+                setMessage("Would you like to upload your puzzle entry from storage?")
+                setPositiveButton("STORAGE") { _, _ -> forPickedResult.launch("*/*") }
+                setNegativeButton("TAKE PHOTO") { _, _ ->
+                    viewState.imageUri = mediaStoreAlloc("image/jpeg")
+                    takeImageResult.launch(viewState.imageUri)
+                }
+                show()
+            }
         }
     }
-
-    fun showHistory() {
-
-
-    }
-
-//    fun startPost(view: View?) = startActivity(Intent(this, PostActivity::class.java))
 
     // refresh content
     private fun refreshTimeline() {
@@ -157,19 +163,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     // plus button
-    private fun plusButton(takePicture: ActivityResultLauncher<Uri>, forPickedResult: ActivityResultLauncher<String>) {
-        // setup the alert builder
-        val builder = AlertDialog.Builder(this)
-        with(builder)
-        {
-            setTitle("Upload from Storage")
-            setMessage("Would you like to upload your puzzle entry from storage?")
-            setPositiveButton("STORAGE") { _, _ -> forPickedResult.launch("*/*") }
-            setNegativeButton("TAKE PHOTO") { _, _ -> takePicture.launch(viewState.imageUri) }
-            show()
-        }
-    }
-
     fun retakeAlertMessage(view: View){
         val builder = AlertDialog.Builder(this)
         with(builder)
