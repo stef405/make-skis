@@ -57,7 +57,7 @@ class Dimensions : AppCompatActivity() {
             var int_width: String = width.text.toString()
             var int_count: String = num_count.text.toString()
 //            var string_image: String = viewState.imageUri.toString()
-            submitPuzzle("1", int_count, int_height, int_width)
+            submitPuzzle("10", int_count, int_height, int_width)
 //            takePicture.launch(viewState.imageUri)
             startActivity(Intent(this, Difficulty::class.java))
         }

@@ -79,7 +79,7 @@ object PuzzleStore {
         }
 
         val request = Request.Builder()
-            .url(serverUrl +"postpuzzle/" + puzzle.user_id ) //https://3.16.218.169/postpuzzle/1/
+            .url(serverUrl +"postpuzzle/") //+ puzzle.user_id ) //https://3.16.218.169/postpuzzle/1/
             .post(mpFD.build())
             .build()
 
