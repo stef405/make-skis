@@ -27,4 +27,9 @@
     <string name="exit_alert_dialog">Exit</string>
 
     <string name="photo_description">Would you like to upload your puzzle entry from storage?</string>
+    <string name="dimensions_popup_title">Puzzle Dimensions and Piece Count</string>
+    <string name="height_hint">Height in Inches</string>
+    <string name="width_hint">Width in Inches</string>
+    <string name="piece_count_hint">Total Piece Count</string>
+    <string name="ok">Ok</string>
 </resources>

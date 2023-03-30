@@ -1,8 +1,10 @@
 package edu.umich.zhukevin.kotlinChatter
 
 import android.Manifest
+import android.app.Dialog
 import android.app.ProgressDialog.show
 import android.content.ContentValues
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -12,7 +14,10 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -22,16 +27,25 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
 import androidx.lifecycle.ViewModel
+import androidx.viewbinding.ViewBinding
 import edu.umich.zhukevin.kotlinChatter.PuzzleStore.getPieces
 import edu.umich.zhukevin.kotlinChatter.PuzzleStore.pieces
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityMainBinding
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityPuzzlePieceBinding
+import edu.umich.zhukevin.kotlinChatter.databinding.DimensionsPopupLayoutBinding
+import edu.umich.zhukevin.kotlinChatter.databinding.LoadingBinding
+
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var view: ActivityMainBinding
     private lateinit var pieceListAdapter: PieceListAdapter
     private val viewState: MainViewState by viewModels()
+
+    //dimensions
+    private lateinit var binding: DimensionsPopupLayoutBinding
+    private var puzzleDim: PuzzleDim? = null
+
 
     private lateinit var other_view: ActivityPuzzlePieceBinding
 
@@ -98,9 +112,10 @@ class MainActivity : AppCompatActivity() {
         var takePicture = registerForActivityResult(ActivityResultContracts.TakePicture())
         { success ->
             if (success) {
-                startActivity(Intent(this, Dimensions::class.java))
+                dimensionsPopup()
             } else {
                 Log.d("Take picture", "failed")
+                // retakeAlertMessage(takePicture)
             }
         }
         view.plusButton.setOnClickListener {
@@ -176,18 +191,82 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun retakeAlertMessage(view: View){
+    //dimensions
+    private fun dimensionsPopup() {
+        var popupBinding = DimensionsPopupLayoutBinding.inflate(layoutInflater)
+
+        //create alert dialog
+        var builder = AlertDialog.Builder(this)
+        with(builder) {
+            setView(popupBinding.root)
+            setTitle("Enter puzzle dimensions and piece count")
+            setMessage("Provide puzzle image dimensions in order to help you")
+            setPositiveButton("Ok") { dialog, _ ->
+                // store input values in PuzzleDim object
+                puzzleDim = PuzzleDim(
+                    height = popupBinding.puzzleHeight.text.toString().toInt(),
+                    width = popupBinding.puzzleWidth.text.toString().toInt(),
+                    num_count = popupBinding.pieceCount.text.toString().toInt()
+                )
+                // do something with the input values??
+                // TODO: need to connect this to taking puzzle piece picture
+                dialog.dismiss()
+            }
+            setNegativeButton("Cancel") { dialog, _ ->
+                dialog.cancel()
+            }
+        }
+
+        // create and show the dialog
+        val dialog = builder.create()
+        dialog.show()
+    }
+    // TODO: NEED TO ADD THIS TO MAIN ACTIVITY OnCreate()
+    //difficulty
+    private fun difficultyPopup() {
+        var popupBinding = LoadingBinding.inflate(layoutInflater)
+
+        //create alert dialog
+        var builder = AlertDialog.Builder(this)
+        with(builder) {
+            setView(popupBinding.root)
+            setTitle("Success!")
+            setMessage("Select difficulty mode.\nProcessing will begin shortly after.")
+            setPositiveButton("Easy ") { dialog, _ ->
+                popupBinding.progressBar.visibility = View.VISIBLE
+                // TODO: PERFORM OPEN CV HERE***
+                // once the task is complete, hide progress bar
+                popupBinding.progressBar.visibility = View.GONE
+            }
+            setNegativeButton("Hard") { dialog, _ ->
+                popupBinding.progressBar.visibility = View.VISIBLE
+                // TODO: PERFORM OPEN CV HERE***
+                // once the task is complete, hide progress bar
+                popupBinding.progressBar.visibility = View.GONE
+            }
+            show()
+        }
+
+        // create and show the dialog
+        val dialog = builder.create()
+        dialog.show()
+    }
+    // TODO: NEED TO ADD THIS TO MAIN ACTIVITY OnCreate()
+    // currently, this is linked to take a picture, but unsure how to take a picture again
+    //retake
+    private fun retakeAlertMessage(takePicture: ActivityResultLauncher<Uri>){
         val builder = AlertDialog.Builder(this)
         with(builder)
         {
             setTitle(getString(R.string.fail_title))
             setMessage(getString(R.string.error_message))
-            setPositiveButton(getString(R.string.retake_photo), DialogInterface.OnClickListener(positiveButtonClick))
-            setNegativeButton(getString(R.string.exit_alert_dialog), negativeButtonClick)
+            setPositiveButton("RETAKE") { _, _ -> takePicture.launch(viewState.imageUri) }
+            setNegativeButton("EXIT") { dialog, _ -> dialog.cancel() }
             show()
         }
     }
 
+    /*
     val positiveButtonClick = { dialog: DialogInterface, which: Int ->
         Toast.makeText(applicationContext,
             android.R.string.yes, Toast.LENGTH_SHORT).show()
@@ -197,6 +276,7 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(applicationContext,
             android.R.string.no, Toast.LENGTH_SHORT).show()
     }
+     */
 }
 
 class MainViewState: ViewModel() {
