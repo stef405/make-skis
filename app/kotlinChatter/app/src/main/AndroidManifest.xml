@@ -47,7 +47,7 @@
             android:exported="false"
             android:label="Dimensions" />
         <activity
-            android:name=".PuzzlePieceActivity"
+            android:name=".PieceActivity"
             android:exported="false"
             android:label="@string/title_activity_puzzle_piece"
             android:theme="@style/Theme.KotlinChatter.NoActionBar" />

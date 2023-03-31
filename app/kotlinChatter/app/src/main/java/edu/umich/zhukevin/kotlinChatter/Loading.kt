@@ -5,13 +5,18 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import edu.umich.zhukevin.kotlinChatter.PuzzleStore.getPieces
 import kotlinx.coroutines.delay
 import edu.umich.zhukevin.kotlinChatter.databinding.DifficultyBinding
 import edu.umich.zhukevin.kotlinChatter.databinding.LoadingBinding
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import java.util.concurrent.Executors
-
+import edu.umich.zhukevin.kotlinChatter.PuzzleStore.getPieces
+import edu.umich.zhukevin.kotlinChatter.PuzzleStore.puzzles
 
 class Loading : AppCompatActivity() {
 
@@ -25,7 +30,7 @@ class Loading : AppCompatActivity() {
 
         view.loading.visibility = View.VISIBLE
         Handler().postDelayed({
-            startActivity(Intent(this, PuzzlePieceActivity::class.java))
+            startActivity(Intent(this, PieceActivity::class.java))
         }, 5000)
 
 //        view.progressBar.visibility = View.VISIBLE

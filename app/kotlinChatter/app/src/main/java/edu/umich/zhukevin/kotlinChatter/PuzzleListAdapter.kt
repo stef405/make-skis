@@ -7,10 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.lifecycle.ViewModel
 import coil.load
-import androidx.activity.viewModels
-import edu.umich.zhukevin.kotlinChatter.PuzzleStore.puzzles
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityListitemPuzzleBinding
 
 class PuzzleListAdapter(context: Context, puzzle: List<Puzzle>) :
@@ -31,6 +28,10 @@ class PuzzleListAdapter(context: Context, puzzle: List<Puzzle>) :
                 listItemView.puzzleImage.load(it) {
                     crossfade(true)
                     crossfade(1000)
+                }
+                listItemView.puzzleImage.setOnClickListener{
+                    val intent = Intent(context, PieceActivity::class.java)
+                    context.startActivity(intent)
                 }
             } ?: run {
                 listItemView.puzzleImage.setVisibility(View.GONE)

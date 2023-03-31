@@ -137,6 +137,7 @@ class MainActivity : AppCompatActivity() {
                 show()
             }
         }
+
     }
 
     // refresh content

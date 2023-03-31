@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PuzzlePieceActivity">
+    tools:context=".PieceActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -22,6 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
+            android:padding="10dp"
             app:layout_constraintEnd_toStartOf="@+id/puzzle_piece_history"
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/_icon_back_arrow" />
@@ -39,16 +40,16 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/emptyPieceImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingHorizontal="10sp"
         android:paddingVertical="10sp"
+        android:src="@drawable/empty_puzzle_piece"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/empty_puzzle_piece" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/defaultHistoryText"
@@ -59,18 +60,18 @@
         android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/emptyPieceImage" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/cameraButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="176dp"
         android:layout_marginBottom="24dp"
         android:clickable="true"
         app:backgroundTint="#FFC107"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@android:drawable/ic_input_add" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -84,7 +85,7 @@
         app:layout_constraintVertical_bias="0.0">
 
         <ListView
-            android:id="@+id/chattListView"
+            android:id="@+id/pieceListView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"

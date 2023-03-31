@@ -3,8 +3,10 @@ package edu.umich.zhukevin.kotlinChatter
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.net.wifi.p2p.WifiP2pDevice.FAILED
 import android.util.Log
 import androidx.databinding.ObservableArrayList
+import edu.umich.zhukevin.kotlinChatter.PuzzleStore.puzzles
 import kotlinx.coroutines.coroutineScope
 import okhttp3.Call
 import okhttp3.Callback
@@ -83,7 +85,7 @@ object PuzzleStore {
             .post(mpFD.build())
             .build()
 
-        context.toast("Posting . . . wait for 'Chatt posted!'")
+        context.toast("Posting . . . wait for 'Puzzle posted!'")
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
@@ -102,12 +104,42 @@ object PuzzleStore {
 
     fun getPieces() {
         val request = Request.Builder()
-            .url(serverUrl + "savedpieces/") //https://3.16.218.169/postpiece/puzzlePieceImage.jpeg
+            .url(serverUrl + "getpieces/10")
             .build()
+
+        Log.d("getpieces", request.toString())
+
+//        val response = client.newCall(request).execute();
+//
+//        if (response.isSuccessful) {
+//            val piecesReceived = try { JSONObject(response.body?.string() ?: "").getJSONArray("puzzle_pieces_images") } catch (e: JSONException) { JSONArray() }
+//
+//            pieces.clear()
+//            for (i in 0 until piecesReceived.length()) {
+//                val piece = piecesReceived[i] as JSONObject
+//                val pieceID: String = piece.getString("piece_id")
+//                val pieceIMG: String = piece.getString("piece_img")
+//                val solutionIMG: String = piece.getString("solution_img")
+//                val difficulty: String = piece.getString("difficulty")
+//                if (piece.length() == nFields) {
+//                    pieces.add(Piece(
+//                        piece_id = pieceID,
+//                        piece_img = pieceIMG,
+//                        solution_img = solutionIMG,
+//                        difficulty = difficulty))
+//                } else {
+//                    Log.e("getPieces", "Received unexpected number of fields " + piece.length().toString() + " instead of " + PuzzleStore.nFields.toString())
+//                }
+//            }
+//        }
+//        else{
+//            Log.d("savedPieces", "Failed GET request")
+//        }
+
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                Log.e("savedPieces", "Failed GET request")
+                Log.d("savedPieces", "Failed GET request")
             }
 
             override fun onResponse(call: Call, response: Response) {
@@ -116,9 +148,17 @@ object PuzzleStore {
 
                     pieces.clear()
                     for (i in 0 until piecesReceived.length()) {
-                        val piece = piecesReceived[i] as JSONArray
+                        val piece = piecesReceived[i] as JSONObject
+                        val pieceID: String = piece.getString("piece_id")
+                        val pieceIMG: String = piece.getString("piece_img")
+                        val solutionIMG: String = piece.getString("solution_img")
+                        val difficulty: String = piece.getString("difficulty")
                         if (piece.length() == nFields) {
-                            pieces.add(Piece(imageUrl = piece[0].toString()))
+                            pieces.add(Piece(
+                                piece_id = pieceID,
+                                piece_img = pieceIMG,
+                                solution_img = solutionIMG,
+                                difficulty = difficulty))
                         } else {
                             Log.e("getPieces", "Received unexpected number of fields " + piece.length().toString() + " instead of " + PuzzleStore.nFields.toString())
                         }

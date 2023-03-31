@@ -4,10 +4,13 @@ import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
 class Piece(
-    imageUrl: String? = null,
-    var id: Int? = null
+    var piece_id: String? = null,
+    piece_img: String? = null,
+    solution_img: String? = null,
+    var difficulty: String? = null
 ) {
-    var imageUrl: String? by PiecePropDelegate(imageUrl) //Probably have to change to some other function
+    var piece_img: String? by PiecePropDelegate(piece_img)
+    var solution_img: String? by PiecePropDelegate(solution_img)
 }
 
 class PiecePropDelegate private constructor ():
