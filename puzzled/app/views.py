@@ -139,9 +139,9 @@ def getpieces(request, puzzle_id):
         piece['piece_id'] = row[0]
         piece['piece_img'] = row[1]
         piece['solution_img'] = row[2]
-        piece['difficulty'] = row[3]
-        piece['width'] = row[4]
-        piece['height'] = row[5]
+        piece['difficulty'] = row[4]
+        piece['width'] = row[5]
+        piece['height'] = row[6]
         response['pieces'].append(piece)
     return JsonResponse(response)
 
