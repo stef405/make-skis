@@ -151,7 +151,6 @@ def postpuzzle(request):
         return HttpResponse(status=400)
     # loading multipart/form-data
     user_id = request.POST.get("user_id")
-    piece_ct = request.POST.get('piece_ct')
     width = request.POST.get('width')
     height = request.POST.get('height')
     
