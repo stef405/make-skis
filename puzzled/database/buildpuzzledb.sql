@@ -1,10 +1,9 @@
 CREATE TABLE Puzzles (
     puzzle_id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
+    user_id VARCHAR(200) NOT NULL,
     puzzle_img TEXT NOT NULL,
-    piece_ct INTEGER,
-    width INTEGER,
-    height INTEGER
+    width FLOAT NOT NULL,
+    height FLOAT NOT NULL
 );
 
 CREATE TABLE Pieces (
@@ -13,7 +12,10 @@ CREATE TABLE Pieces (
     solution_img TEXT NOT NULL,
     puzzle_id INTEGER NOT NULL,
     difficulty INTEGER,
+    width FLOAT NOT NULL,
+    height FLOAT NOT NULL,
     FOREIGN KEY(puzzle_id) REFERENCES Puzzles(puzzle_id)
 );
 
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO puzzler;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public to puzzler;

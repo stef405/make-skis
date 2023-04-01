@@ -119,9 +119,8 @@ def getpuzzles(request, user_id):
         puzzle = {}
         puzzle['puzzle_id'] = row[0]
         puzzle['puzzle_img'] = row[2]
-        puzzle['piece_ct'] = row[3]
-        puzzle['width'] = row[4]
-        puzzle['height'] = row[5]
+        puzzle['width'] = row[3]
+        puzzle['height'] = row[4]
         response['puzzles'].append(puzzle)
     return JsonResponse(response)
 
@@ -140,7 +139,9 @@ def getpieces(request, puzzle_id):
         piece['piece_id'] = row[0]
         piece['piece_img'] = row[1]
         piece['solution_img'] = row[2]
-        piece['difficulty'] = row[3]
+        piece['difficulty'] = row[4]
+        piece['width'] = row[5]
+        piece['height'] = row[6]
         response['pieces'].append(piece)
     return JsonResponse(response)
 
@@ -150,7 +151,6 @@ def postpuzzle(request):
         return HttpResponse(status=400)
     # loading multipart/form-data
     user_id = request.POST.get("user_id")
-    piece_ct = request.POST.get('piece_ct')
     width = request.POST.get('width')
     height = request.POST.get('height')
     
@@ -164,8 +164,8 @@ def postpuzzle(request):
         return HttpResponse(status=400)
     
     cursor = connection.cursor()
-    cursor.execute('INSERT INTO puzzles (user_id, puzzle_img, piece_ct, width, height) VALUES '
-                   '(%s, %s, %s, %s, %s);', (user_id, puzzle_image_url, piece_ct, width, height))
+    cursor.execute('INSERT INTO puzzles (user_id, puzzle_img, width, height) VALUES '
+                   '(%s, %s, %s, %s);', (user_id, puzzle_image_url, width, height))
 
     return HttpResponse(status=201)
 
@@ -177,6 +177,8 @@ def postpiece(request):
     # loading multipart/form-data
     puzzle_id = request.POST.get("puzzle_id")
     difficulty = request.POST.get('difficulty')
+    width = request.POST.get('width')
+    height = request.POST.get('height')
     
 
     if request.FILES.get("piece_img"):
@@ -191,8 +193,9 @@ def postpiece(request):
     cursor = connection.cursor()
     # TODO: Replace the insert for solution_img with the actual solution once we have a
     # way of generating it
-    cursor.execute('INSERT INTO pieces (puzzle_id, piece_img, difficulty, solution_img) VALUES '
-                   '(%s, %s, %s, %s);', (puzzle_id, piece_image_url, difficulty, piece_image_url))
+    cursor.execute('INSERT INTO pieces (puzzle_id, piece_img, difficulty, solution_img, width, height) VALUES '
+                   '(%s, %s, %s, %s, %s, %s);',
+                    (puzzle_id, piece_image_url, difficulty, piece_image_url, width, height))
 
     return HttpResponse(status=201)
 
