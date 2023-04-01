@@ -1,13 +1,9 @@
 package edu.umich.zhukevin.kotlinChatter
 
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
-import android.net.wifi.p2p.WifiP2pDevice.FAILED
 import android.util.Log
 import androidx.databinding.ObservableArrayList
-import edu.umich.zhukevin.kotlinChatter.PuzzleStore.puzzles
-import kotlinx.coroutines.coroutineScope
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaType
@@ -69,7 +65,6 @@ object PuzzleStore {
 
         val mpFD = MultipartBody.Builder().setType(MultipartBody.FORM)
             .addFormDataPart("user_id", puzzle.user_id ?: "")
-            .addFormDataPart("piece_ct", puzzle.piece_ct ?: "")
             .addFormDataPart("height", puzzle.height ?: "")
             .addFormDataPart("width", puzzle.width ?: "")
 
@@ -104,37 +99,10 @@ object PuzzleStore {
 
     fun getPieces() {
         val request = Request.Builder()
-            .url(serverUrl + "getpieces/10")
+            .url(serverUrl + "getpieces/" + "12")
             .build()
 
         Log.d("getpieces", request.toString())
-
-//        val response = client.newCall(request).execute();
-//
-//        if (response.isSuccessful) {
-//            val piecesReceived = try { JSONObject(response.body?.string() ?: "").getJSONArray("puzzle_pieces_images") } catch (e: JSONException) { JSONArray() }
-//
-//            pieces.clear()
-//            for (i in 0 until piecesReceived.length()) {
-//                val piece = piecesReceived[i] as JSONObject
-//                val pieceID: String = piece.getString("piece_id")
-//                val pieceIMG: String = piece.getString("piece_img")
-//                val solutionIMG: String = piece.getString("solution_img")
-//                val difficulty: String = piece.getString("difficulty")
-//                if (piece.length() == nFields) {
-//                    pieces.add(Piece(
-//                        piece_id = pieceID,
-//                        piece_img = pieceIMG,
-//                        solution_img = solutionIMG,
-//                        difficulty = difficulty))
-//                } else {
-//                    Log.e("getPieces", "Received unexpected number of fields " + piece.length().toString() + " instead of " + PuzzleStore.nFields.toString())
-//                }
-//            }
-//        }
-//        else{
-//            Log.d("savedPieces", "Failed GET request")
-//        }
 
 
         client.newCall(request).enqueue(object : Callback {
@@ -153,12 +121,17 @@ object PuzzleStore {
                         val pieceIMG: String = piece.getString("piece_img")
                         val solutionIMG: String = piece.getString("solution_img")
                         val difficulty: String = piece.getString("difficulty")
+                        val width: String = piece.getString("width")
+                        val height: String = piece.getString("height")
                         if (piece.length() == nFields) {
                             pieces.add(Piece(
                                 piece_id = pieceID,
                                 piece_img = pieceIMG,
                                 solution_img = solutionIMG,
-                                difficulty = difficulty))
+                                difficulty = difficulty,
+                                width = width,
+                                height = height),
+                            )
                         } else {
                             Log.e("getPieces", "Received unexpected number of fields " + piece.length().toString() + " instead of " + PuzzleStore.nFields.toString())
                         }
@@ -188,14 +161,12 @@ object PuzzleStore {
                         val puzzle = puzzlesReceived[i] as JSONObject
                         val puzzleID: String = puzzle.getString("puzzle_id")
                         val puzzleIMG: String = puzzle.getString("puzzle_img")
-                        val puzzlePieceCount: String = puzzle.getString("piece_ct")
                         val puzzleWidth: String = puzzle.getString("width")
                         val puzzleHeight: String = puzzle.getString("height")
                         if (puzzle.length() == nPuzzleFields - 1) {
                             puzzles.add(Puzzle(
                                 user_id = "10",
                                 puzzle_id = puzzleID,
-                                piece_ct = puzzlePieceCount,
                                 height =  puzzleHeight,
                                 width =  puzzleWidth,
                                 imageUrl = puzzleIMG

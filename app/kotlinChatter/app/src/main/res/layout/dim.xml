@@ -68,29 +68,6 @@
         app:layout_constraintStart_toStartOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
-    <TextView
-        android:id="@+id/te"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:text="Puzzle Piece Count"
-        android:textSize="15sp"
-        android:textColor="#000000"
-        app:layout_constraintStart_toStartOf="@+id/textView5"
-        app:layout_constraintTop_toBottomOf="@+id/width" />
-
-    <EditText
-        android:id="@+id/num_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="puzzle piece count"
-        android:textColorHint="#808080"
-        app:layout_constraintStart_toStartOf="@+id/textView5"
-        app:layout_constraintTop_toBottomOf="@+id/te" />
-
     <Button
         android:id="@+id/next_button"
         android:layout_width="wrap_content"

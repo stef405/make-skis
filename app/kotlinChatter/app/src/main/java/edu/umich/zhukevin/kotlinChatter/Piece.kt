@@ -5,9 +5,11 @@ import kotlin.reflect.KProperty
 
 class Piece(
     var piece_id: String? = null,
+    var difficulty: String? = null,
+    var width: String? = null,
+    var height: String? = null,
     piece_img: String? = null,
-    solution_img: String? = null,
-    var difficulty: String? = null
+    solution_img: String? = null
 ) {
     var piece_img: String? by PiecePropDelegate(piece_img)
     var solution_img: String? by PiecePropDelegate(solution_img)
