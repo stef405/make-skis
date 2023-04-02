@@ -90,7 +90,10 @@ class MainActivity : AppCompatActivity() {
                         outStream.close()
                         inStream.close()
                     }
-                    startActivity(Intent(this, Dimensions::class.java))
+                    val intent = Intent(this, Dimensions::class.java)
+                    intent.putExtra("PUZZLE_URI", viewState.imageUri)
+                    this.startActivity(intent)
+
                 } ?: run { Log.d("Pick media", "failed") }
             })
 

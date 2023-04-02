@@ -61,7 +61,7 @@ object PuzzleStore {
 
 //        var user_id_int: Int = puzzle.user_id.toInt()
 
-        Log.d("imageUri", imageUri.toString())
+        Log.d("postpuzzle", "imageUri = " + imageUri.toString())
 
         val mpFD = MultipartBody.Builder().setType(MultipartBody.FORM)
             .addFormDataPart("user_id", puzzle.user_id ?: "")
@@ -72,6 +72,7 @@ object PuzzleStore {
             toFile(context)?.let {
                 mpFD.addFormDataPart("puzzle_img", "puzzlePieceImage",
                     it.asRequestBody("image/jpeg".toMediaType()))
+
             } ?: context.toast("Unsupported image format")
         }
 
@@ -80,7 +81,8 @@ object PuzzleStore {
             .post(mpFD.build())
             .build()
 
-        context.toast("Posting . . . wait for 'Puzzle posted!'")
+        //context.toast("Posting . . . wait for 'Puzzle posted!'")
+
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
@@ -99,21 +101,24 @@ object PuzzleStore {
 
     fun getPieces() {
         val request = Request.Builder()
-            .url(serverUrl + "getpieces/" + "12")
+            .url(serverUrl + "getpieces/" + "12/")
             .build()
 
         Log.d("getpieces", request.toString())
 
 
         client.newCall(request).enqueue(object : Callback {
+
             override fun onFailure(call: Call, e: IOException) {
                 Log.d("savedPieces", "Failed GET request")
             }
 
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful) {
-                    val piecesReceived = try { JSONObject(response.body?.string() ?: "").getJSONArray("puzzle_pieces_images") } catch (e: JSONException) { JSONArray() }
+                    Log.d("getpieces","Successful GET request") //successfully goes into function
+                    val piecesReceived = try { JSONObject(response.body?.string() ?: "").getJSONArray("pieces") } catch (e: JSONException) { JSONArray() }
 
+                    Log.d("getpieces","piecesRecieved= " + piecesReceived.length())
                     pieces.clear()
                     for (i in 0 until piecesReceived.length()) {
                         val piece = piecesReceived[i] as JSONObject
@@ -153,6 +158,7 @@ object PuzzleStore {
 
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful) {
+                    Log.d("getpuzzles","Successful GET request")
                     val puzzlesReceived = try { JSONObject(response.body?.string() ?: "").getJSONArray("puzzles") } catch (e: JSONException) { JSONArray() }
 
 
