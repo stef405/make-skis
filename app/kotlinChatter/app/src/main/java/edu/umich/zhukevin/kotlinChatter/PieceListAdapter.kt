@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import coil.load
+import edu.umich.zhukevin.kotlinChatter.PuzzleStore.deletePiece
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityListitemPieceBinding
 
 class PieceListAdapter(context: Context, pieces: List<Piece>) :
@@ -20,6 +21,8 @@ class PieceListAdapter(context: Context, pieces: List<Piece>) :
             rowView.tag
         }) as ActivityListitemPieceBinding
 
+
+
         getItem(position)?.run {
             listItemView.root.setBackgroundColor(Color.parseColor(if (position % 2 == 0) "#E0E0E0" else "#EEEEEE"))
             // show image
@@ -32,6 +35,11 @@ class PieceListAdapter(context: Context, pieces: List<Piece>) :
             } ?: run {
                 listItemView.pieceImage.setVisibility(View.GONE)
                 listItemView.pieceImage.setImageBitmap(null)
+            }
+
+            //pressing garbage to delete piece
+            listItemView.pieceDelete.setOnClickListener {
+                deletePiece(piece_id)
             }
 
         }

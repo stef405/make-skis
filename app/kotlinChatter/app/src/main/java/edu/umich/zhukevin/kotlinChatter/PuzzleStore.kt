@@ -186,5 +186,45 @@ object PuzzleStore {
         })
     }
 
+    fun deletePuzzle(id: String?) {
+        val request = Request.Builder()
+            .url(serverUrl + "deletepuzzle/" + id + "/")
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.d("deletePuzzle", "Failed DELETE request")
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                if (response.isSuccessful) {
+                    //Update list screen
+                    //getPuzzles()
+                    Log.d("deletePuzzle","DELETE SUCCESS")
+                }
+            }
+        })
+    }
+
+    fun deletePiece(id: String?) {
+        val request = Request.Builder()
+            .url(serverUrl + "deletepiece/" + id + "/")
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.d("deletePiece", "Failed DELETE request")
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                if (response.isSuccessful) {
+                    //Update list screen
+                    //getPieces()
+                    Log.d("deletePiece","DELETE SUCCESS")
+                }
+            }
+        })
+    }
+
 }
 

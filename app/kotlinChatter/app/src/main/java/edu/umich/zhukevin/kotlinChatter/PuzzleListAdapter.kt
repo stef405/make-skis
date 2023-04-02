@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import coil.load
+import edu.umich.zhukevin.kotlinChatter.PuzzleStore.deletePuzzle
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityListitemPuzzleBinding
 
 class PuzzleListAdapter(context: Context, puzzle: List<Puzzle>) :
@@ -33,10 +34,17 @@ class PuzzleListAdapter(context: Context, puzzle: List<Puzzle>) :
                     val intent = Intent(context, PieceActivity::class.java)
                     context.startActivity(intent)
                 }
+
+                //pressing garbage can to delete entry
+                listItemView.deleteEntry.setOnClickListener{
+                    deletePuzzle(puzzle_id)
+                }
             } ?: run {
                 listItemView.puzzleImage.setVisibility(View.GONE)
                 listItemView.puzzleImage.setImageBitmap(null)
             }
+
+
 
         }
         return listItemView.root
