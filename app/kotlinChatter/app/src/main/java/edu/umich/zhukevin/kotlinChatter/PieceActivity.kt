@@ -68,16 +68,24 @@ class PieceActivity : AppCompatActivity() {
             refreshTimeline()
         }
         pieces.addOnListChangedCallback(propertyObserver)
-        getPieces()
+        getPieces(intent.getParcelableExtra("puzzle_id", String::class.java))
 
         var takePicture = registerForActivityResult(ActivityResultContracts.TakePicture())
         { success ->
             if (success) {
-                // doCrop(cropIntent)
+
+                val piece_insert = Piece(puzzle_id = intent.getParcelableExtra("puzzle_id", String::class.java),difficulty = "0",width = "2",height = "2")
+                PuzzleStore.postPiece(applicationContext, piece_insert, viewState.imageUri) { msg ->
+                    runOnUiThread {
+                        toast(msg)
+                    }
+                    finish()
+                }
             } else {
                 Log.d("TakePicture", "failed")
             }
         }
+
         view.cameraButton.setOnClickListener {
             viewState.imageUri = mediaStoreAlloc(mediaType="image/jpeg")
             takePicture.launch(viewState.imageUri)
@@ -106,7 +114,7 @@ class PieceActivity : AppCompatActivity() {
             view.emptyPieceImage.visibility = View.GONE
             view.defaultHistoryText.visibility = View.GONE
         }
-        getPieces()
+        getPieces(intent.getParcelableExtra("puzzle_id", String::class.java))
         // stop the refreshing animation upon completion:
         view.refreshContainer.isRefreshing = false
     }

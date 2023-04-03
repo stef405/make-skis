@@ -15,6 +15,7 @@ import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
+import edu.umich.zhukevin.kotlinChatter.PuzzleStore.postPiece
 import edu.umich.zhukevin.kotlinChatter.PuzzleStore.postPuzzle
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityMainBinding
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityPuzzlePieceBinding
@@ -43,8 +44,35 @@ class Dimensions : AppCompatActivity() {
             var int_height: String = height.text.toString()
             var int_width: String = width.text.toString()
             submitPuzzle("10", int_height, int_width)
+
+            //after submitting puzzle entry, go submit puzzle piece
+            //takePiecePhoto()
             startActivity(Intent(this, MainActivity::class.java))
         }
+
+    }
+
+    //for taking a photo of the puzzle piece
+    private fun takePiecePhoto() {
+        val takeImageResult = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+            if (success) {
+                val piece_insert = Piece(puzzle_id = "",difficulty = "0",width = "2",height = "2")
+                postPiece(applicationContext,piece_insert,viewState.imageUri) { msg ->
+                    runOnUiThread {
+                        toast(msg)
+                    }
+                    finish()
+                }
+
+                //get to dimensions
+
+            } else {
+                Log.d("TakePicture", "failed")
+            }
+        }
+
+        viewState.imageUri = mediaStoreAlloc("image/jpeg")
+        takeImageResult.launch(viewState.imageUri)
 
     }
 

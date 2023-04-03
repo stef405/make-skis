@@ -34,6 +34,7 @@ class PuzzleListAdapter(context: Context, puzzle: List<Puzzle>) :
                 }
                 listItemView.puzzleImage.setOnClickListener{
                     val intent = Intent(context, PieceActivity::class.java)
+                    intent.putExtra("puzzle_id",puzzle_id)
                     context.startActivity(intent)
                 }
             } ?: run {

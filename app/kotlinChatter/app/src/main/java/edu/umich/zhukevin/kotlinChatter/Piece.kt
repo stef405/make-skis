@@ -5,6 +5,7 @@ import kotlin.reflect.KProperty
 
 class Piece(
     var piece_id: String? = null,
+    var puzzle_id: String? = null,
     var difficulty: String? = null,
     var width: String? = null,
     var height: String? = null,

@@ -39,7 +39,7 @@ class PieceListAdapter(context: Context, pieces: List<Piece>) :
 
             //pressing garbage to delete piece
             listItemView.pieceDelete.setOnClickListener {
-                deletePiece(piece_id)
+                deletePiece(piece_id,puzzle_id)
             }
 
         }

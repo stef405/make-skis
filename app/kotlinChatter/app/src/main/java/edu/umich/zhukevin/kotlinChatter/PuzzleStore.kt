@@ -28,10 +28,14 @@ object PuzzleStore {
 
     fun postPiece(context: Context, piece: Piece, imageUri: Uri?, completion: (String) -> Unit) {
         val mpFD = MultipartBody.Builder().setType(MultipartBody.FORM)
+            .addFormDataPart("puzzle_id", piece.puzzle_id ?: "")
+            .addFormDataPart("difficulty",piece.difficulty ?: "")
+            .addFormDataPart("height", piece.height ?: "")
+            .addFormDataPart("width", piece.width ?: "")
 
         imageUri?.run {
             toFile(context)?.let {
-                mpFD.addFormDataPart("image", "puzzlePieceImage",
+                mpFD.addFormDataPart("piece_img", "puzzlePieceImage",
                     it.asRequestBody("image/jpeg".toMediaType()))
             } ?: context.toast("Unsupported image format")
         }
@@ -50,7 +54,7 @@ object PuzzleStore {
 
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful) {
-                    getPieces()
+                    getPieces(piece.puzzle_id)
                     completion("Chatt posted!")
                 }
             }
@@ -99,7 +103,7 @@ object PuzzleStore {
         })
     }
 
-    fun getPieces() {
+    fun getPieces(puzzle_id : String?) {
         val request = Request.Builder()
             .url(serverUrl + "getpieces/" + "24/")
             .build()
@@ -207,7 +211,7 @@ object PuzzleStore {
         })
     }
 
-    fun deletePiece(id: String?) {
+    fun deletePiece(id: String?,puzzle_id: String?) {
         val request = Request.Builder()
             .url(serverUrl + "deletepiece/" + id + "/")
             .delete()
@@ -223,7 +227,7 @@ object PuzzleStore {
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful) {
                     //Update list screen
-                    getPieces()
+                    getPieces(puzzle_id)
                     Log.d("deletePiece","DELETE SUCCESS")
                 }
             }
