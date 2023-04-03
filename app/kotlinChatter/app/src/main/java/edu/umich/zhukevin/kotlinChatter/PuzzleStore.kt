@@ -105,11 +105,10 @@ object PuzzleStore {
 
     fun getPieces(puzzle_id : String?) {
         val request = Request.Builder()
-            .url(serverUrl + "getpieces/" + "24/")
+            .url(serverUrl + "getpieces/" + puzzle_id + "/")
             .build()
 
         Log.d("getpieces", request.toString())
-
 
         client.newCall(request).enqueue(object : Callback {
 
@@ -132,10 +131,11 @@ object PuzzleStore {
                         val difficulty: String = piece.getString("difficulty")
                         val width: String = piece.getString("width")
                         val height: String = piece.getString("height")
-                        if (piece.length() == nFields) {
+                        if (piece.length() == nFields -1 ) {
                             pieces.add(Piece(
                                 piece_id = pieceID,
                                 piece_img = pieceIMG,
+                                puzzle_id = puzzle_id,
                                 solution_img = solutionIMG,
                                 difficulty = difficulty,
                                 width = width,

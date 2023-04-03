@@ -60,6 +60,8 @@ class PieceActivity : AppCompatActivity() {
         view.root.setBackgroundColor(Color.parseColor("#FFFFFF"))
         setContentView(view.root)
 
+        refreshTimeline()
+
         pieceListAdapter = PieceListAdapter(this, pieces)
         view.pieceListView.adapter = pieceListAdapter
 
@@ -68,7 +70,7 @@ class PieceActivity : AppCompatActivity() {
             refreshTimeline()
         }
         pieces.addOnListChangedCallback(propertyObserver)
-        getPieces(intent.getParcelableExtra("puzzle_id", String::class.java))
+//        getPieces(intent.getParcelableExtra("puzzle_id", String::class.java))
 
         var takePicture = registerForActivityResult(ActivityResultContracts.TakePicture())
         { success ->

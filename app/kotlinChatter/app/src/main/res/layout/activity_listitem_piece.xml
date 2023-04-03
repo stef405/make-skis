@@ -15,26 +15,40 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="10dp"
-        android:background="@drawable/border_shadow"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        android:padding="5dp"
+        android:gravity="center_horizontal"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <ImageButton
-            android:id="@+id/pieceImage"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/puzzle_piece" />
+        <androidx.cardview.widget.CardView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:cardCornerRadius="8dp"
+            android:background="@color/white"
+            android:elevation="10dp">
+            <ImageButton
+                android:id="@+id/pieceImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:scaleType="fitXY"
+                android:background="@color/white"
+                android:contentDescription="PuzzleImg"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/puzzle_piece" />
+
+        </androidx.cardview.widget.CardView>
 
         <android.widget.Space
             android:layout_width="match_parent"
+            android:layout_gravity="center"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:minHeight="1dp"/>
+            android:minHeight="1dp" />
 
         <ImageButton
             android:gravity="center"

@@ -22,16 +22,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <androidx.cardview.widget.CardView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:cardCornerRadius="8dp"
+            android:background="@color/white"
+            android:elevation="10dp">
+
         <ImageButton
             android:id="@+id/puzzleImage"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginStart="16dp"
             android:contentDescription="PuzzleImg"
+            android:scaleType="fitXY"
             android:src="@drawable/puzzle_image"
+            android:background="@color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.cardview.widget.CardView>
 
         <android.widget.Space
             android:layout_width="match_parent"

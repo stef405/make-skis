@@ -64,6 +64,7 @@ class MainActivity : AppCompatActivity() {
         view.root.setBackgroundColor(Color.parseColor("#FFFFFF"))
         setContentView(view.root)
 
+        refreshTimeline()
         puzzleListAdapter = PuzzleListAdapter(this, puzzles)
         view.puzzleListView.adapter = puzzleListAdapter
 
@@ -72,7 +73,7 @@ class MainActivity : AppCompatActivity() {
             refreshTimeline()
         }
         puzzles.addOnListChangedCallback(propertyObserver)
-        getPuzzles()
+//        getPuzzles()
 
         val forPickedResult =
             registerForActivityResult(ActivityResultContracts.GetContent(), fun(uri: Uri?) {
