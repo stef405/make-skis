@@ -44,6 +44,8 @@
             android:layout_marginEnd="16dp"
             android:background="@android:color/transparent"
             android:layout_gravity="center"
+            android:padding="30dp"
+            android:contentDescription="Delete Piece Entry"
             app:layout_constraintBottom_toBottomOf="@+id/pieceImage"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/pieceImage"

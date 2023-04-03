@@ -9,10 +9,12 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import coil.load
 import edu.umich.zhukevin.kotlinChatter.PuzzleStore.deletePuzzle
+import edu.umich.zhukevin.kotlinChatter.PuzzleStore.puzzles
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityListitemPuzzleBinding
 
 class PuzzleListAdapter(context: Context, puzzle: List<Puzzle>) :
     ArrayAdapter<Puzzle>(context, 0, puzzle) {
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val listItemView = (convertView?.tag /* reuse binding */ ?: run {
             val rowView = LayoutInflater.from(context).inflate(R.layout.activity_listitem_puzzle, parent, false)
@@ -24,7 +26,7 @@ class PuzzleListAdapter(context: Context, puzzle: List<Puzzle>) :
             listItemView.root.setBackgroundColor(Color.parseColor(if (position % 2 == 0) "#E0E0E0" else "#EEEEEE"))
             // show image
             imageUrl?.let {
-                listItemView.puzzleTextView.text = "Puzzle Test"
+                listItemView.puzzleTextView.text = "Puzzle " + puzzle_id
                 listItemView.puzzleImage.setVisibility(View.VISIBLE)
                 listItemView.puzzleImage.load(it) {
                     crossfade(true)
@@ -34,19 +36,17 @@ class PuzzleListAdapter(context: Context, puzzle: List<Puzzle>) :
                     val intent = Intent(context, PieceActivity::class.java)
                     context.startActivity(intent)
                 }
-
-                //pressing garbage can to delete entry
-                listItemView.deleteEntry.setOnClickListener{
-                    deletePuzzle(puzzle_id)
-                }
             } ?: run {
                 listItemView.puzzleImage.setVisibility(View.GONE)
                 listItemView.puzzleImage.setImageBitmap(null)
             }
-
-
+            //pressing garbage can to delete entry
+            listItemView.deleteEntry.setOnClickListener{
+                deletePuzzle(this.puzzle_id)
+            }
 
         }
+
         return listItemView.root
     }
 

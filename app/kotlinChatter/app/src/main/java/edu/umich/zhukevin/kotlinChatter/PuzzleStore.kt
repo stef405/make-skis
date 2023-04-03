@@ -101,7 +101,7 @@ object PuzzleStore {
 
     fun getPieces() {
         val request = Request.Builder()
-            .url(serverUrl + "getpieces/" + "12/")
+            .url(serverUrl + "getpieces/" + "24/")
             .build()
 
         Log.d("getpieces", request.toString())
@@ -161,7 +161,6 @@ object PuzzleStore {
                     Log.d("getpuzzles","Successful GET request")
                     val puzzlesReceived = try { JSONObject(response.body?.string() ?: "").getJSONArray("puzzles") } catch (e: JSONException) { JSONArray() }
 
-
                     puzzles.clear()
                     for (i in 0 until puzzlesReceived.length()) {
                         val puzzle = puzzlesReceived[i] as JSONObject
@@ -189,8 +188,10 @@ object PuzzleStore {
     fun deletePuzzle(id: String?) {
         val request = Request.Builder()
             .url(serverUrl + "deletepuzzle/" + id + "/")
+            .delete()
             .build()
 
+        Log.d("deleteWasCalled", request.toString())
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 Log.d("deletePuzzle", "Failed DELETE request")
@@ -199,7 +200,7 @@ object PuzzleStore {
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful) {
                     //Update list screen
-                    //getPuzzles()
+                    getPuzzles()
                     Log.d("deletePuzzle","DELETE SUCCESS")
                 }
             }
@@ -209,7 +210,10 @@ object PuzzleStore {
     fun deletePiece(id: String?) {
         val request = Request.Builder()
             .url(serverUrl + "deletepiece/" + id + "/")
+            .delete()
             .build()
+
+        Log.d("deleteWasCalled", "Delete was callaed")
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
@@ -219,10 +223,11 @@ object PuzzleStore {
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful) {
                     //Update list screen
-                    //getPieces()
+                    getPieces()
                     Log.d("deletePiece","DELETE SUCCESS")
                 }
             }
+
         })
     }
 
