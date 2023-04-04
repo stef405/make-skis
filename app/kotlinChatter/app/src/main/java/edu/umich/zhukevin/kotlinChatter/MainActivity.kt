@@ -1,7 +1,6 @@
 package edu.umich.zhukevin.kotlinChatter
 
 import android.Manifest
-import android.app.ProgressDialog.show
 import android.content.ContentValues
 import android.content.DialogInterface
 import android.content.Intent
@@ -18,7 +17,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil.setContentView
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
 import androidx.lifecycle.ViewModel
@@ -74,7 +72,26 @@ class MainActivity : AppCompatActivity() {
         view.root.setBackgroundColor(Color.parseColor("#FFFFFF"))
         setContentView(view.root)
 
-        refreshTimeline()
+        val firstrun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("firstrun", true)
+        if (firstrun) {
+            //... Display the dialog message here ...
+            val builder = AlertDialog.Builder(this)
+            with(builder)
+            {
+                setTitle("Welcome to Puzzle Pal")
+                setMessage("Add a new puzzle entry by tapping on the plus icon, happy puzzling!")
+                setPositiveButton("Ok", DialogInterface.OnClickListener(positiveButtonClickWelcome))
+                show()
+            }
+            // Save the state
+            getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                .edit()
+                .putBoolean("firstrun", false)
+                .commit()
+        }
+        else {
+            getPuzzles()
+        }
         puzzleListAdapter = PuzzleListAdapter(this, puzzles)
         view.puzzleListView.adapter = puzzleListAdapter
 
@@ -207,5 +224,9 @@ class MainActivity : AppCompatActivity() {
     val negativeButtonClick = { dialog: DialogInterface, which: Int ->
         Toast.makeText(applicationContext,
             android.R.string.no, Toast.LENGTH_SHORT).show()
+    }
+
+    val positiveButtonClickWelcome = { dialog: DialogInterface, which: Int ->
+        refreshTimeline()
     }
 }
