@@ -152,7 +152,7 @@ object PuzzleStore {
 
     fun getPuzzles() {
         val request = Request.Builder()
-            .url(serverUrl + "getpuzzles/" + "10")
+            .url(serverUrl + "getpuzzles/" + "10" +"/")
             .build()
 
         client.newCall(request).enqueue(object : Callback {
@@ -164,8 +164,9 @@ object PuzzleStore {
                 if (response.isSuccessful) {
                     Log.d("getpuzzles","Successful GET request")
                     val puzzlesReceived = try { JSONObject(response.body?.string() ?: "").getJSONArray("puzzles") } catch (e: JSONException) { JSONArray() }
-
+                    Log.d("getpuzzles","PuzzlesReceived length: ${puzzlesReceived.length()} (${puzzles.size})")
                     puzzles.clear()
+                    Log.d("getpuzzles","Puzzles size: ${puzzles.size}")
                     for (i in 0 until puzzlesReceived.length()) {
                         val puzzle = puzzlesReceived[i] as JSONObject
                         val puzzleID: String = puzzle.getString("puzzle_id")

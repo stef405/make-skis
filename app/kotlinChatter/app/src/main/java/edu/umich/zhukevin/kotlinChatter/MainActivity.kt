@@ -1,6 +1,7 @@
 package edu.umich.zhukevin.kotlinChatter
 
 import android.Manifest
+import android.app.ProgressDialog.show
 import android.content.ContentValues
 import android.content.DialogInterface
 import android.content.Intent
@@ -17,6 +18,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil.setContentView
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
 import androidx.lifecycle.ViewModel
@@ -35,9 +37,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val propertyObserver = object: ObservableList.OnListChangedCallback<ObservableArrayList<Int>>() {
-        override fun onChanged(sender: ObservableArrayList<Int>?) {
-        }
-        override fun onItemRangeChanged(sender: ObservableArrayList<Int>?, positionStart: Int, itemCount: Int) { }
+        override fun onChanged(sender: ObservableArrayList<Int>?) {}
+        override fun onItemRangeChanged(sender: ObservableArrayList<Int>?, positionStart: Int, itemCount: Int) {}
         override fun onItemRangeInserted(
             sender: ObservableArrayList<Int>?,
             positionStart: Int,
@@ -54,8 +55,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
         override fun onItemRangeMoved(sender: ObservableArrayList<Int>?, fromPosition: Int, toPosition: Int,
-                                      itemCount: Int) { }
-        override fun onItemRangeRemoved(sender: ObservableArrayList<Int>?, positionStart: Int, itemCount: Int) { }
+                                      itemCount: Int) {}
+        override fun onItemRangeRemoved(sender: ObservableArrayList<Int>?, positionStart: Int, itemCount: Int) {
+            println("onItemRangeRemoved: ${sender?.size}, $itemCount")
+            if (sender?.size == 0) {
+                runOnUiThread {
+                    view.emptyPuzzlePiece.visibility = View.VISIBLE
+                    view.defaultHistoryText.visibility = View.VISIBLE
+                    puzzleListAdapter.notifyDataSetChanged()
+                }
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -146,10 +156,11 @@ class MainActivity : AppCompatActivity() {
 
     // refresh content
     private fun refreshTimeline() {
+        /*
         if(viewState.filledList){
             view.emptyPuzzlePiece.visibility = View.GONE
             view.defaultHistoryText.visibility = View.GONE
-        }
+        }*/
         getPuzzles()
         // stop the refreshing animation upon completion:
         view.refreshContainer.isRefreshing = false

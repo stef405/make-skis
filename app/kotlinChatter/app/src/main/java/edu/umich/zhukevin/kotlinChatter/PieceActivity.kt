@@ -12,6 +12,8 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.startActivity
+import androidx.databinding.DataBindingUtil.setContentView
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
 import androidx.lifecycle.ViewModel
@@ -31,8 +33,7 @@ class PieceActivity : AppCompatActivity() {
     }
 
     private val propertyObserver = object: ObservableList.OnListChangedCallback<ObservableArrayList<Int>>() {
-        override fun onChanged(sender: ObservableArrayList<Int>?) {
-        }
+        override fun onChanged(sender: ObservableArrayList<Int>?) {}
         override fun onItemRangeChanged(sender: ObservableArrayList<Int>?, positionStart: Int, itemCount: Int) { }
         override fun onItemRangeInserted(
             sender: ObservableArrayList<Int>?,
@@ -42,16 +43,26 @@ class PieceActivity : AppCompatActivity() {
             viewState.filledList = itemCount > 0
             println("onItemRangeInserted: $positionStart, $itemCount")
             runOnUiThread {
-                if(viewState.filledList){
+                if (viewState.filledList) {
                     view.emptyPieceImage.visibility = View.GONE
                     view.defaultHistoryText.visibility = View.GONE
+
+                    pieceListAdapter.notifyDataSetChanged()
                 }
-                pieceListAdapter.notifyDataSetChanged()
             }
         }
         override fun onItemRangeMoved(sender: ObservableArrayList<Int>?, fromPosition: Int, toPosition: Int,
                                       itemCount: Int) { }
-        override fun onItemRangeRemoved(sender: ObservableArrayList<Int>?, positionStart: Int, itemCount: Int) { }
+        override fun onItemRangeRemoved(sender: ObservableArrayList<Int>?, positionStart: Int, itemCount: Int) {
+            println("onItemRangeRemoved: ${sender?.size}, $positionStart, $itemCount")
+            if (sender?.size == 0) {
+                runOnUiThread {
+                    view.emptyPieceImage.visibility = View.VISIBLE
+                    view.defaultHistoryText.visibility = View.VISIBLE
+                    pieceListAdapter.notifyDataSetChanged()
+                }
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
