@@ -23,7 +23,6 @@ class PuzzleListAdapter(context: Context, puzzle: List<Puzzle>) :
         }) as ActivityListitemPuzzleBinding
 
         getItem(position)?.run {
-            listItemView.root.setBackgroundColor(Color.parseColor(if (position % 2 == 0) "#E0E0E0" else "#EEEEEE"))
             // show image
             imageUrl?.let {
                 listItemView.puzzleTextView.text = "Puzzle " + puzzle_id

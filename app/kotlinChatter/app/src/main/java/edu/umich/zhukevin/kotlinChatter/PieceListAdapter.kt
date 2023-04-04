@@ -24,7 +24,6 @@ class PieceListAdapter(context: Context, pieces: List<Piece>) :
 
 
         getItem(position)?.run {
-            listItemView.root.setBackgroundColor(Color.parseColor(if (position % 2 == 0) "#E0E0E0" else "#EEEEEE"))
             // show image
             piece_img?.let {
                 listItemView.pieceImage.setVisibility(View.VISIBLE)

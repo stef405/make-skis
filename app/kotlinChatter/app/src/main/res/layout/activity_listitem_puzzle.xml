@@ -4,86 +4,93 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingStart="6dp"
-    android:paddingTop="8dp"
-    android:paddingEnd="6dp"
-    android:paddingBottom="14dp"
+    android:paddingStart="10dp"
+    android:paddingEnd="10dp"
     tools:context=".PuzzleListAdapter">
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp"
-        android:gravity="center_horizontal"
-        android:clickable="true"
+        app:cardBackgroundColor="@color/puzzle_pal_light_grey"
+        app:cardCornerRadius="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            app:cardCornerRadius="8dp"
-            android:background="@color/white"
-            android:elevation="10dp">
-
-        <ImageButton
-            android:id="@+id/puzzleImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:contentDescription="PuzzleImg"
-            android:scaleType="fitXY"
-            android:src="@drawable/puzzle_image"
-            android:background="@color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.cardview.widget.CardView>
-
-        <android.widget.Space
+        <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_gravity="center"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:minHeight="1dp" />
-
-        <TextView
-            android:id="@+id/puzzleTextView"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Puzzle 1"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="@+id/entryImage"
-            app:layout_constraintTop_toTopOf="@+id/entryImage"
-            tools:layout_editor_absoluteX="178dp" />
-
-        <android.widget.Space
-            android:layout_gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:minHeight="1dp" />
-
-        <ImageButton
-            android:id="@+id/deleteEntry"
-            android:layout_width="53dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="16dp"
-            android:background="@android:color/transparent"
-            android:contentDescription="PuzzleImgDelete"
-            android:padding="15dp"
-            android:src="@drawable/icon_garbage"
-            app:layout_constraintBottom_toBottomOf="@+id/entryImage"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:padding="10dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/entryImage"
-            app:layout_constraintVertical_bias="0.393" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@color/white"
+                app:cardCornerRadius="8dp">
+
+                <ImageButton
+                    android:id="@+id/puzzleImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@color/white"
+                    android:contentDescription="PuzzleImg"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/puzzle_image"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.cardview.widget.CardView>
+
+            <android.widget.Space
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:minHeight="1dp" />
+
+            <TextView
+                android:id="@+id/puzzleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Puzzle 1"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="@+id/entryImage"
+                app:layout_constraintTop_toTopOf="@+id/entryImage"
+                tools:layout_editor_absoluteX="178dp" />
+
+            <android.widget.Space
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:minHeight="1dp" />
+
+            <ImageButton
+                android:id="@+id/deleteEntry"
+                android:layout_width="53dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="16dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="PuzzleImgDelete"
+                android:padding="15dp"
+                android:src="@drawable/icon_garbage"
+                app:layout_constraintBottom_toBottomOf="@+id/entryImage"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/entryImage"
+                app:layout_constraintVertical_bias="0.393" />
 
 
-    </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

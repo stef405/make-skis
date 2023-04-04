@@ -15,6 +15,7 @@
         android:text="@string/history"
         android:textSize="24sp"
         android:textStyle="bold"
+        android:textColor="@color/puzzle_pal_black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.119"
         app:layout_constraintStart_toStartOf="parent"
@@ -69,10 +70,11 @@
             android:id="@+id/puzzleListView"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="10.0sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            >
 
 
         </ListView>
