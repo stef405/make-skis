@@ -158,21 +158,20 @@ def postpuzzle(request):
     if request.FILES.get("puzzle_img"):
         content = request.FILES['puzzle_img']
         filename = user_id+str(time.time())+".jpeg"
-        filename2 = filename
         fs = FileSystemStorage()
         filename = fs.save(filename, content)
         puzzle_image_url = fs.url(filename)
     else:
         return HttpResponse(status=400)
-    
+    """
     print("hello")
     current = os.path.dirname(os.path.realpath(__file__))
     parent = os.path.dirname(current)
     with open(os.path.join(parent, "print_output.txt"), "w") as output:
         #output.write(filename2)
         output.write("test")
-
-    if is_blurry(filename):
+    """
+    if is_blurry(puzzle_image_url):
         return HttpResponse(status=202)
 
     cursor = connection.cursor()
