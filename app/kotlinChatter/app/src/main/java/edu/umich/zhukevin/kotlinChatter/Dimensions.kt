@@ -10,11 +10,14 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.*
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModel
+import edu.umich.zhukevin.kotlinChatter.PuzzleStore.getLastPuzzle
 import edu.umich.zhukevin.kotlinChatter.PuzzleStore.postPiece
 import edu.umich.zhukevin.kotlinChatter.PuzzleStore.postPuzzle
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityMainBinding
@@ -47,6 +50,10 @@ class Dimensions : AppCompatActivity() {
 
             //after submitting puzzle entry, go submit puzzle piece
             //takePiecePhoto()
+            val puzzleID = getLastPuzzle()
+            Log.d("Dimensions onCreate","puzzleID = $puzzleID")
+
+
             startActivity(Intent(this, MainActivity::class.java))
         }
 
@@ -102,6 +109,18 @@ class Dimensions : AppCompatActivity() {
                 toast(msg)
             }
             finish()
+        }
+    }
+
+    private fun proceedWithPieceMessage(savedInstanceState: Bundle?){
+        val builder = AlertDialog.Builder(this)
+        with(builder)
+        {
+            setTitle(getString(R.string.fail_title))
+            setMessage(getString(R.string.error_message))
+            setPositiveButton("Insert Piece") { _, _ -> startActivity(Intent(this, MainActivity::class.java)) }
+            setNegativeButton("Go back to main") { dialog, _ -> startActivity(Intent(this, MainActivity::class.java)) }
+            show()
         }
     }
 

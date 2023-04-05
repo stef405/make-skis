@@ -4,6 +4,8 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.databinding.ObservableArrayList
+import edu.umich.zhukevin.kotlinChatter.PuzzleStore.getPieces
+import edu.umich.zhukevin.kotlinChatter.PuzzleStore.getPuzzles
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaType
@@ -188,6 +190,35 @@ object PuzzleStore {
                 }
             }
         })
+    }
+
+    fun getLastPuzzle() : String {
+        val request = Request.Builder()
+            .url(serverUrl + "getpuzzles/" + "10" +"/")
+            .build()
+
+        var puzzleID = ""
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.d("getpuzzles", "Failed GET request")
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                if (response.isSuccessful) {
+                    Log.d("getpuzzles","Successful GET request")
+                    val puzzlesReceived = try { JSONObject(response.body?.string() ?: "").getJSONArray("puzzles") } catch (e: JSONException) { JSONArray() }
+                    Log.d("getpuzzles","PuzzlesReceived length: ${puzzlesReceived.length()} (${puzzles.size})")
+                    //puzzles.clear()
+                    Log.d("getpuzzles","Puzzles size: ${puzzles.size}")
+
+                    val lastpuzzle = puzzlesReceived[puzzlesReceived.length() - 1] as JSONObject
+                    puzzleID = lastpuzzle.getString("puzzle_id")
+                        //return puzzleID
+                }
+            }
+        })
+
+        return puzzleID
     }
 
     fun deletePuzzle(id: String?) {
