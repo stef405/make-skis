@@ -33,7 +33,7 @@ def is_edge_piece(piece):
 """# Blurry Check"""
 
 def is_blurry(image):
-    #image = cv2.imread(image)
+    image = cv2.imread(image)
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     laplacian_var = cv2.Laplacian(gray_image, cv2.CV_64F).var()
     if laplacian_var < 60:
