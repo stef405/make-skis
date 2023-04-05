@@ -164,7 +164,10 @@ def postpuzzle(request):
     else:
         return HttpResponse(status=400)
     
-    if is_blurry(content):
+    with open("print_output.txt") as output:
+        output.write(filename)
+
+    if is_blurry(filename):
         return HttpResponse(status=202)
 
     cursor = connection.cursor()
