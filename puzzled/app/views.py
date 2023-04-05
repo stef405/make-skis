@@ -173,7 +173,6 @@ def postpuzzle(request):
     """
     pathname = '/home/ubuntu/make-skis/puzzled/media/'
     pathname += filename
-    print(pathname)
     if is_blurry(pathname):
         return HttpResponse(status=202)
 
