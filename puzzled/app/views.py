@@ -163,15 +163,16 @@ def postpuzzle(request):
         puzzle_image_url = fs.url(filename)
     else:
         return HttpResponse(status=400)
+    print(filename)
     """
     print("hello")
     current = os.path.dirname(os.path.realpath(__file__))
     parent = os.path.dirname(current)
     with open(os.path.join(parent, "print_output.txt"), "w") as output:
-        #output.write(filename2)
+        output.write(filename)
         output.write("test")
     """
-    if is_blurry(puzzle_image_url):
+    if is_blurry(filename):
         return HttpResponse(status=202)
 
     cursor = connection.cursor()
