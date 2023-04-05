@@ -163,7 +163,7 @@ def postpuzzle(request):
         puzzle_image_url = fs.url(filename)
     else:
         return HttpResponse(status=400)
-    print(puzzle_image_url)
+    print(type(content))
     """
     print("hello")
     current = os.path.dirname(os.path.realpath(__file__))
