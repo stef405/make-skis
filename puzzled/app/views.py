@@ -163,7 +163,6 @@ def postpuzzle(request):
         puzzle_image_url = fs.url(filename)
     else:
         return HttpResponse(status=400)
-    print(type(content))
     """
     print("hello")
     current = os.path.dirname(os.path.realpath(__file__))
@@ -174,6 +173,7 @@ def postpuzzle(request):
     """
     pathname = '/home/ubuntu/make-skis/puzzled/media/'
     pathname += filename
+    print(pathname)
     if is_blurry(pathname):
         return HttpResponse(status=202)
 
