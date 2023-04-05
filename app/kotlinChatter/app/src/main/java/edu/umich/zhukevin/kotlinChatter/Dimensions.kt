@@ -112,17 +112,5 @@ class Dimensions : AppCompatActivity() {
         }
     }
 
-    private fun proceedWithPieceMessage(savedInstanceState: Bundle?){
-        val builder = AlertDialog.Builder(this)
-        with(builder)
-        {
-            setTitle(getString(R.string.fail_title))
-            setMessage(getString(R.string.error_message))
-            setPositiveButton("Insert Piece") { _, _ -> startActivity(Intent(this, MainActivity::class.java)) }
-            setNegativeButton("Go back to main") { dialog, _ -> startActivity(Intent(this, MainActivity::class.java)) }
-            show()
-        }
-    }
-
 
 }
