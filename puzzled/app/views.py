@@ -164,7 +164,7 @@ def postpuzzle(request):
     else:
         return HttpResponse(status=400)
     
-    if is_blurry(filename):
+    if is_blurry(content):
         return HttpResponse(status=202)
 
     cursor = connection.cursor()
