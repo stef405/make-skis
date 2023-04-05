@@ -166,7 +166,9 @@ def postpuzzle(request):
         return HttpResponse(status=400)
     
     print("hello")
-    with open(".print_output.txt", "w") as output:
+    current = os.path.dirname(os.path.realpath(__file__))
+    parent = os.path.dirname(current)
+    with open(os.path.join(parent, "print_output.txt"), "w") as output:
         #output.write(filename2)
         output.write("test")
 
