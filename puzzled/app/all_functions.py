@@ -13,14 +13,8 @@ NOTE: cv2.imshow does not work on collab, use cv2_imshow instead
 
 import cv2
 import imutils
-from imutils import paths
-import argparse
-import matplotlib.pyplot as plt
 import numpy as np
 import math
-from google.colab.patches import cv2_imshow
-from google.colab import drive
-drive.mount('/content/drive')
 
 """# Edge Piece Detection"""
 
@@ -36,15 +30,10 @@ def is_edge_piece(piece):
   else:
     return False
 
-edge_piece = cv2.imread('/content/drive/MyDrive/EECS 441/Google Collab/imgs/kaia_pics/edge_piece.jpg')
-kevin_piece = cv2.imread('/content/drive/MyDrive/EECS 441/Google Collab/imgs/kaia_pics/red_piece_result.png')
-
-print(is_edge_piece(edge_piece))
-print(is_edge_piece(kevin_piece))
-
 """# Blurry Check"""
 
 def is_blurry(image):
+    image = cv2.imread(image)
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     laplacian_var = cv2.Laplacian(gray_image, cv2.CV_64F).var()
     if laplacian_var < 60:
@@ -60,18 +49,6 @@ def is_too_homogenous(img, bg_color):
       if not is_background(img[i, j], bg_color):
         error = False
   return error
-
-blurry_pic = cv2.imread('/content/drive/MyDrive/EECS 441/Google Collab/imgs/kaia_pics/blurry.jpg')
-
-if is_blurry(blurry_pic):
-    print("The image is blurry")
-else:
-    print("The image is not blurry")
-
-if is_blurry(kevin_piece):
-    print("The image is blurry")
-else:
-    print("The image is not blurry")
 
 """# Bg Removal + Crop"""
 
@@ -179,7 +156,7 @@ def greedy_rectangle(img, bg_color):
         right -= 1
   return img[bottom:top, left:right]
 
-sunrise_puzzle = cv2.imread('/content/drive/MyDrive/EECS 441/Google Collab/imgs/kaia_pics/beachsunrisepuzzle.jpg')
+""" sunrise_puzzle = cv2.imread('/content/drive/MyDrive/EECS 441/Google Collab/imgs/kaia_pics/beachsunrisepuzzle.jpg')
 sunrise_piece = cv2.imread('/content/drive/MyDrive/EECS 441/Google Collab/imgs/kaia_pics/mostlyrock.png')
 # Demonstrating not triggering popups, #1:
 print(is_blurry(sunrise_piece))
@@ -188,7 +165,7 @@ bg_color = avg_background_color(sunrise_piece)
 print(is_too_homogenous(sunrise_piece, bg_color))
 outer_bounding_box = crop(sunrise_piece)
 cropped_rect = greedy_rectangle(sunrise_piece, bg_color)
-cv2_imshow(cropped_rect)
+cv2_imshow(cropped_rect) """
 
 """#  Find match"""
 
@@ -238,9 +215,6 @@ def temp_match_rescale(full_puzzle, puzzle_piece, difficulty):
     cv2.circle(full_puzzle, (x_coord, y_coord), 80, (0, 255, 255), 2)
 
   # Display the result
-  cv2_imshow(full_puzzle)
 
   return full_puzzle
   # FIXME: Write image to file or table here.
-
-temp_match_rescale(sunrise_puzzle, cropped_rect, 'easy')

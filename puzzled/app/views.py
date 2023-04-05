@@ -10,6 +10,7 @@ import json
 import os, time
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+from all_functions import *
 
 @csrf_exempt
 def postimages(request):
@@ -163,6 +164,9 @@ def postpuzzle(request):
     else:
         return HttpResponse(status=400)
     
+    if is_blurry(filename):
+        return HttpResponse(status=202)
+
     cursor = connection.cursor()
     cursor.execute('INSERT INTO puzzles (user_id, puzzle_img, width, height) VALUES '
                    '(%s, %s, %s, %s);', (user_id, puzzle_image_url, width, height))
