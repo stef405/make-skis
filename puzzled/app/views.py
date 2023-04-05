@@ -10,7 +10,7 @@ import json
 import os, time
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-from all_functions import *
+from .all_functions import *
 
 @csrf_exempt
 def postimages(request):
