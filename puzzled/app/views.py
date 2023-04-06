@@ -216,8 +216,13 @@ def postpiece(request):
     cursor.execute("""SELECT puzzle_img FROM puzzles WHERE puzzle_id = %s;""", (puzzle_id, ))
     row = cursor.fetchone()
     puzzle_url = row[0]
-    print(puzzle_url)
-    print(puzzle_url.partition("media/")[2])
+    #print(puzzle_url)
+    #print(puzzle_url.partition("media/")[2])
+    puzzle_filename = puzzle_url.partition("media/")[2]
+    puzzle_pathname = '/home/ubuntu/make-skis/puzzled/media/' + puzzle_filename
+
+    outer_bounding_box = crop(pathname)
+    print(type(outer_bounding_box))
 
     cursor.execute('INSERT INTO pieces (puzzle_id, piece_img, difficulty, solution_img, width, height) VALUES '
                    '(%s, %s, %s, %s, %s, %s);',

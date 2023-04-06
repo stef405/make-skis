@@ -53,6 +53,7 @@ def is_too_homogenous(img, bg_color):
 """# Bg Removal + Crop"""
 
 def crop(img):
+  img = cv2.imread(img)
   # Convert the color image to grayscale
   gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
