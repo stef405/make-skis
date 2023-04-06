@@ -1,6 +1,7 @@
 package edu.umich.zhukevin.kotlinChatter
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -34,6 +35,12 @@ class PieceListAdapter(context: Context, pieces: List<Piece>) :
             } ?: run {
                 listItemView.pieceImage.setVisibility(View.GONE)
                 listItemView.pieceImage.setImageBitmap(null)
+            }
+
+            listItemView.pieceImage.setOnClickListener{
+                val intent = Intent(context, ShowSolutionActivity::class.java)
+                intent.putExtra("puzzle_solution_image", solution_img)
+                context.startActivity(intent)
             }
 
             //pressing garbage to delete piece

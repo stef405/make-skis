@@ -27,6 +27,7 @@ object PuzzleStore {
     private val nPuzzleFields = Puzzle::class.declaredMemberProperties.size
     private const val serverUrl = "https://3.16.218.169/"
     private val client = OkHttpClient()
+    var last_puzzleID = ""
 
     fun postPiece(context: Context, piece: Piece, imageUri: Uri?, completion: (String) -> Unit) {
         val mpFD = MultipartBody.Builder().setType(MultipartBody.FORM)
@@ -197,7 +198,7 @@ object PuzzleStore {
             .url(serverUrl + "getpuzzles/" + "10" +"/")
             .build()
 
-        var puzzleID = ""
+        //var last_puzzleID = ""
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 Log.d("getpuzzles", "Failed GET request")
@@ -205,20 +206,21 @@ object PuzzleStore {
 
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful) {
-                    Log.d("getpuzzles","Successful GET request")
+                    Log.d("getLastPuzzle","Successful GET request")
                     val puzzlesReceived = try { JSONObject(response.body?.string() ?: "").getJSONArray("puzzles") } catch (e: JSONException) { JSONArray() }
-                    Log.d("getpuzzles","PuzzlesReceived length: ${puzzlesReceived.length()} (${puzzles.size})")
+                    Log.d("getLastPuzzle","PuzzlesReceived length: ${puzzlesReceived.length()} (${puzzles.size})")
                     //puzzles.clear()
-                    Log.d("getpuzzles","Puzzles size: ${puzzles.size}")
+                    //Log.d("getpuzzles","Puzzles size: ${puzzles.size}")
 
                     val lastpuzzle = puzzlesReceived[puzzlesReceived.length() - 1] as JSONObject
-                    puzzleID = lastpuzzle.getString("puzzle_id")
-                        //return puzzleID
+                    last_puzzleID = lastpuzzle.getString("puzzle_id")
+                    Log.d("getLastPuzzle","puzzle_id = $last_puzzleID")
+
                 }
             }
         })
 
-        return puzzleID
+        return last_puzzleID
     }
 
     fun deletePuzzle(id: String?) {
