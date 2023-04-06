@@ -226,9 +226,10 @@ def postpiece(request):
     outer_bounding_box = crop(pathname)
     cropped_rect = greedy_rectangle(outer_bounding_box, bg_color)
     solution = temp_match_rescale(puzzle_pathname, cropped_rect, difficulty)
-    
+
+    # FIXME: make sure solutions are unique to pieces in their names
     # Store solution in media
-    
+    cv2.imwrite('/home/ubuntu/make-skis/puzzled/media/solution' + puzzle_id + '.jpg', solution)
 
     cursor.execute('INSERT INTO pieces (puzzle_id, piece_img, difficulty, solution_img, width, height) VALUES '
                    '(%s, %s, %s, %s, %s, %s);',
