@@ -202,7 +202,12 @@ def postpiece(request):
         piece_image_url = fs.url(filename)
     else:
         return HttpResponse(status=400)
-        
+    # Check if piece image is blurry
+    pathname = '/home/ubuntu/make-skis/puzzled/media/'
+    pathname += filename
+    if is_blurry(pathname):
+        return HttpResponse(status=202)   
+    
     cursor = connection.cursor()
     # TODO: Replace the insert for solution_img with the actual solution once we have a
     # way of generating it
