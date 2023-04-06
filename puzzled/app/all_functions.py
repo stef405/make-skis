@@ -92,6 +92,7 @@ def crop(img):
   return crop_img
 
 def avg_background_color(piece):
+  piece = cv2.imread(piece)
   b = 0
   g = 0
   r = 0
@@ -171,6 +172,11 @@ cv2_imshow(cropped_rect) """
 """#  Find match"""
 
 def temp_match_rescale(full_puzzle, puzzle_piece, difficulty):
+  full_puzzle = cv2.imread(full_puzzle)
+  if difficulty == 0:
+    difficulty = 'easy'
+  else:
+    difficulty = 'hard'
   # Don't convert the images to grayscale
   full_puzzle_gray = full_puzzle
   # cv2.cvtColor(full_puzzle, cv2.COLOR_BGR2GRAY)

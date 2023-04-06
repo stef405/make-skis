@@ -221,8 +221,12 @@ def postpiece(request):
     puzzle_filename = puzzle_url.partition("media/")[2]
     puzzle_pathname = '/home/ubuntu/make-skis/puzzled/media/' + puzzle_filename
 
+    bg_color = avg_background_color(pathname)
     outer_bounding_box = crop(pathname)
-    print(type(outer_bounding_box))
+    cropped_rect = greedy_rectangle(outer_bounding_box, bg_color)
+    solution = temp_match_rescale(puzzle_pathname, cropped_rect, difficulty)
+    print(type(solution))
+    
 
     cursor.execute('INSERT INTO pieces (puzzle_id, piece_img, difficulty, solution_img, width, height) VALUES '
                    '(%s, %s, %s, %s, %s, %s);',
