@@ -211,6 +211,13 @@ def postpiece(request):
     cursor = connection.cursor()
     # TODO: Replace the insert for solution_img with the actual solution once we have a
     # way of generating it
+
+    # Get puzzle_image_url with puzzle_id
+    cursor.execute("""SELECT puzzle_img FROM puzzles WHERE puzzle_id = %s;""", (puzzle_id, ))
+    row = cursor.fetchone()
+    puzzle_url = row[0]
+    print(puzzle_url)
+
     cursor.execute('INSERT INTO pieces (puzzle_id, piece_img, difficulty, solution_img, width, height) VALUES '
                    '(%s, %s, %s, %s, %s, %s);',
                     (puzzle_id, piece_image_url, difficulty, piece_image_url, width, height))
