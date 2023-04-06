@@ -196,6 +196,7 @@ def postpiece(request):
 
     if request.FILES.get("piece_img"):
         content = request.FILES['piece_img']
+        print(type(content))
         filename = puzzle_id+str(time.time())+".jpeg"
         fs = FileSystemStorage()
         filename = fs.save(filename, content)
@@ -225,7 +226,8 @@ def postpiece(request):
     outer_bounding_box = crop(pathname)
     cropped_rect = greedy_rectangle(outer_bounding_box, bg_color)
     solution = temp_match_rescale(puzzle_pathname, cropped_rect, difficulty)
-    print(type(solution))
+    
+    # Store solution in media
     
 
     cursor.execute('INSERT INTO pieces (puzzle_id, piece_img, difficulty, solution_img, width, height) VALUES '
