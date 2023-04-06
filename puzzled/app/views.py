@@ -196,7 +196,6 @@ def postpiece(request):
 
     if request.FILES.get("piece_img"):
         content = request.FILES['piece_img']
-        print(type(content))
         filename = puzzle_id+str(time.time())+".jpeg"
         fs = FileSystemStorage()
         filename = fs.save(filename, content)
