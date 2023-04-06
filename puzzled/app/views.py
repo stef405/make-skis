@@ -217,14 +217,14 @@ def postpiece(request):
     cursor.execute("""SELECT puzzle_img FROM puzzles WHERE puzzle_id = %s;""", (puzzle_id, ))
     row = cursor.fetchone()
     puzzle_url = row[0]
-    #print(puzzle_url)
-    #print(puzzle_url.partition("media/")[2])
     puzzle_filename = puzzle_url.partition("media/")[2]
     puzzle_pathname = '/home/ubuntu/make-skis/puzzled/media/' + puzzle_filename
 
     bg_color = avg_background_color(pathname)
     outer_bounding_box = crop(pathname)
     cropped_rect = greedy_rectangle(outer_bounding_box, bg_color)
+    print(type(difficulty))
+    print(difficulty)
     solution = temp_match_rescale(puzzle_pathname, cropped_rect, difficulty)
 
     # FIXME: make sure solutions are unique to pieces in their names
