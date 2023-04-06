@@ -173,6 +173,10 @@ cv2_imshow(cropped_rect) """
 
 def temp_match_rescale(full_puzzle, puzzle_piece, difficulty):
   full_puzzle = cv2.imread(full_puzzle)
+  if difficulty == '0':
+    difficulty = 'easy'
+  else:
+    difficulty = 'hard'
   # Don't convert the images to grayscale
   full_puzzle_gray = full_puzzle
   # cv2.cvtColor(full_puzzle, cv2.COLOR_BGR2GRAY)
