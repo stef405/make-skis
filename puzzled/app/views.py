@@ -217,6 +217,7 @@ def postpiece(request):
     row = cursor.fetchone()
     puzzle_url = row[0]
     print(puzzle_url)
+    print(puzzle_url.partition("media/")[2])
 
     cursor.execute('INSERT INTO pieces (puzzle_id, piece_img, difficulty, solution_img, width, height) VALUES '
                    '(%s, %s, %s, %s, %s, %s);',
