@@ -222,11 +222,8 @@ def postpiece(request):
     bg_color = avg_background_color(pathname)
     outer_bounding_box = crop(pathname)
     cropped_rect = greedy_rectangle(outer_bounding_box, bg_color)
-    print(type(difficulty))
-    print(difficulty)
     solution = temp_match_rescale(puzzle_pathname, cropped_rect, difficulty)
 
-    # FIXME: make sure solutions are unique to pieces in their names
     # Store solution in media
     filename1 = puzzle_id+str(time.time())+".jpeg"
     cv2.imwrite('/home/ubuntu/make-skis/puzzled/media/solution' + filename1, solution)
