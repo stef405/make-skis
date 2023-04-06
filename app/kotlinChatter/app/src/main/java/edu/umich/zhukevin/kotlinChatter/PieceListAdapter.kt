@@ -37,12 +37,9 @@ class PieceListAdapter(context: Context, pieces: List<Piece>) :
                 listItemView.pieceImage.setImageBitmap(null)
             }
 
-            listItemView.pieceImage.setOnClickListener{
+            listItemView.pieceImage.setOnClickListener {
                 val intent = Intent(context, ShowSolutionActivity::class.java)
-                intent.putExtra("puzzle_solution_image", solution_img)
-                context.startActivity(intent)
             }
-
             //pressing garbage to delete piece
             listItemView.pieceDelete.setOnClickListener {
                 deletePiece(piece_id,puzzle_id)

@@ -28,23 +28,26 @@ object PuzzleStore {
     private const val serverUrl = "https://3.16.218.169/"
     private val client = OkHttpClient()
     var last_puzzleID = ""
+    var last_pieceID = ""
 
     fun postPiece(context: Context, piece: Piece, imageUri: Uri?, completion: (String) -> Unit) {
         val mpFD = MultipartBody.Builder().setType(MultipartBody.FORM)
             .addFormDataPart("puzzle_id", piece.puzzle_id ?: "")
-            .addFormDataPart("difficulty",piece.difficulty ?: "")
+            .addFormDataPart("difficulty", piece.difficulty ?: "")
             .addFormDataPart("height", piece.height ?: "")
             .addFormDataPart("width", piece.width ?: "")
 
         imageUri?.run {
             toFile(context)?.let {
-                mpFD.addFormDataPart("piece_img", "puzzlePieceImage",
-                    it.asRequestBody("image/jpeg".toMediaType()))
+                mpFD.addFormDataPart(
+                    "piece_img", "puzzlePieceImage",
+                    it.asRequestBody("image/jpeg".toMediaType())
+                )
             } ?: context.toast("Unsupported image format")
         }
 
         val request = Request.Builder()
-            .url(serverUrl +"postpiece/") //https://3.16.218.169/postpiece/puzzlePieceImage.jpeg
+            .url(serverUrl + "postpiece/") //https://3.16.218.169/postpiece/puzzlePieceImage.jpeg
             .post(mpFD.build())
             .build()
 
@@ -77,14 +80,16 @@ object PuzzleStore {
 
         imageUri?.run {
             toFile(context)?.let {
-                mpFD.addFormDataPart("puzzle_img", "puzzlePieceImage",
-                    it.asRequestBody("image/jpeg".toMediaType()))
+                mpFD.addFormDataPart(
+                    "puzzle_img", "puzzlePieceImage",
+                    it.asRequestBody("image/jpeg".toMediaType())
+                )
 
             } ?: context.toast("Unsupported image format")
         }
 
         val request = Request.Builder()
-            .url(serverUrl +"postpuzzle/") //+ puzzle.user_id ) //https://3.16.218.169/postpuzzle/1/
+            .url(serverUrl + "postpuzzle/") //+ puzzle.user_id ) //https://3.16.218.169/postpuzzle/1/
             .post(mpFD.build())
             .build()
 
@@ -106,7 +111,7 @@ object PuzzleStore {
         })
     }
 
-    fun getPieces(puzzle_id : String?) {
+    fun getPieces(puzzle_id: String?) {
         val request = Request.Builder()
             .url(serverUrl + "getpieces/" + puzzle_id + "/")
             .build()
@@ -121,10 +126,14 @@ object PuzzleStore {
 
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful) {
-                    Log.d("getpieces","Successful GET request") //successfully goes into function
-                    val piecesReceived = try { JSONObject(response.body?.string() ?: "").getJSONArray("pieces") } catch (e: JSONException) { JSONArray() }
+                    Log.d("getpieces", "Successful GET request") //successfully goes into function
+                    val piecesReceived = try {
+                        JSONObject(response.body?.string() ?: "").getJSONArray("pieces")
+                    } catch (e: JSONException) {
+                        JSONArray()
+                    }
 
-                    Log.d("getpieces","piecesRecieved= " + piecesReceived.length())
+                    Log.d("getpieces", "piecesRecieved= " + piecesReceived.length())
                     pieces.clear()
                     for (i in 0 until piecesReceived.length()) {
                         val piece = piecesReceived[i] as JSONObject
@@ -134,18 +143,24 @@ object PuzzleStore {
                         val difficulty: String = piece.getString("difficulty")
                         val width: String = piece.getString("width")
                         val height: String = piece.getString("height")
-                        if (piece.length() == nFields -1 ) {
-                            pieces.add(Piece(
-                                piece_id = pieceID,
-                                piece_img = pieceIMG,
-                                puzzle_id = puzzle_id,
-                                solution_img = solutionIMG,
-                                difficulty = difficulty,
-                                width = width,
-                                height = height),
+                        if (piece.length() == nFields - 1) {
+                            pieces.add(
+                                Piece(
+                                    piece_id = pieceID,
+                                    piece_img = pieceIMG,
+                                    puzzle_id = puzzle_id,
+                                    solution_img = solutionIMG,
+                                    difficulty = difficulty,
+                                    width = width,
+                                    height = height
+                                ),
                             )
                         } else {
-                            Log.e("getPieces", "Received unexpected number of fields " + piece.length().toString() + " instead of " + PuzzleStore.nFields.toString())
+                            Log.e(
+                                "getPieces",
+                                "Received unexpected number of fields " + piece.length()
+                                    .toString() + " instead of " + PuzzleStore.nFields.toString()
+                            )
                         }
                     }
                 }
@@ -155,7 +170,7 @@ object PuzzleStore {
 
     fun getPuzzles() {
         val request = Request.Builder()
-            .url(serverUrl + "getpuzzles/" + "10" +"/")
+            .url(serverUrl + "getpuzzles/" + "10" + "/")
             .build()
 
         client.newCall(request).enqueue(object : Callback {
@@ -165,11 +180,18 @@ object PuzzleStore {
 
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful) {
-                    Log.d("getpuzzles","Successful GET request")
-                    val puzzlesReceived = try { JSONObject(response.body?.string() ?: "").getJSONArray("puzzles") } catch (e: JSONException) { JSONArray() }
-                    Log.d("getpuzzles","PuzzlesReceived length: ${puzzlesReceived.length()} (${puzzles.size})")
+                    Log.d("getpuzzles", "Successful GET request")
+                    val puzzlesReceived = try {
+                        JSONObject(response.body?.string() ?: "").getJSONArray("puzzles")
+                    } catch (e: JSONException) {
+                        JSONArray()
+                    }
+                    Log.d(
+                        "getpuzzles",
+                        "PuzzlesReceived length: ${puzzlesReceived.length()} (${puzzles.size})"
+                    )
                     puzzles.clear()
-                    Log.d("getpuzzles","Puzzles size: ${puzzles.size}")
+                    Log.d("getpuzzles", "Puzzles size: ${puzzles.size}")
                     for (i in 0 until puzzlesReceived.length()) {
                         val puzzle = puzzlesReceived[i] as JSONObject
                         val puzzleID: String = puzzle.getString("puzzle_id")
@@ -177,15 +199,21 @@ object PuzzleStore {
                         val puzzleWidth: String = puzzle.getString("width")
                         val puzzleHeight: String = puzzle.getString("height")
                         if (puzzle.length() == nPuzzleFields - 1) {
-                            puzzles.add(Puzzle(
-                                user_id = "10",
-                                puzzle_id = puzzleID,
-                                height =  puzzleHeight,
-                                width =  puzzleWidth,
-                                imageUrl = puzzleIMG
-                            ))
+                            puzzles.add(
+                                Puzzle(
+                                    user_id = "10",
+                                    puzzle_id = puzzleID,
+                                    height = puzzleHeight,
+                                    width = puzzleWidth,
+                                    imageUrl = puzzleIMG
+                                )
+                            )
                         } else {
-                            Log.d("getpuzzles", "Received unexpected number of fields " + puzzle.length().toString() + " instead of " + PuzzleStore.nFields.toString())
+                            Log.d(
+                                "getpuzzles",
+                                "Received unexpected number of fields " + puzzle.length()
+                                    .toString() + " instead of " + PuzzleStore.nFields.toString()
+                            )
                         }
                     }
                 }
@@ -193,9 +221,9 @@ object PuzzleStore {
         })
     }
 
-    fun getLastPuzzle() : String {
+    fun getLastPuzzle(): String {
         val request = Request.Builder()
-            .url(serverUrl + "getpuzzles/" + "10" +"/")
+            .url(serverUrl + "getpuzzles/" + "10" + "/")
             .build()
 
         //var last_puzzleID = ""
@@ -206,21 +234,66 @@ object PuzzleStore {
 
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful) {
-                    Log.d("getLastPuzzle","Successful GET request")
-                    val puzzlesReceived = try { JSONObject(response.body?.string() ?: "").getJSONArray("puzzles") } catch (e: JSONException) { JSONArray() }
-                    Log.d("getLastPuzzle","PuzzlesReceived length: ${puzzlesReceived.length()} (${puzzles.size})")
+                    Log.d("getLastPuzzle", "Successful GET request")
+                    val puzzlesReceived = try {
+                        JSONObject(response.body?.string() ?: "").getJSONArray("puzzles")
+                    } catch (e: JSONException) {
+                        JSONArray()
+                    }
+                    Log.d(
+                        "getLastPuzzle",
+                        "PuzzlesReceived length: ${puzzlesReceived.length()} (${puzzles.size})"
+                    )
                     //puzzles.clear()
                     //Log.d("getpuzzles","Puzzles size: ${puzzles.size}")
 
                     val lastpuzzle = puzzlesReceived[puzzlesReceived.length() - 1] as JSONObject
                     last_puzzleID = lastpuzzle.getString("puzzle_id")
-                    Log.d("getLastPuzzle","puzzle_id = $last_puzzleID")
+                    Log.d("getLastPuzzle", "puzzle_id = $last_puzzleID")
 
                 }
             }
         })
 
         return last_puzzleID
+    }
+
+    var lastSolutionImg = ""
+    fun getLastSolutionImg(puzzle: String?) : String {
+        val request = Request.Builder()
+            .url(serverUrl + "getpieces/" + puzzle + "/")
+            .build()
+
+        //var last_puzzleID = ""
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.d("getpuzzles", "Failed GET request")
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                if (response.isSuccessful) {
+                    Log.d("getLastSolutionImg", "Successful GET request")
+                    val piecesReceived = try {
+                        JSONObject(response.body?.string() ?: "").getJSONArray("puzzles")
+                    } catch (e: JSONException) {
+                        JSONArray()
+                    }
+                    Log.d(
+                        "getLastSolutionImg",
+                        "PuzzlesReceived length: ${piecesReceived.length()} (${pieces.size})"
+                    )
+                    //puzzles.clear()
+                    //Log.d("getpuzzles","Puzzles size: ${puzzles.size}")
+
+                    val lastpiece = piecesReceived[piecesReceived.length() - 1] as JSONObject
+                    val last_pieceID = lastpiece.getString("puzzle_id")
+                    Log.d("getLastSolutionImg", "piece_id = $last_pieceID")
+
+                    lastSolutionImg = lastpiece.getString("solution_img")
+                }
+            }
+        })
+        return lastSolutionImg
     }
 
     fun deletePuzzle(id: String?) {
@@ -237,15 +310,15 @@ object PuzzleStore {
 
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful) {
-                    //Update list screen
+                        //Update list screen
                     getPuzzles()
-                    Log.d("deletePuzzle","DELETE SUCCESS")
+                    Log.d("deletePuzzle", "DELETE SUCCESS")
                 }
             }
         })
     }
 
-    fun deletePiece(id: String?,puzzle_id: String?) {
+    fun deletePiece(id: String?, puzzle_id: String?) {
         val request = Request.Builder()
             .url(serverUrl + "deletepiece/" + id + "/")
             .delete()
@@ -262,12 +335,14 @@ object PuzzleStore {
                 if (response.isSuccessful) {
                     //Update list screen
                     getPieces(puzzle_id)
-                    Log.d("deletePiece","DELETE SUCCESS")
+                    Log.d("deletePiece", "DELETE SUCCESS")
                 }
             }
 
         })
     }
-
 }
+
+
+
 

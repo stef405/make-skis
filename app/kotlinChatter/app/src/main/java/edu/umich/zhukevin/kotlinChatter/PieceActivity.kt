@@ -12,20 +12,24 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat.startActivity
 import androidx.databinding.DataBindingUtil.setContentView
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
 import androidx.lifecycle.ViewModel
+import edu.umich.zhukevin.kotlinChatter.PuzzleStore.getLastSolutionImg
 import edu.umich.zhukevin.kotlinChatter.PuzzleStore.getPieces
 import edu.umich.zhukevin.kotlinChatter.PuzzleStore.pieces
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityPuzzlePieceBinding
+import edu.umich.zhukevin.kotlinChatter.databinding.LoadingBinding
 
 class PieceActivity : AppCompatActivity() {
 
     private lateinit var view: ActivityPuzzlePieceBinding
     private lateinit var pieceListAdapter: PieceListAdapter
     private val viewState: PostViewState by viewModels()
+    private val puzzle_id = intent.getParcelableExtra("puzzle_id", String::class.java)
 
     class PostViewState: ViewModel() {
         var imageUri: Uri? = null
@@ -86,22 +90,56 @@ class PieceActivity : AppCompatActivity() {
         var takePicture = registerForActivityResult(ActivityResultContracts.TakePicture())
         { success ->
             if (success) {
+                difficultyPopup() // code below should be in this function
 
-                val piece_insert = Piece(puzzle_id = intent.getParcelableExtra("puzzle_id", String::class.java),difficulty = "0",width = "2",height = "2")
-                PuzzleStore.postPiece(applicationContext, piece_insert, viewState.imageUri) { msg ->
-                    runOnUiThread {
-                        toast(msg)
-                    }
-                    finish()
-                }
             } else {
                 Log.d("TakePicture", "failed")
             }
         }
 
+        val forPickedResult =
+            registerForActivityResult(ActivityResultContracts.GetContent(), fun(uri: Uri?) {
+                uri?.let {
+                    val inStream = contentResolver.openInputStream(it) ?: return
+                    viewState.imageUri = mediaStoreAlloc("image/jpeg")
+                    viewState.imageUri?.let {
+                        val outStream = contentResolver.openOutputStream(it) ?: return
+                        val buffer = ByteArray(8192)
+                        var read: Int
+                        while (inStream.read(buffer).also{ read = it } != -1) {
+                            outStream.write(buffer, 0, read)
+                        }
+                        outStream.flush()
+                        outStream.close()
+                        inStream.close()
+                    }
+
+                    difficultyPopup() //code below should be in function
+                    /*val piece_insert = Piece(puzzle_id = intent.getParcelableExtra("puzzle_id", String::class.java),difficulty = "0",width = "2",height = "2")
+                    PuzzleStore.postPiece(applicationContext, piece_insert, viewState.imageUri) { msg ->
+                        runOnUiThread {
+                            toast(msg)
+                        }
+                        finish()
+                    }*/
+
+
+                } ?: run { Log.d("Pick media", "failed") }
+            })
+
         view.cameraButton.setOnClickListener {
-            viewState.imageUri = mediaStoreAlloc(mediaType="image/jpeg")
-            takePicture.launch(viewState.imageUri)
+            val builder = AlertDialog.Builder(this)
+            with(builder)
+            {
+                setTitle("Upload from Storage")
+                setMessage("Would you like to upload your puzzle entry from storage?")
+                setPositiveButton("STORAGE") { _, _ -> forPickedResult.launch("*/*") }
+                setNegativeButton("TAKE PHOTO") { _, _ ->
+                    viewState.imageUri = mediaStoreAlloc("image/jpeg")
+                    takePicture.launch(viewState.imageUri)
+                }
+                show()
+            }
         }
 
         view.backArrowButton.setOnClickListener{
@@ -130,6 +168,56 @@ class PieceActivity : AppCompatActivity() {
         getPieces(intent.getParcelableExtra("puzzle_id", String::class.java))
         // stop the refreshing animation upon completion:
         view.refreshContainer.isRefreshing = false
+    }
+
+    private fun submitPiece(diff: String) {
+        val piece_insert = Piece(puzzle_id = intent.getParcelableExtra("puzzle_id", String::class.java),difficulty = diff,width = "2",height = "2")
+        PuzzleStore.postPiece(applicationContext, piece_insert, viewState.imageUri) { msg ->
+            runOnUiThread {
+                toast(msg)
+            }
+            finish()
+        }
+    }
+
+    private fun difficultyPopup() {
+        var popupBinding = LoadingBinding.inflate(layoutInflater)
+
+        //create alert dialog
+        var builder = AlertDialog.Builder(this)
+        with(builder) {
+            setView(popupBinding.root)
+            setTitle("Success!")
+            setMessage("Select difficulty mode.\nProcessing will begin shortly after.")
+            setPositiveButton("Easy ") { dialog, _ ->
+                popupBinding.progressBar.visibility = View.VISIBLE
+                // TODO: PERFORM OPEN CV HERE***
+                submitPiece("0")
+                // once the task is complete, hide progress bar
+                popupBinding.progressBar.visibility = View.GONE
+                var solution_img = PuzzleStore.getLastSolutionImg(puzzle_id)
+
+            }
+            setNegativeButton("Hard") { dialog, _ ->
+                popupBinding.progressBar.visibility = View.VISIBLE
+                // TODO: PERFORM OPEN CV HERE***
+                submitPiece("1")
+                // once the task is complete, hide progress bar
+                popupBinding.progressBar.visibility = View.GONE
+            }
+            show()
+        }
+
+        // create and show the dialog
+        val dialog = builder.create()
+        dialog.show()
+    }
+
+    private fun displayImageAfterInput() {
+
+        intent = Intent(this, ShowSolutionActivity::class.java)
+        intent.putExtra("puzzle_solution_image",PuzzleStore.getLastSolutionImg(puzzle_id))
+        this.startActivity(intent)
     }
 
 }
