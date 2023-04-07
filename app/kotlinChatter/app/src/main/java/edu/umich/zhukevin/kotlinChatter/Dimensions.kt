@@ -54,6 +54,7 @@ class Dimensions : AppCompatActivity() {
 //                    startActivity(Intent(this, PieceActivity::class.java))
 //                }
 //            }
+            startActivity(Intent(this, PieceActivity::class.java))
         }
 
         view.backButton.setOnClickListener{
