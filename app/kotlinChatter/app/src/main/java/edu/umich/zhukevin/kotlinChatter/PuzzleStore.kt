@@ -34,8 +34,6 @@ object PuzzleStore {
         val mpFD = MultipartBody.Builder().setType(MultipartBody.FORM)
             .addFormDataPart("puzzle_id", piece.puzzle_id ?: "")
             .addFormDataPart("difficulty", piece.difficulty ?: "")
-            .addFormDataPart("height", piece.height ?: "")
-            .addFormDataPart("width", piece.width ?: "")
 
         imageUri?.run {
             toFile(context)?.let {
@@ -75,8 +73,6 @@ object PuzzleStore {
 
         val mpFD = MultipartBody.Builder().setType(MultipartBody.FORM)
             .addFormDataPart("user_id", puzzle.user_id ?: "")
-            .addFormDataPart("height", puzzle.height ?: "")
-            .addFormDataPart("width", puzzle.width ?: "")
 
         imageUri?.run {
             toFile(context)?.let {
@@ -142,8 +138,6 @@ object PuzzleStore {
                         val pieceIMG: String = piece.getString("piece_img")
                         val solutionIMG: String = piece.getString("solution_img")
                         val difficulty: String = piece.getString("difficulty")
-                        val width: String = piece.getString("width")
-                        val height: String = piece.getString("height")
                         if (piece.length() == nFields - 1) {
                             pieces.add(
                                 Piece(
@@ -151,9 +145,7 @@ object PuzzleStore {
                                     piece_img = pieceIMG,
                                     puzzle_id = puzzle_id,
                                     solution_img = solutionIMG,
-                                    difficulty = difficulty,
-                                    width = width,
-                                    height = height
+                                    difficulty = difficulty
                                 ),
                             )
                         } else {
@@ -197,15 +189,11 @@ object PuzzleStore {
                         val puzzle = puzzlesReceived[i] as JSONObject
                         val puzzleID: String = puzzle.getString("puzzle_id")
                         val puzzleIMG: String = puzzle.getString("puzzle_img")
-                        val puzzleWidth: String = puzzle.getString("width")
-                        val puzzleHeight: String = puzzle.getString("height")
                         if (puzzle.length() == nPuzzleFields - 1) {
                             puzzles.add(
                                 Puzzle(
                                     user_id = "10",
                                     puzzle_id = puzzleID,
-                                    height = puzzleHeight,
-                                    width = puzzleWidth,
                                     imageUrl = puzzleIMG
                                 )
                             )

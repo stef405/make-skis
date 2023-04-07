@@ -23,14 +23,14 @@ import edu.umich.zhukevin.kotlinChatter.PuzzleStore.postPuzzle
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityMainBinding
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityPuzzlePieceBinding
 import edu.umich.zhukevin.kotlinChatter.databinding.DimBinding
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class Dimensions : AppCompatActivity() {
 
     private lateinit var view: DimBinding
     private val viewState: MainActivity.MainViewState by viewModels()
-
-    private lateinit var height: EditText
-    private lateinit var width: EditText
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,30 +39,25 @@ class Dimensions : AppCompatActivity() {
         view.root.setBackgroundColor(Color.parseColor("#FFFFFF"))
         setContentView(view.root)
 
-        height = view.height
-        width = view.width
         viewState.imageUri = intent.getParcelableExtra("PUZZLE_URI", Uri::class.java)
 
-        var intHeight: String = height.text.toString()
-        var intWidth: String = width.text.toString()
-
         view.nextButton.setOnClickListener{
-            submitPuzzle("10", intHeight, intWidth)
+            submitPuzzle("10")
 
             //after submitting puzzle entry, go submit puzzle piece
             //takePiecePhoto()
-            val puzzleID = getLastPuzzle()
-            Log.d("Dimensions onCreate","puzzleID = $puzzleID")
-            startActivity(Intent(this, PieceActivity::class.java))
+//            runBlocking {
+//                launch {
+//                    delay(2000L)
+//                    val puzzleID = getLastPuzzle()
+//                    Log.d("Dimensions getLastPuzzle", "puzzleID = $puzzleID")
+//                    startActivity(Intent(this, PieceActivity::class.java))
+//                }
+//            }
         }
 
         view.backButton.setOnClickListener{
-            submitPuzzle("10", intHeight, intWidth)
-
-            //after submitting puzzle entry, go submit puzzle piece
-            //takePiecePhoto()
-            val puzzleID = getLastPuzzle()
-            Log.d("Dimensions onCreate","puzzleID = $puzzleID")
+            submitPuzzle("10")
             startActivity(Intent(this, MainActivity::class.java))
         }
 
@@ -72,7 +67,7 @@ class Dimensions : AppCompatActivity() {
     private fun takePiecePhoto() {
         val takeImageResult = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
             if (success) {
-                val piece_insert = Piece(puzzle_id = "",difficulty = "0",width = "2",height = "2")
+                val piece_insert = Piece(puzzle_id = "",difficulty = "0")
                 postPiece(applicationContext,piece_insert,viewState.imageUri) { msg ->
                     runOnUiThread {
                         toast(msg)
@@ -104,12 +99,9 @@ class Dimensions : AppCompatActivity() {
         )
     }
 
-    private fun submitPuzzle(user_id_puzzle: String? = null,
-                            height_puzzle: String? = null,
-                            width_puzzle: String? = null) {
+    private fun submitPuzzle(user_id_puzzle: String? = null) {
 
-        val puzzle = Puzzle(user_id = user_id_puzzle,
-            height = height_puzzle, width = width_puzzle)
+        val puzzle = Puzzle(user_id = user_id_puzzle)
 
         postPuzzle(applicationContext, puzzle, viewState.imageUri) { msg ->
             runOnUiThread {

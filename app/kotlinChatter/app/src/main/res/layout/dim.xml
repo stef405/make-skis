@@ -24,50 +24,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:paddingBottom="25dp"
-            android:text="Please Your Puzzle's Provide Dimensions"
+            android:text="Continue to post a puzzle piece?"
             android:textSize="20sp"
             android:textColor="@color/puzzle_pal_black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/height_text_input_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="25dp">
-
-            <EditText
-                android:id="@+id/height"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:contentDescription="height"
-                android:ems="10"
-                android:background="@color/puzzle_pal_light_grey"
-                android:hint="height" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/width_text_input_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="25dp">
-
-            <EditText
-                android:id="@+id/width"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:contentDescription="width"
-                android:ems="10"
-                android:background="@color/puzzle_pal_light_grey"
-                android:hint="width" />
-
-        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/textView5"
@@ -86,9 +48,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingTop="200dp"
         android:gravity="center_horizontal"
         android:clickable="true"
+        android:padding="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">

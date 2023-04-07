@@ -170,7 +170,7 @@ class PieceActivity : AppCompatActivity() {
     }
 
     private fun submitPiece(diff: String) {
-        val piece_insert = Piece(puzzle_id = intent.getParcelableExtra("puzzle_id", String::class.java),difficulty = diff,width = "2",height = "2")
+        val piece_insert = Piece(puzzle_id = intent.getParcelableExtra("puzzle_id", String::class.java),difficulty = diff)
         PuzzleStore.postPiece(applicationContext, piece_insert, viewState.imageUri) { msg ->
             runOnUiThread {
                 toast(msg)

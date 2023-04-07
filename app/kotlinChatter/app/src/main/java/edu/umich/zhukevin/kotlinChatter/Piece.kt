@@ -7,8 +7,6 @@ class Piece(
     var piece_id: String? = null,
     var puzzle_id: String? = null,
     var difficulty: String? = null,
-    var width: String? = null,
-    var height: String? = null,
     piece_img: String? = null,
     solution_img: String? = null
 ) {
