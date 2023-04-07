@@ -43,17 +43,26 @@ class Dimensions : AppCompatActivity() {
         width = view.width
         viewState.imageUri = intent.getParcelableExtra("PUZZLE_URI", Uri::class.java)
 
+        var int_height: String = height.text.toString()
+        var int_width: String = width.text.toString()
+
         view.nextButton.setOnClickListener{
-            var int_height: String = height.text.toString()
-            var int_width: String = width.text.toString()
             submitPuzzle("10", int_height, int_width)
 
             //after submitting puzzle entry, go submit puzzle piece
             //takePiecePhoto()
             val puzzleID = getLastPuzzle()
             Log.d("Dimensions onCreate","puzzleID = $puzzleID")
+            startActivity(Intent(this, PieceActivity::class.java))
+        }
 
+        view.backButton.setOnClickListener{
+            submitPuzzle("10", int_height, int_width)
 
+            //after submitting puzzle entry, go submit puzzle piece
+            //takePiecePhoto()
+            val puzzleID = getLastPuzzle()
+            Log.d("Dimensions onCreate","puzzleID = $puzzleID")
             startActivity(Intent(this, MainActivity::class.java))
         }
 

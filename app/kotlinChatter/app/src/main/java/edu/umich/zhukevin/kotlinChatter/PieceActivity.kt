@@ -29,7 +29,6 @@ class PieceActivity : AppCompatActivity() {
     private lateinit var view: ActivityPuzzlePieceBinding
     private lateinit var pieceListAdapter: PieceListAdapter
     private val viewState: PostViewState by viewModels()
-    private val puzzle_id = intent.getParcelableExtra("puzzle_id", String::class.java)
 
     class PostViewState: ViewModel() {
         var imageUri: Uri? = null
@@ -37,8 +36,8 @@ class PieceActivity : AppCompatActivity() {
     }
 
     private val propertyObserver = object: ObservableList.OnListChangedCallback<ObservableArrayList<Int>>() {
-        override fun onChanged(sender: ObservableArrayList<Int>?) {}
-        override fun onItemRangeChanged(sender: ObservableArrayList<Int>?, positionStart: Int, itemCount: Int) { }
+        override fun onChanged(sender: ObservableArrayList<Int>?) { Log.d("on changed", "hello") }
+        override fun onItemRangeChanged(sender: ObservableArrayList<Int>?, positionStart: Int, itemCount: Int) { Log.d("on item range changed", "hello") }
         override fun onItemRangeInserted(
             sender: ObservableArrayList<Int>?,
             positionStart: Int,
@@ -50,13 +49,12 @@ class PieceActivity : AppCompatActivity() {
                 if (viewState.filledList) {
                     view.emptyPieceImage.visibility = View.GONE
                     view.defaultHistoryText.visibility = View.GONE
-
                     pieceListAdapter.notifyDataSetChanged()
                 }
             }
         }
         override fun onItemRangeMoved(sender: ObservableArrayList<Int>?, fromPosition: Int, toPosition: Int,
-                                      itemCount: Int) { }
+                                      itemCount: Int) { Log.d("on moved", "hello1")  }
         override fun onItemRangeRemoved(sender: ObservableArrayList<Int>?, positionStart: Int, itemCount: Int) {
             println("onItemRangeRemoved: ${sender?.size}, $positionStart, $itemCount")
             if (sender?.size == 0) {
@@ -85,7 +83,7 @@ class PieceActivity : AppCompatActivity() {
             refreshTimeline()
         }
         pieces.addOnListChangedCallback(propertyObserver)
-//        getPieces(intent.getParcelableExtra("puzzle_id", String::class.java))
+        getPieces(intent.getParcelableExtra("puzzle_id", String::class.java))
 
         var takePicture = registerForActivityResult(ActivityResultContracts.TakePicture())
         { success ->
@@ -165,7 +163,8 @@ class PieceActivity : AppCompatActivity() {
             view.emptyPieceImage.visibility = View.GONE
             view.defaultHistoryText.visibility = View.GONE
         }
-        getPieces(intent.getParcelableExtra("puzzle_id", String::class.java))
+        val piece_id = intent.getParcelableExtra("puzzle_id", String::class.java)
+        getPieces(piece_id)
         // stop the refreshing animation upon completion:
         view.refreshContainer.isRefreshing = false
     }
@@ -185,6 +184,7 @@ class PieceActivity : AppCompatActivity() {
 
         //create alert dialog
         var builder = AlertDialog.Builder(this)
+        val puzzle_id = intent.getParcelableExtra("puzzle_id", String::class.java)
         with(builder) {
             setView(popupBinding.root)
             setTitle("Success!")
@@ -209,15 +209,15 @@ class PieceActivity : AppCompatActivity() {
         }
 
         // create and show the dialog
-        val dialog = builder.create()
-        dialog.show()
+//        val dialog = builder.create()
+//        dialog.show()
     }
 
     private fun displayImageAfterInput() {
 
-        intent = Intent(this, ShowSolutionActivity::class.java)
-        intent.putExtra("puzzle_solution_image",PuzzleStore.getLastSolutionImg(puzzle_id))
-        this.startActivity(intent)
+//        intent = Intent(this, ShowSolutionActivity::class.java)
+//        intent.putExtra("puzzle_solution_image",PuzzleStore.getLastSolutionImg(puzzle_id))
+//        this.startActivity(intent)
     }
 
 }

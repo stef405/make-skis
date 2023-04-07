@@ -61,7 +61,7 @@ object PuzzleStore {
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful) {
                     getPieces(piece.puzzle_id)
-                    completion("Chatt posted!")
+                    completion("PIECE posted!")
                 }
             }
         })
@@ -94,7 +94,6 @@ object PuzzleStore {
             .build()
 
         //context.toast("Posting . . . wait for 'Puzzle posted!'")
-
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
@@ -284,12 +283,13 @@ object PuzzleStore {
                     )
                     //puzzles.clear()
                     //Log.d("getpuzzles","Puzzles size: ${puzzles.size}")
+                    if (piecesReceived.length() >= 1) {
+                        val lastpiece = piecesReceived[piecesReceived.length() - 1] as JSONObject
+                        val last_pieceID = lastpiece.getString("puzzle_id")
+                        Log.d("getLastSolutionImg", "piece_id = $last_pieceID")
 
-                    val lastpiece = piecesReceived[piecesReceived.length() - 1] as JSONObject
-                    val last_pieceID = lastpiece.getString("puzzle_id")
-                    Log.d("getLastSolutionImg", "piece_id = $last_pieceID")
-
-                    lastSolutionImg = lastpiece.getString("solution_img")
+                        lastSolutionImg = lastpiece.getString("solution_img")
+                    }
                 }
             }
         })
