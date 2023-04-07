@@ -43,11 +43,11 @@ class Dimensions : AppCompatActivity() {
         width = view.width
         viewState.imageUri = intent.getParcelableExtra("PUZZLE_URI", Uri::class.java)
 
-        var int_height: String = height.text.toString()
-        var int_width: String = width.text.toString()
+        var intHeight: String = height.text.toString()
+        var intWidth: String = width.text.toString()
 
         view.nextButton.setOnClickListener{
-            submitPuzzle("10", int_height, int_width)
+            submitPuzzle("10", intHeight, intWidth)
 
             //after submitting puzzle entry, go submit puzzle piece
             //takePiecePhoto()
@@ -57,7 +57,7 @@ class Dimensions : AppCompatActivity() {
         }
 
         view.backButton.setOnClickListener{
-            submitPuzzle("10", int_height, int_width)
+            submitPuzzle("10", intHeight, intWidth)
 
             //after submitting puzzle entry, go submit puzzle piece
             //takePiecePhoto()
@@ -86,10 +86,8 @@ class Dimensions : AppCompatActivity() {
                 Log.d("TakePicture", "failed")
             }
         }
-
         viewState.imageUri = mediaStoreAlloc("image/jpeg")
         takeImageResult.launch(viewState.imageUri)
-
     }
 
     private fun mediaStoreAlloc(mediaType: String): Uri? {
@@ -120,6 +118,4 @@ class Dimensions : AppCompatActivity() {
             finish()
         }
     }
-
-
 }

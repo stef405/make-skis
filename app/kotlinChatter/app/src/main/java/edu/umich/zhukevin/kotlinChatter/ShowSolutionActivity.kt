@@ -2,6 +2,7 @@ package edu.umich.zhukevin.kotlinChatter
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import coil.load
@@ -14,10 +15,13 @@ class ShowSolutionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        var solution = intent.getParcelableExtra("puzzle_solution_image", String::class.java)
+        var solution = intent.getParcelableExtra("solution_img", String::class.java)
+        var puzzleID = intent.getParcelableExtra("puzzle_id", String::class.java)
 
         view = ActivityShowSolutionBinding.inflate(layoutInflater)
         setContentView(view.root)
+
+        Log.d("solution", solution.toString())
 
         solution?.let {
             view.solution.setVisibility(View.VISIBLE)
@@ -28,7 +32,9 @@ class ShowSolutionActivity : AppCompatActivity() {
         }
 
         view.backArrowButton.setOnClickListener{
-            startActivity(Intent(this, PieceActivity::class.java))
+            val intent = Intent(this, PieceActivity::class.java)
+            intent.putExtra("puzzle_id", puzzleID)
+            this.startActivity(intent)
         }
 
     }

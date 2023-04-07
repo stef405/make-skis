@@ -93,6 +93,7 @@ object PuzzleStore {
             .post(mpFD.build())
             .build()
 
+        Log.d("postpuzzle", "request = " + request.toString())
         //context.toast("Posting . . . wait for 'Puzzle posted!'")
 
         client.newCall(request).enqueue(object : Callback {
@@ -103,6 +104,7 @@ object PuzzleStore {
 
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful) {
+                    Log.d("success posting", "yay")
                     getPuzzles()
                     completion("Puzzle posted!")
                 }
