@@ -1,9 +1,7 @@
 CREATE TABLE Puzzles (
     puzzle_id SERIAL PRIMARY KEY,
     user_id VARCHAR(200) NOT NULL,
-    puzzle_img TEXT NOT NULL,
-    width FLOAT NOT NULL,
-    height FLOAT NOT NULL
+    puzzle_img TEXT NOT NULL
 );
 
 CREATE TABLE Pieces (
@@ -12,9 +10,7 @@ CREATE TABLE Pieces (
     solution_img TEXT NOT NULL,
     puzzle_id INTEGER NOT NULL,
     difficulty INTEGER,
-    width FLOAT NOT NULL,
-    height FLOAT NOT NULL,
-    FOREIGN KEY(puzzle_id) REFERENCES Puzzles(puzzle_id)
+    FOREIGN KEY(puzzle_id) REFERENCES Puzzles(puzzle_id) ON DELETE CASCADE
 );
 
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO puzzler;
