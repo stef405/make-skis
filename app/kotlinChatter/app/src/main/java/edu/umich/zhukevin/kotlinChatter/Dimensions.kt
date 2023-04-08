@@ -64,7 +64,6 @@ class Dimensions : AppCompatActivity() {
                 }
             }
             else if(pop_up==false){ //if we get 200
-                toast(pop_up.toString())
                 startActivity(Intent(applicationContext, PieceActivity::class.java))
             }
         }
