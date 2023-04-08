@@ -1,5 +1,6 @@
 package edu.umich.zhukevin.kotlinChatter
 
+import android.Manifest
 import android.content.ContentValues
 import android.content.DialogInterface
 import android.content.Intent
@@ -17,13 +18,18 @@ import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModel
+import edu.umich.zhukevin.kotlinChatter.PuzzleStore.getEntryPopUp
 import edu.umich.zhukevin.kotlinChatter.PuzzleStore.getLastPuzzle
 import edu.umich.zhukevin.kotlinChatter.PuzzleStore.postPiece
 import edu.umich.zhukevin.kotlinChatter.PuzzleStore.postPuzzle
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityMainBinding
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityPuzzlePieceBinding
 import edu.umich.zhukevin.kotlinChatter.databinding.DimBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -32,6 +38,7 @@ class Dimensions : AppCompatActivity() {
 
     private lateinit var view: DimBinding
     private val viewState: MainActivity.MainViewState by viewModels()
+    private var pop_up: Boolean? = null
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,23 +51,28 @@ class Dimensions : AppCompatActivity() {
 
         view.nextButton.setOnClickListener{
             submitPuzzle("10")
-
-            //after submitting puzzle entry, go submit puzzle piece
-            //takePiecePhoto()
-//            runBlocking {
-//                launch {
-//                    delay(2000L)
-//                    val puzzleID = getLastPuzzle()
-//                    Log.d("Dimensions getLastPuzzle", "puzzleID = $puzzleID")
-//                    startActivity(Intent(this, PieceActivity::class.java))
-//                }
-//            }
-            startActivity(Intent(this, PieceActivity::class.java))
+            if(pop_up==true){ //if we get 202
+                val builder = AlertDialog.Builder(this)
+                with(builder)
+                {
+                    setTitle("Image too Blurry")
+                    setMessage("Go back to main to take another photo or select from storage")
+                    setPositiveButton(
+                        "Ok",
+                        DialogInterface.OnClickListener(positiveButtonClickWelcome)
+                    )
+                    show()
+                }
+            }
+            else if(pop_up==false){ //if we get 200
+                toast(pop_up.toString())
+                startActivity(Intent(applicationContext, PieceActivity::class.java))
+            }
         }
 
         view.backButton.setOnClickListener{
             submitPuzzle("10")
-            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(applicationContext, MainActivity::class.java))
         }
 
     }
@@ -69,20 +81,13 @@ class Dimensions : AppCompatActivity() {
     private fun takePiecePhoto() {
         val takeImageResult = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
             if (success) {
-                val piece_insert = Piece(puzzle_id = "",difficulty = "0")
-                val pop_up = postPiece(applicationContext,piece_insert,viewState.imageUri) { msg ->
+                val piece_insert = Piece(puzzle_id = getLastPuzzle(),difficulty = "0")
+                postPiece(applicationContext,piece_insert,viewState.imageUri) { msg ->
                     runOnUiThread {
                         toast(msg)
                     }
                     finish()
                 }
-
-                if (pop_up != null && pop_up) {
-
-                }
-
-                //get to dimensions
-
             } else {
                 Log.d("TakePicture", "failed")
             }
@@ -109,21 +114,13 @@ class Dimensions : AppCompatActivity() {
 
         val puzzle = Puzzle(user_id = user_id_puzzle)
 
-        val pop_up = postPuzzle(applicationContext, puzzle, viewState.imageUri) { msg ->
-            runOnUiThread {
-                toast(msg)
-            }
-            finish()
-        }
-
-        if (pop_up != null && pop_up) {
-            val builder = AlertDialog.Builder(this)
-            with(builder)
-            {
-                setTitle("Image too Blurry")
-                setMessage("Go back to main to take another photo or select from storage")
-                setPositiveButton("Ok", DialogInterface.OnClickListener(positiveButtonClickWelcome))
-                show()
+        runBlocking {
+            launch {
+                pop_up = postPuzzle(applicationContext, puzzle, viewState.imageUri) { msg ->
+                    runOnUiThread {
+                        toast(msg)
+                    }
+                }
             }
         }
     }

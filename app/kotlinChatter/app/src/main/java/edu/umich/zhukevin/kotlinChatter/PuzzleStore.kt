@@ -6,6 +6,12 @@ import android.util.Log
 import androidx.databinding.ObservableArrayList
 import edu.umich.zhukevin.kotlinChatter.PuzzleStore.getPieces
 import edu.umich.zhukevin.kotlinChatter.PuzzleStore.getPuzzles
+import edu.umich.zhukevin.kotlinChatter.PuzzleStore.pieces
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaType
@@ -27,6 +33,7 @@ object PuzzleStore {
     private val nPuzzleFields = Puzzle::class.declaredMemberProperties.size
     private const val serverUrl = "https://3.16.218.169/"
     private val client = OkHttpClient()
+    var entry_popup : Boolean ?= null
     var last_puzzleID = ""
     var last_pieceID = ""
 
@@ -54,14 +61,15 @@ object PuzzleStore {
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
+                Log.d("PostPiece Fail: response call", e.localizedMessage );
                 completion(e.localizedMessage ?: "Posting failed")
             }
 
             override fun onResponse(call: Call, response: Response) {
+                Log.d("PostPiece Success: response call", response.toString());
                 if (response.isSuccessful) {
                     if (response.code == 202) {
                         piece_popup = true
-
                     }
                     getPieces(piece.puzzle_id)
                     completion("PIECE posted!")
@@ -71,54 +79,74 @@ object PuzzleStore {
         return piece_popup
     }
 
-    var entry_popup : Boolean = false
-    fun postPuzzle(context: Context, puzzle: Puzzle, imageUri: Uri?, completion: (String) -> Unit) : Boolean {
-
+    val scope = CoroutineScope(Dispatchers.IO)
+    suspend fun postPuzzle(context: Context, puzzle: Puzzle, imageUri: Uri?, completion: (String) -> Unit) :
+            Boolean {
+        val res = CompletableDeferred<Boolean>()
 //        var user_id_int: Int = puzzle.user_id.toInt()
-        entry_popup = false
+//        entry_popup = false
         Log.d("postpuzzle", "imageUri = " + imageUri.toString())
 
-        val mpFD = MultipartBody.Builder().setType(MultipartBody.FORM)
-            .addFormDataPart("user_id", puzzle.user_id ?: "")
+        scope.launch {
+            val mpFD = MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("user_id", puzzle.user_id ?: "")
 
-        imageUri?.run {
-            toFile(context)?.let {
-                mpFD.addFormDataPart(
-                    "puzzle_img", "puzzlePieceImage",
-                    it.asRequestBody("image/jpeg".toMediaType())
-                )
+            imageUri?.run {
+                toFile(context)?.let {
+                    mpFD.addFormDataPart(
+                        "puzzle_img", "puzzlePieceImage",
+                        it.asRequestBody("image/jpeg".toMediaType())
+                    )
 
-            } ?: context.toast("Unsupported image format")
-        }
-
-        val request = Request.Builder()
-            .url(serverUrl + "postpuzzle/") //+ puzzle.user_id ) //https://3.16.218.169/postpuzzle/1/
-            .post(mpFD.build())
-            .build()
-
-        Log.d("postpuzzle", "request = " + request.toString())
-        //context.toast("Posting . . . wait for 'Puzzle posted!'")
-
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                Log.d("error posting", e.localizedMessage)
-                completion(e.localizedMessage ?: "Posting failed")
+                } ?: context.toast("Unsupported image format")
             }
 
-            override fun onResponse(call: Call, response: Response) {
-                if (response.isSuccessful) {
-                    if (response.code == 202) {
-                        entry_popup = true
-                    }
-                    Log.d("success posting", "yay")
-                    getPuzzles()
-                    completion("Puzzle posted!")
+            val request = Request.Builder()
+                .url(serverUrl + "postpuzzle/") //+ puzzle.user_id ) //https://3.16.218.169/postpuzzle/1/
+                .post(mpFD.build())
+                .build()
+
+            Log.d("postpuzzle", "request = " + request.toString())
+            //context.toast("Posting . . . wait for 'Puzzle posted!'")
+
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+//                    Log.d("error posting", e.localizedMessage)
+                    completion(e.localizedMessage ?: "Posting failed")
                 }
-            }
-        })
 
+                override fun onResponse(call: Call, response: Response) {
+//                    Log.d("success code", response.code.toString())
+//                    Log.d("entrypopup", entry_popup.toString())
+                    if (response.isSuccessful) {
+                        Log.d("response successful", response.code.toString())
+                        if (response.code.toString() == "202") {
+//                            Log.d("string == 202", response.code.toString())
+                            res.complete(true)
+                            completion("Please Retake!")
+//                            Log.d("entrypopup 202 ", "true")
+                        } else {
+//                            Log.d("entrypopup", "false")
+//                            Log.d("success posting", "yay")
+//                    getPuzzles()
+                            res.complete(false)
+                            completion("Puzzle posted!")
+                        }
+                    }
+                }
+            })
+        }
+        return res.await()
+    }
+
+    fun setEntryPopUp(bool : Boolean) {
+        entry_popup = bool
+    }
+
+    fun getEntryPopUp() : Boolean? {
         return entry_popup
     }
+
 
     fun getPieces(puzzle_id: String?) {
         val request = Request.Builder()

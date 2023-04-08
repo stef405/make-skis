@@ -179,7 +179,7 @@ class PieceActivity : AppCompatActivity() {
             finish()
         }
 
-        if (pop_up != "" && pop_up) {
+        if (pop_up != null && pop_up) {
             val builder = AlertDialog.Builder(this)
             with(builder)
             {
