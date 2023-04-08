@@ -20,7 +20,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModel
-import edu.umich.zhukevin.kotlinChatter.PuzzleStore.getEntryPopUp
 import edu.umich.zhukevin.kotlinChatter.PuzzleStore.getLastPuzzle
 import edu.umich.zhukevin.kotlinChatter.PuzzleStore.postPiece
 import edu.umich.zhukevin.kotlinChatter.PuzzleStore.postPuzzle
