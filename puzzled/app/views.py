@@ -10,6 +10,7 @@ import json
 import os, time
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+from .all_functions import *
 
 @csrf_exempt
 def postimages(request):
@@ -156,6 +157,18 @@ def postpuzzle(request):
         puzzle_image_url = fs.url(filename)
     else:
         return HttpResponse(status=400)
+    """
+    print("hello")
+    current = os.path.dirname(os.path.realpath(__file__))
+    parent = os.path.dirname(current)
+    with open(os.path.join(parent, "print_output.txt"), "w") as output:
+        output.write(filename)
+        output.write("test")
+    """
+    pathname = '/home/ubuntu/make-skis/puzzled/media/'
+    pathname += filename
+    if is_blurry(pathname):
+        return HttpResponse(status=202)
     
     cursor = connection.cursor()
     cursor.execute('INSERT INTO puzzles (user_id, puzzle_img) VALUES '
@@ -181,13 +194,37 @@ def postpiece(request):
         piece_image_url = fs.url(filename)
     else:
         return HttpResponse(status=400)
-        
+    
+    # Check if piece image is blurry
+    pathname = '/home/ubuntu/make-skis/puzzled/media/'
+    pathname += filename
+    if is_blurry(pathname):
+        return HttpResponse(status=202)
+    
     cursor = connection.cursor()
     # TODO: Replace the insert for solution_img with the actual solution once we have a
     # way of generating it
+    # Get puzzle_image_url with puzzle_id
+    cursor.execute("""SELECT puzzle_img FROM puzzles WHERE puzzle_id = %s;""", (puzzle_id, ))
+    row = cursor.fetchone()
+    puzzle_url = row[0]
+    puzzle_filename = puzzle_url.partition("media/")[2]
+    puzzle_pathname = '/home/ubuntu/make-skis/puzzled/media/' + puzzle_filename
+
+    bg_color = avg_background_color(pathname)
+    outer_bounding_box = crop(pathname)
+    cropped_rect = greedy_rectangle(outer_bounding_box, bg_color)
+    solution = temp_match_rescale(puzzle_pathname, cropped_rect, difficulty)
+
+    # Store solution in media
+    filename1 = puzzle_id+str(time.time())+".jpeg"
+    cv2.imwrite('/home/ubuntu/make-skis/puzzled/media/solution' + filename1, solution)
+
+    solution_image_url = 'https://3.16.218.169/media/solution' + filename1
+
     cursor.execute('INSERT INTO pieces (puzzle_id, piece_img, difficulty, solution_img) VALUES '
                    '(%s, %s, %s, %s);',
-                    (puzzle_id, piece_image_url, difficulty, piece_image_url))
+                    (puzzle_id, piece_image_url, difficulty, solution_image_url))
 
     return HttpResponse(status=201)
 
