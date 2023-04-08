@@ -1,6 +1,7 @@
 package edu.umich.zhukevin.kotlinChatter
 
 import android.content.ContentValues
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
@@ -171,12 +172,27 @@ class PieceActivity : AppCompatActivity() {
 
     private fun submitPiece(diff: String) {
         val piece_insert = Piece(puzzle_id = intent.getParcelableExtra("puzzle_id", String::class.java),difficulty = diff)
-        PuzzleStore.postPiece(applicationContext, piece_insert, viewState.imageUri) { msg ->
+        val pop_up = PuzzleStore.postPiece(applicationContext, piece_insert, viewState.imageUri) { msg ->
             runOnUiThread {
                 toast(msg)
             }
             finish()
         }
+
+        if (pop_up != "" && pop_up) {
+            val builder = AlertDialog.Builder(this)
+            with(builder)
+            {
+                setTitle("Image too Blurry or Solution Not Found")
+                setMessage("Go back to main to take another photo or select from storage")
+                setPositiveButton("Ok", DialogInterface.OnClickListener(piecePopUpOk))
+                show()
+            }
+        }
+    }
+
+    val piecePopUpOk = { dialog: DialogInterface, which: Int ->
+        refreshTimeline()
     }
 
     private fun difficultyPopup() {

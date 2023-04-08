@@ -30,7 +30,8 @@ object PuzzleStore {
     var last_puzzleID = ""
     var last_pieceID = ""
 
-    fun postPiece(context: Context, piece: Piece, imageUri: Uri?, completion: (String) -> Unit) {
+    var piece_popup : Boolean = false
+    fun postPiece(context: Context, piece: Piece, imageUri: Uri?, completion: (String) -> Unit) : Boolean? {
         val mpFD = MultipartBody.Builder().setType(MultipartBody.FORM)
             .addFormDataPart("puzzle_id", piece.puzzle_id ?: "")
             .addFormDataPart("difficulty", piece.difficulty ?: "")
@@ -43,7 +44,7 @@ object PuzzleStore {
                 )
             } ?: context.toast("Unsupported image format")
         }
-
+        piece_popup = false
         val request = Request.Builder()
             .url(serverUrl + "postpiece/") //https://3.16.218.169/postpiece/puzzlePieceImage.jpeg
             .post(mpFD.build())
@@ -58,17 +59,23 @@ object PuzzleStore {
 
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful) {
+                    if (response.code == 202) {
+                        piece_popup = true
+
+                    }
                     getPieces(piece.puzzle_id)
                     completion("PIECE posted!")
                 }
             }
         })
+        return piece_popup
     }
 
-    fun postPuzzle(context: Context, puzzle: Puzzle, imageUri: Uri?, completion: (String) -> Unit) {
+    var entry_popup : Boolean = false
+    fun postPuzzle(context: Context, puzzle: Puzzle, imageUri: Uri?, completion: (String) -> Unit) : Boolean {
 
 //        var user_id_int: Int = puzzle.user_id.toInt()
-
+        entry_popup = false
         Log.d("postpuzzle", "imageUri = " + imageUri.toString())
 
         val mpFD = MultipartBody.Builder().setType(MultipartBody.FORM)
@@ -100,12 +107,17 @@ object PuzzleStore {
 
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful) {
+                    if (response.code == 202) {
+                        entry_popup = true
+                    }
                     Log.d("success posting", "yay")
                     getPuzzles()
                     completion("Puzzle posted!")
                 }
             }
         })
+
+        return entry_popup
     }
 
     fun getPieces(puzzle_id: String?) {
@@ -174,6 +186,8 @@ object PuzzleStore {
             override fun onResponse(call: Call, response: Response) {
                 if (response.isSuccessful) {
                     Log.d("getpuzzles", "Successful GET request")
+
+                    Log.d("getpuzzles","response code = ${response.code}")
                     val puzzlesReceived = try {
                         JSONObject(response.body?.string() ?: "").getJSONArray("puzzles")
                     } catch (e: JSONException) {
