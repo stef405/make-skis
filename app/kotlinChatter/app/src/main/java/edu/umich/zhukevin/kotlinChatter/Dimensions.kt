@@ -80,12 +80,12 @@ class Dimensions : AppCompatActivity() {
         val takeImageResult = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
             if (success) {
                 val piece_insert = Piece(puzzle_id = getLastPuzzle(),difficulty = "0")
-                postPiece(applicationContext,piece_insert,viewState.imageUri) { msg ->
+                /*postPiece(applicationContext,piece_insert,viewState.imageUri) { msg ->
                     runOnUiThread {
                         toast(msg)
                     }
                     finish()
-                }
+                }*/
             } else {
                 Log.d("TakePicture", "failed")
             }

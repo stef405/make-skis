@@ -20,6 +20,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
 import androidx.lifecycle.ViewModel
+import android.telephony.TelephonyManager
+import android.content.Context
+import android.os.Build.VERSION_CODES.R
 import edu.umich.zhukevin.kotlinChatter.PuzzleStore.getPuzzles
 import edu.umich.zhukevin.kotlinChatter.PuzzleStore.puzzles
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityMainBinding
@@ -29,6 +32,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var view: ActivityMainBinding
     private lateinit var puzzleListAdapter: PuzzleListAdapter
     private val viewState: MainViewState by viewModels()
+    //private val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+    //private val deviceID = telephonyManager.getDeviceId()
     class MainViewState: ViewModel() {
         var imageUri: Uri? = null
         var filledList: Boolean = false
@@ -204,7 +209,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     // plus button
-    fun retakeAlertMessage(view: View){
+/*    fun retakeAlertMessage(view: View){
         val builder = AlertDialog.Builder(this)
         with(builder)
         {
@@ -214,7 +219,7 @@ class MainActivity : AppCompatActivity() {
             setNegativeButton(getString(R.string.exit_alert_dialog), negativeButtonClick)
             show()
         }
-    }
+    }*/
 
     val positiveButtonClick = { dialog: DialogInterface, which: Int ->
         Toast.makeText(applicationContext,

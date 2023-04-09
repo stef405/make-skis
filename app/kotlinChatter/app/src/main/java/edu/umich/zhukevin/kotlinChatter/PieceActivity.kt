@@ -24,6 +24,8 @@ import edu.umich.zhukevin.kotlinChatter.PuzzleStore.getPieces
 import edu.umich.zhukevin.kotlinChatter.PuzzleStore.pieces
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityPuzzlePieceBinding
 import edu.umich.zhukevin.kotlinChatter.databinding.LoadingBinding
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class PieceActivity : AppCompatActivity() {
 
@@ -170,25 +172,48 @@ class PieceActivity : AppCompatActivity() {
         view.refreshContainer.isRefreshing = false
     }
 
+    var pop_up : Int = 0
     private fun submitPiece(diff: String) {
         val piece_insert = Piece(puzzle_id = intent.getParcelableExtra("puzzle_id", String::class.java),difficulty = diff)
-        val pop_up = PuzzleStore.postPiece(applicationContext, piece_insert, viewState.imageUri) { msg ->
-            runOnUiThread {
-                toast(msg)
+
+        runBlocking {
+            launch {
+                pop_up = PuzzleStore.postPiece(applicationContext, piece_insert, viewState.imageUri) { msg ->
+                    runOnUiThread {
+                        toast(msg)
+                    }
+                    //finish()
+                }
             }
-            finish()
         }
 
-        if (pop_up != null && pop_up) {
+
+    }
+
+    private fun NoSolutionPopUp () {
+        Log.d("submitPiece","response = $pop_up")
+
+        if (pop_up == 202) {
             val builder = AlertDialog.Builder(this)
             with(builder)
             {
-                setTitle("Image too Blurry or Solution Not Found")
-                setMessage("Go back to main to take another photo or select from storage")
+                setTitle("Image too Blurry")
+                setMessage("Take another photo or select from storage")
                 setPositiveButton("Ok", DialogInterface.OnClickListener(piecePopUpOk))
                 show()
             }
         }
+
+        /*if (pop_up == ) { //use response code for no solution found
+            val builder = AlertDialog.Builder(this)
+            with(builder)
+            {
+                setTitle("Solution Not Found")
+                setMessage("Take another photo or select from storage")
+                setPositiveButton("Ok", DialogInterface.OnClickListener(piecePopUpOk))
+                show()
+            }
+        }*/
     }
 
     val piecePopUpOk = { dialog: DialogInterface, which: Int ->
@@ -203,6 +228,7 @@ class PieceActivity : AppCompatActivity() {
         val puzzle_id = intent.getParcelableExtra("puzzle_id", String::class.java)
         with(builder) {
             setView(popupBinding.root)
+
             setTitle("Success!")
             setMessage("Select difficulty mode.\nProcessing will begin shortly after.")
             setPositiveButton("Easy ") { dialog, _ ->
@@ -211,7 +237,8 @@ class PieceActivity : AppCompatActivity() {
                 submitPiece("0")
                 // once the task is complete, hide progress bar
                 popupBinding.progressBar.visibility = View.GONE
-                var solution_img = PuzzleStore.getLastSolutionImg(puzzle_id)
+                NoSolutionPopUp()
+                //var solution_img = PuzzleStore.getLastSolutionImg(puzzle_id)
 
             }
             setNegativeButton("Hard") { dialog, _ ->
@@ -220,6 +247,7 @@ class PieceActivity : AppCompatActivity() {
                 submitPiece("1")
                 // once the task is complete, hide progress bar
                 popupBinding.progressBar.visibility = View.GONE
+                NoSolutionPopUp()
             }
             show()
         }

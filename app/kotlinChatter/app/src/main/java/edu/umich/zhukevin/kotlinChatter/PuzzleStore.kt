@@ -37,49 +37,52 @@ object PuzzleStore {
     var last_puzzleID = ""
     var last_pieceID = ""
 
+    //var scope1 = CoroutineScope(Dispatchers.IO)
     var piece_popup : Boolean = false
-    fun postPiece(context: Context, piece: Piece, imageUri: Uri?, completion: (String) -> Unit) : Boolean? {
-        val mpFD = MultipartBody.Builder().setType(MultipartBody.FORM)
-            .addFormDataPart("puzzle_id", piece.puzzle_id ?: "")
-            .addFormDataPart("difficulty", piece.difficulty ?: "")
+    val scope = CoroutineScope(Dispatchers.IO)
+    suspend fun postPiece(context: Context, piece: Piece, imageUri: Uri?, completion: (String) -> Unit) : Int {
+        val res = CompletableDeferred<Int>()
 
-        imageUri?.run {
-            toFile(context)?.let {
-                mpFD.addFormDataPart(
-                    "piece_img", "puzzlePieceImage",
-                    it.asRequestBody("image/jpeg".toMediaType())
-                )
-            } ?: context.toast("Unsupported image format")
-        }
-        piece_popup = false
-        val request = Request.Builder()
-            .url(serverUrl + "postpiece/") //https://3.16.218.169/postpiece/puzzlePieceImage.jpeg
-            .post(mpFD.build())
-            .build()
+        scope.launch {
+            val mpFD = MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("puzzle_id", piece.puzzle_id ?: "")
+                .addFormDataPart("difficulty", piece.difficulty ?: "")
 
-        context.toast("Posting . . . wait for 'Chatt posted!'")
-
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                Log.d("PostPiece Fail: response call", e.localizedMessage );
-                completion(e.localizedMessage ?: "Posting failed")
+            imageUri?.run {
+                toFile(context)?.let {
+                    mpFD.addFormDataPart(
+                        "piece_img", "puzzlePieceImage",
+                        it.asRequestBody("image/jpeg".toMediaType())
+                    )
+                } ?: context.toast("Unsupported image format")
             }
+            piece_popup = false
+            val request = Request.Builder()
+                .url(serverUrl + "postpiece/") //https://3.16.218.169/postpiece/puzzlePieceImage.jpeg
+                .post(mpFD.build())
+                .build()
 
-            override fun onResponse(call: Call, response: Response) {
-                Log.d("PostPiece Success: response call", response.toString());
-                if (response.isSuccessful) {
-                    if (response.code == 202) {
-                        piece_popup = true
-                    }
-                    getPieces(piece.puzzle_id)
-                    completion("PIECE posted!")
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    Log.d("PostPiece Fail: response call", e.localizedMessage );
+                    completion(e.localizedMessage ?: "Posting failed")
                 }
-            }
-        })
-        return piece_popup
+
+                override fun onResponse(call: Call, response: Response) {
+                    Log.d("PostPiece Success: response call", response.toString());
+                    if (response.isSuccessful) {
+
+                        res.complete(response.code)
+                        //getPieces(piece.puzzle_id)
+                        completion("PIECE posted!")
+                    }
+                }
+            })
+        }
+        return res.await()
     }
 
-    val scope = CoroutineScope(Dispatchers.IO)
+    //val scope = CoroutineScope(Dispatchers.IO)
     suspend fun postPuzzle(context: Context, puzzle: Puzzle, imageUri: Uri?, completion: (String) -> Unit) :
             Boolean {
         val res = CompletableDeferred<Boolean>()
