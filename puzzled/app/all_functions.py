@@ -15,6 +15,8 @@ import cv2
 import imutils
 import numpy as np
 import math
+from django.http import HttpResponse
+import time
 
 """# Edge Piece Detection"""
 
@@ -172,6 +174,7 @@ cv2_imshow(cropped_rect) """
 """#  Find match"""
 
 def temp_match_rescale(full_puzzle, puzzle_piece, difficulty):
+  curr_time = time.time()
   full_puzzle = cv2.imread(full_puzzle)
   if difficulty == '0':
     difficulty = 'easy'
@@ -191,6 +194,8 @@ def temp_match_rescale(full_puzzle, puzzle_piece, difficulty):
 
   # Apply template matching to find the puzzle piece location in the full puzzle image
   for scale in np.linspace(0.1, 1.0, 20)[::-1]:
+    if (time.time() - curr_time > 60):
+      return (204, full_puzzle)
     # Resize puzzle piece image and keep ratio of resizing
     resizey = imutils.resize(puzzle_piece_gray, width = int(puzzle_piece_gray.shape[1] * scale))
     r = puzzle_piece_gray.shape[1] / float(resizey.shape[1])
@@ -223,5 +228,5 @@ def temp_match_rescale(full_puzzle, puzzle_piece, difficulty):
 
   # Display the result
 
-  return full_puzzle
+  return (201, full_puzzle)
   # FIXME: Write image to file or table here.
