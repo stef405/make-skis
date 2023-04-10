@@ -51,8 +51,7 @@
             android:exported="false" />
         <activity
             android:name=".Dimensions"
-            android:exported="false"
-            android:label="Dimensions" />
+            android:exported="false" />
         <activity
             android:name=".PieceActivity"
             android:exported="false"
@@ -93,7 +92,6 @@
         <activity
             android:name=".Blank"
             android:exported="true"
-            android:label="Blank"
         />
 
     </application>
