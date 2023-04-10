@@ -219,17 +219,17 @@ def postpiece(request):
     try: 
         outer_bounding_box = crop(pathname)
     except:
-        return HttpResponse(status=204)
+        return HttpResponse(204)
     
     try: 
         cropped_rect = greedy_rectangle(outer_bounding_box, bg_color)
     except:
-        return HttpResponse(status=204)
+        return HttpResponse(204)
     
     try:
         solution = temp_match_rescale(puzzle_pathname, cropped_rect, difficulty)
     except:
-        return HttpResponse(status=204)
+        return HttpResponse(204)
 
     # Store solution in media
     filename1 = puzzle_id+str(time.time())+".jpeg"
