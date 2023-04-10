@@ -215,12 +215,10 @@ def postpiece(request):
     outer_bounding_box = crop(pathname)
     cropped_rect = greedy_rectangle(outer_bounding_box, bg_color)
     solution = temp_match_rescale(puzzle_pathname, cropped_rect, difficulty)
-    if solution[0] == 204:
-        return HttpResponse(204)
 
     # Store solution in media
     filename1 = puzzle_id+str(time.time())+".jpeg"
-    cv2.imwrite('/home/ubuntu/make-skis/puzzled/media/solution' + filename1, solution[1])
+    cv2.imwrite('/home/ubuntu/make-skis/puzzled/media/solution' + filename1, solution)
 
     solution_image_url = 'https://3.16.218.169/media/solution' + filename1
 

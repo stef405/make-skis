@@ -204,7 +204,7 @@ class PieceActivity : AppCompatActivity() {
             }
         }
 
-        if (pop_up == 204) { //use response code for no solution found
+        /*if (pop_up == ) { //use response code for no solution found
             val builder = AlertDialog.Builder(this)
             with(builder)
             {
@@ -213,7 +213,7 @@ class PieceActivity : AppCompatActivity() {
                 setPositiveButton("Ok", DialogInterface.OnClickListener(piecePopUpOk))
                 show()
             }
-        }
+        }*/
     }
 
     val piecePopUpOk = { dialog: DialogInterface, which: Int ->
