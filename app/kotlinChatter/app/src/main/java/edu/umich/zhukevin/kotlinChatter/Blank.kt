@@ -36,6 +36,8 @@ class Blank : AppCompatActivity() {
         view.root.setBackgroundColor(Color.parseColor("#FFFFFF"))
         setContentView(view.root)
 
+        view.progressBar2.visibility = View.INVISIBLE
+
         runBlocking {
             launch {
                 puzzle_id = PuzzleStore.getLastPuzzle()
@@ -112,33 +114,34 @@ class Blank : AppCompatActivity() {
     }
 
     private fun difficultyPopup() {
-        var popupBinding = LoadingBinding.inflate(layoutInflater)
-        popupBinding.progressBar.visibility = View.INVISIBLE
+        //var popupBinding = LoadingBinding.inflate(layoutInflater)
+        //popupBinding.progressBar.visibility = View.INVISIBLE
         //create alert dialog
         var builder = AlertDialog.Builder(this)
         //val puzzle_id = intent.getParcelableExtra("puzzle_id", String::class.java)
+        view.progressBar2.visibility = View.VISIBLE
         with(builder) {
-            setView(popupBinding.root)
+            //setView(popupBinding.root)
 
             setTitle("Success!")
             setMessage("Select difficulty mode.\nProcessing will begin shortly after.")
             setPositiveButton("Easy ") { dialog, _ ->
-                popupBinding.progressBar.visibility = View.VISIBLE
+                //popupBinding.progressBar.visibility = View.VISIBLE
                 // TODO: PERFORM OPEN CV HERE***
                 submitPiece("0")
                 // once the task is complete, hide progress bar
-                popupBinding.progressBar.visibility = View.GONE
+                //popupBinding.progressBar.visibility = View.GONE
                 NoSolutionPopUp()
                 //viewSolution()
                 //var solution_img = PuzzleStore.getLastSolutionImg(puzzle_id)
 
             }
             setNegativeButton("Hard") { dialog, _ ->
-                popupBinding.progressBar.visibility = View.VISIBLE
+                //popupBinding.progressBar.visibility = View.VISIBLE
                 // TODO: PERFORM OPEN CV HERE***
                 submitPiece("1")
                 // once the task is complete, hide progress bar
-                popupBinding.progressBar.visibility = View.GONE
+                //popupBinding.progressBar.visibility = View.GONE
                 NoSolutionPopUp()
                 //viewSolution()
             }
@@ -167,7 +170,7 @@ class Blank : AppCompatActivity() {
 
     private fun NoSolutionPopUp () {
         Log.d("submitPiece","response = $pop_up")
-
+        view.progressBar2.visibility = View.INVISIBLE
         if (pop_up == 202) {
             val builder = AlertDialog.Builder(this)
             with(builder)
@@ -178,7 +181,7 @@ class Blank : AppCompatActivity() {
                 show()
             }
         }
-        else if (pop_up == 200) {
+        else if (pop_up == 201) {
             viewSolution()
         }
         else  { //use response code for no solution found

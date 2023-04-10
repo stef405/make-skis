@@ -204,7 +204,7 @@ class PieceActivity : AppCompatActivity() {
                 show()
             }
         }
-        else if (pop_up == 200) {
+        else if (pop_up == 201) {
             viewSolution()
         }
         else { //use response code for no solution found
