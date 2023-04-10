@@ -15,7 +15,8 @@ import cv2
 import imutils
 import numpy as np
 import math
-from .timeout import *
+from django.http import HttpResponse
+import time
 
 """# Edge Piece Detection"""
 
@@ -52,7 +53,7 @@ def is_too_homogenous(img, bg_color):
   return error
 
 """# Bg Removal + Crop"""
-@timeout(30, os.strerror(errno.ETIMEDOUT))
+
 def crop(img):
   img = cv2.imread(img)
   # Convert the color image to grayscale
@@ -116,7 +117,6 @@ def is_background(pixel, bg_color):
   rms_error = math.sqrt(((pixel[0] - bg_color[0])**2 + (pixel[1] - bg_color[1])**2 + (pixel[2] - bg_color[2])**2)/2)
   return rms_error < poss_error
 
-@timeout(30, os.strerror(errno.ETIMEDOUT))
 def greedy_rectangle(img, bg_color):
   # Remember that y coord is first for ndarrays for some reason
   top = img.shape[0] - 1
@@ -172,8 +172,9 @@ cropped_rect = greedy_rectangle(sunrise_piece, bg_color)
 cv2_imshow(cropped_rect) """
 
 """#  Find match"""
-@timeout(50, os.strerror(errno.ETIMEDOUT))
+
 def temp_match_rescale(full_puzzle, puzzle_piece, difficulty):
+  curr_time = time.time()
   full_puzzle = cv2.imread(full_puzzle)
   if difficulty == '0':
     difficulty = 'easy'
@@ -193,6 +194,8 @@ def temp_match_rescale(full_puzzle, puzzle_piece, difficulty):
 
   # Apply template matching to find the puzzle piece location in the full puzzle image
   for scale in np.linspace(0.1, 1.0, 20)[::-1]:
+    if (time.time() - curr_time > 60):
+      return (204, full_puzzle)
     # Resize puzzle piece image and keep ratio of resizing
     resizey = imutils.resize(puzzle_piece_gray, width = int(puzzle_piece_gray.shape[1] * scale))
     r = puzzle_piece_gray.shape[1] / float(resizey.shape[1])
@@ -225,5 +228,5 @@ def temp_match_rescale(full_puzzle, puzzle_piece, difficulty):
 
   # Display the result
 
-  return full_puzzle
+  return (201, full_puzzle)
   # FIXME: Write image to file or table here.
