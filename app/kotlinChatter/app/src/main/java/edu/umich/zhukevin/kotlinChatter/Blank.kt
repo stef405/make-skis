@@ -178,9 +178,10 @@ class Blank : AppCompatActivity() {
                 show()
             }
         }
-
-
-        else if (pop_up == 204) { //use response code for no solution found
+        else if (pop_up == 200) {
+            viewSolution()
+        }
+        else  { //use response code for no solution found
             val builder = AlertDialog.Builder(this)
             with(builder)
             {
@@ -190,9 +191,7 @@ class Blank : AppCompatActivity() {
                 show()
             }
         }
-        else {
-            viewSolution()
-        }
+
     }
 
     val reject = { dialog: DialogInterface, which: Int ->
