@@ -316,7 +316,7 @@ object PuzzleStore {
                         //Log.d("getpuzzles","Puzzles size: ${puzzles.size}")
                         //if (piecesReceived.length() >= 1) {
                         val lastpiece = piecesReceived[piecesReceived.length() - 1] as JSONObject
-                        val last_pieceID = lastpiece.getString("puzzle_id")
+                        val last_pieceID = lastpiece.getString("piece_id")
                         val lastSolutionImg = lastpiece.getString("solution_img")
                         Log.d("getLastPiece", "piece_id = $last_pieceID")
                         val i : List<String> = listOf(last_pieceID,lastSolutionImg)

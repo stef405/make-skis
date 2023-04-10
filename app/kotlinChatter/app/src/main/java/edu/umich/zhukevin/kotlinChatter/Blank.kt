@@ -178,20 +178,21 @@ class Blank : AppCompatActivity() {
                 show()
             }
         }
-        else {
-            viewSolution()
-        }
 
-        /*if (pop_up == ) { //use response code for no solution found
+
+        else if (pop_up == 204) { //use response code for no solution found
             val builder = AlertDialog.Builder(this)
             with(builder)
             {
                 setTitle("Solution Not Found")
                 setMessage("Take another photo or select from storage")
-                setPositiveButton("Ok", DialogInterface.OnClickListener(piecePopUpOk))
+                setPositiveButton("Ok", DialogInterface.OnClickListener(reject))
                 show()
             }
-        }*/
+        }
+        else {
+            viewSolution()
+        }
     }
 
     val reject = { dialog: DialogInterface, which: Int ->
