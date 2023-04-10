@@ -64,35 +64,50 @@ class Dimensions : AppCompatActivity() {
                 }
             }
             else if(pop_up==false){ //if we get 200
-                startActivity(Intent(applicationContext, PieceActivity::class.java))
+                startActivity(Intent(applicationContext, Blank::class.java))
             }
         }
 
         view.backButton.setOnClickListener{
             submitPuzzle("10")
-            startActivity(Intent(applicationContext, MainActivity::class.java))
+            if(pop_up==true){ //if we get 202
+                val builder = AlertDialog.Builder(this)
+                with(builder)
+                {
+                    setTitle("Image too Blurry")
+                    setMessage("Go back to main to take another photo or select from storage")
+                    setPositiveButton(
+                        "Ok",
+                        DialogInterface.OnClickListener(positiveButtonClickWelcome)
+                    )
+                    show()
+                }
+            }
+            else if(pop_up==false){ //if we get 200
+                startActivity(Intent(applicationContext, MainActivity::class.java))
+            }
         }
 
     }
 
     //for taking a photo of the puzzle piece
-    private fun takePiecePhoto() {
-        val takeImageResult = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
-            if (success) {
-                val piece_insert = Piece(puzzle_id = getLastPuzzle(),difficulty = "0")
-                /*postPiece(applicationContext,piece_insert,viewState.imageUri) { msg ->
-                    runOnUiThread {
-                        toast(msg)
-                    }
-                    finish()
-                }*/
-            } else {
-                Log.d("TakePicture", "failed")
-            }
-        }
-        viewState.imageUri = mediaStoreAlloc("image/jpeg")
-        takeImageResult.launch(viewState.imageUri)
-    }
+//    private fun takePiecePhoto() {
+//        val takeImageResult = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+//            if (success) {
+//                val piece_insert = Piece(puzzle_id = getLastPuzzle(),difficulty = "0")
+//                /*postPiece(applicationContext,piece_insert,viewState.imageUri) { msg ->
+//                    runOnUiThread {
+//                        toast(msg)
+//                    }
+//                    finish()
+//                }*/
+//            } else {
+//                Log.d("TakePicture", "failed")
+//            }
+//        }
+//        viewState.imageUri = mediaStoreAlloc("image/jpeg")
+//        takeImageResult.launch(viewState.imageUri)
+//    }
 
     private fun mediaStoreAlloc(mediaType: String): Uri? {
         val values = ContentValues()
