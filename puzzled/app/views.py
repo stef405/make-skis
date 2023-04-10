@@ -212,6 +212,10 @@ def postpiece(request):
     puzzle_pathname = '/home/ubuntu/make-skis/puzzled/media/' + puzzle_filename
 
     bg_color = avg_background_color(pathname)
+
+    if is_too_homogenous(pathname, bg_color):
+        return HttpResponse(status=204)
+    
     outer_bounding_box = crop(pathname)
     cropped_rect = greedy_rectangle(outer_bounding_box, bg_color)
     solution = temp_match_rescale(puzzle_pathname, cropped_rect, difficulty)

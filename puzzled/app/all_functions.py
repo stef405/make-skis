@@ -43,6 +43,7 @@ def is_blurry(image):
 
 def is_too_homogenous(img, bg_color):
   # Given an average background color from avg_background_color, returns true if the whole image is too similar and a piece cannot be distinguished.
+  img = cv2.imread(img)
   error = True
   for i in range(img.shape[0]):
     for j in range(img.shape[1]):
