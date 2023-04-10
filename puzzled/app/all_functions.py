@@ -52,7 +52,7 @@ def is_too_homogenous(img, bg_color):
   return error
 
 """# Bg Removal + Crop"""
-@timeout(30, os.strerror(errno.ETIMEDOUT))
+@timeout(5, os.strerror(errno.ETIMEDOUT))
 def crop(img):
   img = cv2.imread(img)
   # Convert the color image to grayscale
@@ -116,7 +116,7 @@ def is_background(pixel, bg_color):
   rms_error = math.sqrt(((pixel[0] - bg_color[0])**2 + (pixel[1] - bg_color[1])**2 + (pixel[2] - bg_color[2])**2)/2)
   return rms_error < poss_error
 
-@timeout(30, os.strerror(errno.ETIMEDOUT))
+@timeout(5, os.strerror(errno.ETIMEDOUT))
 def greedy_rectangle(img, bg_color):
   # Remember that y coord is first for ndarrays for some reason
   top = img.shape[0] - 1
@@ -172,7 +172,7 @@ cropped_rect = greedy_rectangle(sunrise_piece, bg_color)
 cv2_imshow(cropped_rect) """
 
 """#  Find match"""
-@timeout(50, os.strerror(errno.ETIMEDOUT))
+@timeout(5, os.strerror(errno.ETIMEDOUT))
 def temp_match_rescale(full_puzzle, puzzle_piece, difficulty):
   full_puzzle = cv2.imread(full_puzzle)
   if difficulty == '0':
