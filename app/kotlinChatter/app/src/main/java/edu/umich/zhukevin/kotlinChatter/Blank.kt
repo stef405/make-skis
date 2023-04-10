@@ -126,6 +126,7 @@ class Blank : AppCompatActivity() {
             setTitle("Success!")
             setMessage("Select difficulty mode.\nProcessing will begin shortly after.")
             setPositiveButton("Easy ") { dialog, _ ->
+                dialog.cancel()
                 //popupBinding.progressBar.visibility = View.VISIBLE
                 // TODO: PERFORM OPEN CV HERE***
                 submitPiece("0")
@@ -137,6 +138,7 @@ class Blank : AppCompatActivity() {
 
             }
             setNegativeButton("Hard") { dialog, _ ->
+                dialog.cancel()
                 //popupBinding.progressBar.visibility = View.VISIBLE
                 // TODO: PERFORM OPEN CV HERE***
                 submitPiece("1")
