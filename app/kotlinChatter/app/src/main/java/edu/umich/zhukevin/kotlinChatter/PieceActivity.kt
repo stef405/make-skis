@@ -225,7 +225,7 @@ class PieceActivity : AppCompatActivity() {
 
     private fun difficultyPopup() {
         var popupBinding = LoadingBinding.inflate(layoutInflater)
-
+        popupBinding.progressBar.visibility = View.INVISIBLE
         //create alert dialog
         var builder = AlertDialog.Builder(this)
         val puzzle_id = intent.getParcelableExtra("puzzle_id", String::class.java)
@@ -235,21 +235,26 @@ class PieceActivity : AppCompatActivity() {
             setTitle("Success!")
             setMessage("Select difficulty mode.\nProcessing will begin shortly after.")
             setPositiveButton("Easy ") { dialog, _ ->
+                //popupBinding.progressBar.visibility = View.VISIBLE
                 popupBinding.progressBar.visibility = View.VISIBLE
                 // TODO: PERFORM OPEN CV HERE***
+
                 submitPiece("0")
                 // once the task is complete, hide progress bar
-                popupBinding.progressBar.visibility = View.GONE
+                //popupBinding.progressBar.visibility = View.GONE
+                popupBinding.progressBar.visibility = View.INVISIBLE
                 NoSolutionPopUp()
                 //var solution_img = PuzzleStore.getLastSolutionImg(puzzle_id)
 
             }
             setNegativeButton("Hard") { dialog, _ ->
-                popupBinding.progressBar.visibility = View.VISIBLE
+                //popupBinding.progressBar.visibility = View.VISIBLE
                 // TODO: PERFORM OPEN CV HERE***
+                popupBinding.progressBar.visibility = View.VISIBLE
                 submitPiece("1")
                 // once the task is complete, hide progress bar
-                popupBinding.progressBar.visibility = View.GONE
+                //popupBinding.progressBar.visibility = View.GONE
+                popupBinding.progressBar.visibility = View.INVISIBLE
                 NoSolutionPopUp()
             }
             show()

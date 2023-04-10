@@ -113,7 +113,7 @@ class Blank : AppCompatActivity() {
 
     private fun difficultyPopup() {
         var popupBinding = LoadingBinding.inflate(layoutInflater)
-
+        popupBinding.progressBar.visibility = View.INVISIBLE
         //create alert dialog
         var builder = AlertDialog.Builder(this)
         //val puzzle_id = intent.getParcelableExtra("puzzle_id", String::class.java)
