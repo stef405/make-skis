@@ -29,7 +29,7 @@ class ShowSolutionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         var solution = intent.getParcelableExtra("solution_img", String::class.java)
-        var puzzleID = intent.getParcelableExtra("puzzle_id", String::class.java)
+
 
         view = ActivityShowSolutionBinding.inflate(layoutInflater)
         setContentView(view.root)
@@ -47,7 +47,8 @@ class ShowSolutionActivity : AppCompatActivity() {
         scaleGestureDetector = ScaleGestureDetector(this, ScaleListener())
 
         view.backArrowButton.setOnClickListener{
-            if (intent.getParcelableExtra("askdelete",Boolean::class.java) == true) {
+            Log.d("backArrowButton","${intent.getParcelableExtra("askdelete",String::class.java)}")
+            if (intent.getParcelableExtra("askdelete",String::class.java) == "true") {
                 // ask if user wants to delete piece
 
                 val builder = AlertDialog.Builder(this)
@@ -55,19 +56,29 @@ class ShowSolutionActivity : AppCompatActivity() {
                 {
                     setTitle("Would You Like to Delete This Solution or Save It?")
                     //setMessage("Add a new puzzle entry by tapping on the plus icon, happy puzzling!")
-                    setPositiveButton("Save") { _,_ -> }
+                    setPositiveButton("Save") { _,_ ->
+                        goBackToPiece()
+                    }
                     setNegativeButton("Delete",DialogInterface.OnClickListener(deleteButton))
                     show()
                 }
             }
+            else {
+                goBackToPiece()
+            }
 
-            val intent = Intent(this, PieceActivity::class.java)
-            intent.putExtra("puzzle_id", puzzleID)
-            this.startActivity(intent)
+
         }
 
 
 
+    }
+
+    private fun goBackToPiece() {
+        var puzzleID = intent.getParcelableExtra("puzzle_id", String::class.java)
+        val intent = Intent(this, PieceActivity::class.java)
+        intent.putExtra("puzzle_id", puzzleID)
+        this.startActivity(intent)
     }
     override fun onTouchEvent(motionEvent: MotionEvent): Boolean {
         scaleGestureDetector.onTouchEvent(motionEvent)
@@ -87,6 +98,7 @@ class ShowSolutionActivity : AppCompatActivity() {
     val deleteButton = { dialog: DialogInterface, which: Int ->
         val piece_id = intent.getParcelableExtra("piece_id",String::class.java)//PuzzleStore.getLastPieceID(intent.getParcelableExtra("puzzle_id", String::class.java))
         PuzzleStore.deletePiece(piece_id,intent.getParcelableExtra("puzzle_id", String::class.java))
+        goBackToPiece()
     }
 
 

@@ -32,7 +32,7 @@ class PieceActivity : AppCompatActivity() {
     private lateinit var view: ActivityPuzzlePieceBinding
     private lateinit var pieceListAdapter: PieceListAdapter
     private val viewState: PostViewState by viewModels()
-    val puzzle_id = intent.getParcelableExtra("puzzle_id",String::class.java)
+    //val puzzle_id = intent.getParcelableExtra("puzzle_id",String::class.java)
 
     class PostViewState: ViewModel() {
         var imageUri: Uri? = null
@@ -263,6 +263,7 @@ class PieceActivity : AppCompatActivity() {
     private fun viewSolution() {
         var pieceID = ""
         var img = ""
+        val puzzle_id = intent.getParcelableExtra("puzzle_id",String::class.java)
         Log.d("Puzzle ID",puzzle_id ?: "")
         runBlocking {
             launch {
@@ -275,7 +276,7 @@ class PieceActivity : AppCompatActivity() {
         val intent = Intent(this,ShowSolutionActivity::class.java)
         intent.putExtra("puzzle_id",puzzle_id)
         intent.putExtra("solution_img",img)
-        intent.putExtra("askdelete",true)
+        intent.putExtra("askdelete","true")
         intent.putExtra("piece_id",pieceID)
         startActivity(intent)
     }

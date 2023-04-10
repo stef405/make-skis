@@ -217,7 +217,7 @@ class Blank : AppCompatActivity() {
         val intent = Intent(this,ShowSolutionActivity::class.java)
         intent.putExtra("puzzle_id",puzzle_id)
         intent.putExtra("solution_img",img)
-        intent.putExtra("askdelete",true)
+        intent.putExtra("askdelete","true")
         intent.putExtra("piece_id",pieceID)
         startActivity(intent)
     }
