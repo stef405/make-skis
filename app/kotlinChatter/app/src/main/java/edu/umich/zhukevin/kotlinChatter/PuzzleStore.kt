@@ -237,109 +237,50 @@ object PuzzleStore {
         })
     }
 
-    suspend fun getLastPuzzle(): String {
-        val res = CompletableDeferred<String>()
+    fun getLastPuzzle(): String {
+        val request = Request.Builder()
+            .url(serverUrl + "getpuzzles/" + "10" + "/")
+            .build()
 
-        scope.launch {
-            val request = Request.Builder()
-                .url(serverUrl + "getpuzzles/" + "10" + "/")
-                .build()
+        //var last_puzzleID = ""
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.d("getpuzzles", "Failed GET request")
+            }
 
-            //var last_puzzleID = ""
-            client.newCall(request).enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    Log.d("getpuzzles", "Failed GET request")
-                }
-
-                override fun onResponse(call: Call, response: Response) {
-                    if (response.isSuccessful) {
-                        Log.d("getLastPuzzle", "Successful GET request")
-                        val puzzlesReceived = try {
-                            JSONObject(response.body?.string() ?: "").getJSONArray("puzzles")
-                        } catch (e: JSONException) {
-                            JSONArray()
-                        }
-                        Log.d(
-                            "getLastPuzzle",
-                            "PuzzlesReceived length: ${puzzlesReceived.length()} (${puzzles.size})"
-                        )
-                        //puzzles.clear()
-                        //Log.d("getpuzzles","Puzzles size: ${puzzles.size}")
-
-                        val lastpuzzle = puzzlesReceived[puzzlesReceived.length() - 1] as JSONObject
-                        val ID = lastpuzzle.getString("puzzle_id")
-                        Log.d("getLastPuzzle", "puzzle_id = $ID")
-                        res.complete(ID)
-
+            override fun onResponse(call: Call, response: Response) {
+                if (response.isSuccessful) {
+                    Log.d("getLastPuzzle", "Successful GET request")
+                    val puzzlesReceived = try {
+                        JSONObject(response.body?.string() ?: "").getJSONArray("puzzles")
+                    } catch (e: JSONException) {
+                        JSONArray()
                     }
+                    Log.d(
+                        "getLastPuzzle",
+                        "PuzzlesReceived length: ${puzzlesReceived.length()} (${puzzles.size})"
+                    )
+                    //puzzles.clear()
+                    //Log.d("getpuzzles","Puzzles size: ${puzzles.size}")
+
+                    val lastpuzzle = puzzlesReceived[puzzlesReceived.length() - 1] as JSONObject
+                    last_puzzleID = lastpuzzle.getString("puzzle_id")
+                    Log.d("getLastPuzzle", "puzzle_id = $last_puzzleID")
+
                 }
-            })
+            }
+        })
 
-        }
-
-
-        return res.await()
+        return last_puzzleID
     }
 
-
-    // returns pieceID as first element and piece solution image as second
-    suspend fun getLastPiece(puzzle: String?) : List<String> {
-
-        val res = CompletableDeferred<List<String>>()
-
-        scope.launch {
-            val request = Request.Builder()
-                .url(serverUrl + "getpieces/" + puzzle + "/")
-                .build()
-
-            Log.d("getLastPiece","request = ${request.toString()}")
-            client.newCall(request).enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    Log.d("getLastPiece", "Failed GET request")
-                }
-
-                override fun onResponse(call: Call, response: Response) {
-                    if (response.isSuccessful) {
-                        Log.d("getLastPiece", "Successful GET request")
-                        val piecesReceived = try {
-                            Log.d("getLastPiece","go into try")
-                            JSONObject(response.body?.string() ?: "").getJSONArray("pieces")
-                        } catch (e: JSONException) {
-                            Log.d("getLastPiece","catch JSON Exception $e")
-                            JSONArray()
-                        }
-                        Log.d(
-                            "getLastPiece",
-                            "PuzzlesReceived length: ${piecesReceived.length()} (${pieces.size})"
-                        )
-                        //puzzles.clear()
-                        //Log.d("getpuzzles","Puzzles size: ${puzzles.size}")
-                        //if (piecesReceived.length() >= 1) {
-                        val lastpiece = piecesReceived[piecesReceived.length() - 1] as JSONObject
-                        val last_pieceID = lastpiece.getString("puzzle_id")
-                        val lastSolutionImg = lastpiece.getString("solution_img")
-                        Log.d("getLastPiece", "piece_id = $last_pieceID")
-                        val i : List<String> = listOf(last_pieceID,lastSolutionImg)
-                        res.complete(i)
-
-
-                        //}
-
-                    }
-                }
-            })
-
-        }
-        return res.await()
-    }
-
-    //var last_pieceID = ""
-    fun getLastPieceID(puzzle: String?) : String {
+    var lastSolutionImg = ""
+    fun getLastSolutionImg(puzzle: String?) : String {
         val request = Request.Builder()
             .url(serverUrl + "getpieces/" + puzzle + "/")
             .build()
 
-        last_pieceID = ""
+        //var last_puzzleID = ""
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 Log.d("getpuzzles", "Failed GET request")
@@ -361,15 +302,15 @@ object PuzzleStore {
                     //Log.d("getpuzzles","Puzzles size: ${puzzles.size}")
                     if (piecesReceived.length() >= 1) {
                         val lastpiece = piecesReceived[piecesReceived.length() - 1] as JSONObject
-                        last_pieceID = lastpiece.getString("piece_id")
-                        //Log.d("getLastSolutionImg", "piece_id = $last_pieceID")
+                        val last_pieceID = lastpiece.getString("puzzle_id")
+                        Log.d("getLastSolutionImg", "piece_id = $last_pieceID")
 
-                        //lastSolutionImg = lastpiece.getString("solution_img")
+                        lastSolutionImg = lastpiece.getString("solution_img")
                     }
                 }
             }
         })
-        return last_pieceID
+        return lastSolutionImg
     }
 
     fun deletePuzzle(id: String?) {
