@@ -32,6 +32,7 @@ class PieceActivity : AppCompatActivity() {
     private lateinit var view: ActivityPuzzlePieceBinding
     private lateinit var pieceListAdapter: PieceListAdapter
     private val viewState: PostViewState by viewModels()
+    val puzzle_id = intent.getParcelableExtra("puzzle_id",String::class.java)
 
     class PostViewState: ViewModel() {
         var imageUri: Uri? = null
@@ -203,8 +204,7 @@ class PieceActivity : AppCompatActivity() {
                 show()
             }
         }
-
-        if (pop_up == 204) { //use response code for no solution found
+        else if (pop_up == 204) { //use response code for no solution found
             val builder = AlertDialog.Builder(this)
             with(builder)
             {
@@ -213,6 +213,9 @@ class PieceActivity : AppCompatActivity() {
                 setPositiveButton("Ok", DialogInterface.OnClickListener(piecePopUpOk))
                 show()
             }
+        }
+        else {
+            viewSolution()
         }
     }
 
@@ -257,11 +260,24 @@ class PieceActivity : AppCompatActivity() {
 //        dialog.show()
     }
 
-    private fun displayImageAfterInput() {
+    private fun viewSolution() {
+        var pieceID = ""
+        var img = ""
+        Log.d("Puzzle ID",puzzle_id ?: "")
+        runBlocking {
+            launch {
+                val str_arr = PuzzleStore.getLastPiece(puzzle_id)
+                pieceID = str_arr[0]
+                img = str_arr[1]
+            }
+        }
 
-//        intent = Intent(this, ShowSolutionActivity::class.java)
-//        intent.putExtra("puzzle_solution_image",PuzzleStore.getLastSolutionImg(puzzle_id))
-//        this.startActivity(intent)
+        val intent = Intent(this,ShowSolutionActivity::class.java)
+        intent.putExtra("puzzle_id",puzzle_id)
+        intent.putExtra("solution_img",img)
+        intent.putExtra("askdelete",true)
+        intent.putExtra("piece_id",pieceID)
+        startActivity(intent)
     }
 
 }
