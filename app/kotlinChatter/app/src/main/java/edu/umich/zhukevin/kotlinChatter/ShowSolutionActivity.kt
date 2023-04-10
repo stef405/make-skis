@@ -1,7 +1,5 @@
 package edu.umich.zhukevin.kotlinChatter
 
-import android.app.ProgressDialog.show
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -12,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import coil.load
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityShowSolutionBinding
@@ -47,26 +44,10 @@ class ShowSolutionActivity : AppCompatActivity() {
         scaleGestureDetector = ScaleGestureDetector(this, ScaleListener())
 
         view.backArrowButton.setOnClickListener{
-            if (intent.getParcelableExtra("askdelete",Boolean::class.java) == true) {
-                // ask if user wants to delete piece
-
-                val builder = AlertDialog.Builder(this)
-                with(builder)
-                {
-                    setTitle("Would You Like to Delete This Solution or Save It?")
-                    //setMessage("Add a new puzzle entry by tapping on the plus icon, happy puzzling!")
-                    setPositiveButton("Save") { _,_ -> }
-                    setNegativeButton("Delete",DialogInterface.OnClickListener(deleteButton))
-                    show()
-                }
-            }
-
             val intent = Intent(this, PieceActivity::class.java)
             intent.putExtra("puzzle_id", puzzleID)
             this.startActivity(intent)
         }
-
-
 
     }
     override fun onTouchEvent(motionEvent: MotionEvent): Boolean {
@@ -82,11 +63,6 @@ class ShowSolutionActivity : AppCompatActivity() {
             return true
         }
 
-    }
-
-    val deleteButton = { dialog: DialogInterface, which: Int ->
-        val piece_id = intent.getParcelableExtra("piece_id",String::class.java)//PuzzleStore.getLastPieceID(intent.getParcelableExtra("puzzle_id", String::class.java))
-        PuzzleStore.deletePiece(piece_id,intent.getParcelableExtra("puzzle_id", String::class.java))
     }
 
 

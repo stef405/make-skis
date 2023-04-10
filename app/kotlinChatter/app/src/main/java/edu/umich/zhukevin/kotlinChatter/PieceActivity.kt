@@ -19,7 +19,7 @@ import androidx.databinding.DataBindingUtil.setContentView
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
 import androidx.lifecycle.ViewModel
-
+import edu.umich.zhukevin.kotlinChatter.PuzzleStore.getLastSolutionImg
 import edu.umich.zhukevin.kotlinChatter.PuzzleStore.getPieces
 import edu.umich.zhukevin.kotlinChatter.PuzzleStore.pieces
 import edu.umich.zhukevin.kotlinChatter.databinding.ActivityPuzzlePieceBinding
