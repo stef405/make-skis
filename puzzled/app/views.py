@@ -198,6 +198,11 @@ def postpiece(request):
     # Check if piece image is blurry
     pathname = '/home/ubuntu/make-skis/puzzled/media/'
     pathname += filename
+    bg_color = avg_background_color(pathname)
+
+    if is_too_homogenous(pathname, bg_color):
+        return HttpResponse(status=204)
+    
     if is_blurry(pathname):
         return HttpResponse(status=202)
     
@@ -210,11 +215,6 @@ def postpiece(request):
     puzzle_url = row[0]
     puzzle_filename = puzzle_url.partition("media/")[2]
     puzzle_pathname = '/home/ubuntu/make-skis/puzzled/media/' + puzzle_filename
-
-    bg_color = avg_background_color(pathname)
-
-    if is_too_homogenous(pathname, bg_color):
-        return HttpResponse(status=204)
     
     outer_bounding_box = crop(pathname)
     cropped_rect = greedy_rectangle(outer_bounding_box, bg_color)
