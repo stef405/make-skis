@@ -198,14 +198,13 @@ def postpiece(request):
     # Check if piece image is blurry
     pathname = '/home/ubuntu/make-skis/puzzled/media/'
     pathname += filename
-    
-    if is_blurry(pathname):
-        return HttpResponse(status=202)
-    
     bg_color = avg_background_color(pathname)
 
     if is_too_homogenous(pathname, bg_color):
         return HttpResponse(status=204)
+    
+    if is_blurry(pathname):
+        return HttpResponse(status=202)
     
     cursor = connection.cursor()
     # TODO: Replace the insert for solution_img with the actual solution once we have a
